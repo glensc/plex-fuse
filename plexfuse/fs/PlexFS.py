@@ -4,9 +4,14 @@ from time import time
 import fuse
 
 from plexfuse.fs.PlexDirectory import PlexDirectory
+from plexfuse.plex.PlexApi import PlexApi
 
 
 class PlexFS(fuse.Fuse):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        self.plex = PlexApi()
+
     def getattr(self, path: str):
         st = PlexDirectory()
 
