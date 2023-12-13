@@ -1,0 +1,13 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+plexapi = "==4.15.6"
+fuse-python = "==1.0.7"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
