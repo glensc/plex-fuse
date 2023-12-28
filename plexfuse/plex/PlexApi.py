@@ -16,6 +16,9 @@ class PlexApi:
     def sections(self):
         return self.library.sections()
 
-    @cached_property
+    @property
     def section_types(self):
         return {s.type for s in self.sections}
+
+    def sections_by_type(self, type: str):
+        return {s.title for s in self.sections if s.type == type}

@@ -23,6 +23,8 @@ class PlexFS(fuse.Fuse):
             pass
         elif pe[-1] in self.plex.section_types:
             pass
+        elif pe[-1] in self.plex.sections_by_type(pe[0]):
+            pass
         else:
             return -errno.ENOENT
         return st
@@ -31,6 +33,8 @@ class PlexFS(fuse.Fuse):
         dirents = [".", ".."]
         if path == "/":
             dirents.extend(self.plex.section_types)
+        elif path.lstrip("/") in self.plex.section_types:
+            dirents.extend(self.plex.sections_by_type(path.lstrip("/")))
 
         for r in dirents:
             yield fuse.Direntry(r)
