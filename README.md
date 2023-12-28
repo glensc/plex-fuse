@@ -12,6 +12,18 @@ Currently implemented:
 - [x] Listing of library types in root directory
 - [x] Listing library titles in library type sub-directory
 
+## Usage
+
+1. Install fuse, macfuse, osxfuse, [fuse-t](https://github.com/macos-fuse-t/fuse-t) depending on your OS
+1. Install [pipenv](https://pipenv.pypa.io/en/latest/installation.html)
+1. Clone this project: `git clone https://github.com/glensc/plex-fuse`
+1. Change to `plex-fuse` directory
+1. Install project dependencies `pipenv install`
+1. Create [config.ini](#plex-config) for `python-plex`
+1. Mount the configured PMS somewhere, i.e `plex-server`: `mkdir plex-server; pipenv run python -m plexfuse plex-server -f`
+1. Access the `plex-server` directory from another terminal
+1. `umount` or `fusermount -u` the directory to remove the `plex-server` mount
+
 ## Plex Config
 
 Create Plex [configuration] file:
