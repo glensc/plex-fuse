@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from functools import cache, cached_property
-from pathlib import PureWindowsPath
+from os import makedirs
+from pathlib import Path, PureWindowsPath
 from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
@@ -15,9 +16,20 @@ if TYPE_CHECKING:
 
 
 class PlexApi:
+    CACHE_PATH = Path("cache")
+    CACHE_VERSION = str(2)
+
     @cached_property
     def server(self):
         return PlexServer()
+
+    @property
+    def session(self):
+        return self.server._session
+
+    @property
+    def token(self):
+        return self.server._token
 
     @property
     def library(self):
@@ -95,3 +107,33 @@ class PlexApi:
                 # We need to handle Windows and Unix differences,
                 # hence the PureWindowsPath class
                 yield PureWindowsPath(part.file).name, part
+
+    def url(self, key: str, include_token=False):
+        return self.server.url(key, includeToken=include_token)
+
+    def fetch_item(self, key: str):
+        return self.library.fetchItem(key)
+
+    def cache_path(self, item):
+        """Return cache path of item consisting machine uuid and item key"""
+        return \
+            self.CACHE_PATH \
+            / self.server.machineIdentifier \
+            / self.CACHE_VERSION \
+            / item.key.lstrip("/")
+
+    def download_part(self, part):
+        url = self.url(part.key)
+        headers = {"X-Plex-Token": self.token}
+        response = self.session.get(url, headers=headers, stream=True)
+        if response.status_code not in (200, 201, 204):
+            errtext = response.text.replace("\n", " ")
+            message = f"({response.status_code}): {response.url} {errtext}"
+            raise RuntimeError(message)
+
+        savepath = self.cache_path(part)
+        makedirs(Path(savepath).parent, exist_ok=True)
+
+        with open(savepath, "wb") as handle:
+            for chunk in response.iter_content(chunk_size=None):
+                handle.write(chunk)
