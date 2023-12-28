@@ -7,7 +7,7 @@ An attempt to create fuse filesystem to access Plex Media Server.
 This project is in very early development.
 
 Currently implemented:
-- [x] listing of root directory
+- [x] Listing of root directory
 - [x] Connecting to PMS via python-plexapi
 - [x] Listing of library types in root directory
 - [x] Listing library titles in library type sub-directory
