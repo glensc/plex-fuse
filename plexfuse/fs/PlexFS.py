@@ -1,5 +1,4 @@
 import errno
-from time import time
 
 import fuse
 
@@ -13,13 +12,9 @@ class PlexFS(fuse.Fuse):
         self.plex = PlexApi()
 
     def getattr(self, path: str):
-        st = PlexDirectory()
         pe = path.split("/")[1:]
         pc = len(pe)
-
-        st.st_atime = int(time())
-        st.st_mtime = st.st_atime
-        st.st_ctime = st.st_atime
+        st = PlexDirectory()
 
         if path == "/":
             pass
