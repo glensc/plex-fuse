@@ -18,9 +18,9 @@ class PlexFS(fuse.Fuse):
 
         if path == "/":
             pass
-        elif pe[-1] in self.plex.section_types:
+        elif pc == 1 and pe[0] in self.plex.section_types:
             pass
-        elif pe[-1] in self.plex.sections_by_type(pe[0]):
+        elif pc == 2 and pe[1] in self.plex.sections_by_type(pe[0]):
             pass
         elif pc == 3 and pe[2] in self.plex.library_items(pe[1]):
             pass
@@ -35,8 +35,8 @@ class PlexFS(fuse.Fuse):
         dirents = [".", ".."]
         if path == "/":
             dirents.extend(self.plex.section_types)
-        elif path.lstrip("/") in self.plex.section_types:
-            dirents.extend(self.plex.sections_by_type(path.lstrip("/")))
+        elif pc == 1 and pe[0] in self.plex.section_types:
+            dirents.extend(self.plex.sections_by_type(pe[0]))
         elif pc == 2:
             dirents.extend(self.plex.library_items(pe[1]))
 
