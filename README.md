@@ -11,6 +11,7 @@ Currently implemented:
 - [x] Connecting to PMS via python-plexapi
 - [x] Listing of library types in root directory
 - [x] Listing library titles in library type sub-directory
+- [x] Listing titles from a library
 
 ## Usage
 
