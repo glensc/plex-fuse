@@ -52,3 +52,7 @@ class PlexApi:
             for guid in m.guids:
                 title += f" {{{guid.id.replace('://', '-')}}}"
             yield title, m
+
+    def library_item(self, library: str, title: str):
+        it = (m for m_title, m in self.library_items(library) if m_title == title)
+        return next(it)
