@@ -15,26 +15,35 @@ class PlexFS(fuse.Fuse):
     def getattr(self, path: str):
         st = PlexDirectory()
         pe = path.split("/")[1:]
+        pc = len(pe)
 
         st.st_atime = int(time())
         st.st_mtime = st.st_atime
         st.st_ctime = st.st_atime
+
         if path == "/":
             pass
         elif pe[-1] in self.plex.section_types:
             pass
         elif pe[-1] in self.plex.sections_by_type(pe[0]):
             pass
+        elif pc == 3 and pe[2] in self.plex.library_items(pe[1]):
+            pass
         else:
             return -errno.ENOENT
         return st
 
     def readdir(self, path: str, offset: int):
+        pe = path.split("/")[1:]
+        pc = len(pe)
+
         dirents = [".", ".."]
         if path == "/":
             dirents.extend(self.plex.section_types)
         elif path.lstrip("/") in self.plex.section_types:
             dirents.extend(self.plex.sections_by_type(path.lstrip("/")))
+        elif pc == 2:
+            dirents.extend(self.plex.library_items(pe[1]))
 
         for r in dirents:
             yield fuse.Direntry(r)
