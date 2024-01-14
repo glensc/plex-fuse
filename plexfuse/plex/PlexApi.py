@@ -39,6 +39,10 @@ class PlexApi:
     def library_items(self, library: str):
         return set(self._library_items(library))
 
+    def library_items_titles(self, library: str):
+        for title, m in self.library_items(library):
+            yield title
+
     def _library_items(self, library: str):
         section = self.section_by_title(library)
         for m in section.search():
@@ -47,4 +51,4 @@ class PlexApi:
                 title += f" ({m.year})"
             for guid in m.guids:
                 title += f" {{{guid.id.replace('://', '-')}}}"
-            yield title
+            yield title, m
