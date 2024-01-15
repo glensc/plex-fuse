@@ -24,6 +24,7 @@ Currently implemented:
 
 ## Usage
 
+1. Install Python >= 3.10
 1. Install fuse, macfuse, osxfuse, [fuse-t](https://github.com/macos-fuse-t/fuse-t) depending on your OS
 1. Install [pipenv](https://pipenv.pypa.io/en/latest/installation.html)
 1. Clone this project: `git clone https://github.com/glensc/plex-fuse`
