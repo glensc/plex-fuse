@@ -15,8 +15,6 @@ class PlexFS(fuse.Fuse):
         self.vfs = PlexVFS(self.plex)
 
     def getattr(self, path: str):
-        st = PlexDirectory()
-
         try:
             item = self.vfs[path]
         except IndexError as e:
@@ -29,10 +27,8 @@ class PlexFS(fuse.Fuse):
         if pc == 4 and pe[0] == "movie":
             part = item[0]
             return PlexFile(st_size=part.size)
-        else:
-            st.st_nlink = 2 + len(item)
 
-        return st
+        return PlexDirectory(st_nlink=2 + len(item))
 
     def readdir(self, path: str, offset: int):
         for r in [".", ".."]:
