@@ -51,7 +51,9 @@ class PlexApi:
             title = m.title
             if m.TYPE != "artist" and m.year:
                 title += f" ({m.year})"
-            for guid in m.guids:
+
+            guids = m.guids if m.guid.startswith("plex://") else []
+            for guid in guids:
                 title += f" {{{guid.id.replace('://', '-')}}}"
             yield title, m
 
