@@ -52,6 +52,8 @@ class PlexApi:
 
     def _library_items(self, library: str):
         section = self.section_by_title(library)
+        if section is None:
+            return None
         for m in section.search():
             title = m.title
             year = m.__dict__.get("year", None)
