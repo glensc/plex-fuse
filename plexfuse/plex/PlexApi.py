@@ -74,6 +74,8 @@ class PlexApi:
             return None
 
     def media_part_names(self, item: Movie):
+        if item is None:
+            return None
         yield from (fn for fn, part in self.media_parts(item))
 
     def media_parts_by_name(self, item: Movie, filename: str) -> MediaPart | None:
