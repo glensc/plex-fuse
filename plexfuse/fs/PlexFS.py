@@ -19,7 +19,7 @@ class PlexFS(fuse.Fuse):
 
         try:
             item = self.vfs[path]
-        except ValueError as e:
+        except IndexError as e:
             print(e)
             return -errno.ENOENT
 
@@ -41,5 +41,5 @@ class PlexFS(fuse.Fuse):
         try:
             for r in self.vfs[path]:
                 yield fuse.Direntry(r)
-        except ValueError as e:
+        except IndexError as e:
             print(e)
