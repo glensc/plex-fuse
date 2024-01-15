@@ -27,7 +27,7 @@ class PlexFS(fuse.Fuse):
         if pc == 1 and pe[0] in self.plex.section_types:
             st.st_nlink = 2 + len(self.vfs[path])
         elif pc == 2 and pe[1] in self.plex.sections_by_type(pe[0]):
-            pass
+            st.st_nlink = 2 + len(self.vfs[path])
         elif pc == 3 and pe[2] in self.plex.library_items_titles(pe[1]):
             pass
         elif pc == 4 and pe[0] == "movie" \
