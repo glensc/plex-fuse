@@ -17,12 +17,23 @@ class PlexVFS(UserDict):
         if entry is None:
             raise ValueError(f"Unsupported path: {path}")
 
-        self[path] = entry
+        self[path] = list(entry)
 
         return entry
 
     def resolve(self, path: str):
         if path == "/":
             return self.plex.section_types
+
+        pe = path.split("/")[1:]
+        pc = len(pe)
+
+        if pc == 1 and pe[0] in self["/"]:
+            return self.plex.sections_by_type(pe[0])
+        elif pc == 2:
+            return self.plex.library_items_titles(pe[1])
+        elif pc == 3 and pe[0] == "movie":
+            item = self.plex.library_item(pe[1], pe[2])
+            return self.plex.media_part_names(item)
 
         return None

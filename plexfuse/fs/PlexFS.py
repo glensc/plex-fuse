@@ -45,13 +45,11 @@ class PlexFS(fuse.Fuse):
         if path == "/":
             dirents.extend(self.vfs["/"])
         elif pc == 1 and pe[0] in self.plex.section_types:
-            dirents.extend(self.plex.sections_by_type(pe[0]))
+            dirents.extend(self.vfs[path])
         elif pc == 2:
-            dirents.extend(self.plex.library_items_titles(pe[1]))
+            dirents.extend(self.vfs[path])
         elif pc == 3 and pe[0] == "movie":
-            item = self.plex.library_item(pe[1], pe[2])
-            parts = self.plex.media_part_names(item)
-            dirents.extend(parts)
+            dirents.extend(self.vfs[path])
 
         for r in dirents:
             yield fuse.Direntry(r)
