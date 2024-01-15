@@ -1,4 +1,5 @@
 import errno
+from functools import cache
 
 import fuse
 
@@ -14,6 +15,7 @@ class PlexFS(fuse.Fuse):
         self.plex = PlexApi()
         self.vfs = PlexVFS(self.plex)
 
+    @cache
     def getattr(self, path: str):
         try:
             item = self.vfs[path]
@@ -30,7 +32,11 @@ class PlexFS(fuse.Fuse):
 
         return PlexDirectory(st_nlink=2 + len(item))
 
+    @cache
     def readdir(self, path: str, offset: int):
+        return list(self._readdir(path, offset))
+
+    def _readdir(self, path: str, offset: int):
         for r in [".", ".."]:
             yield fuse.Direntry(r)
 
