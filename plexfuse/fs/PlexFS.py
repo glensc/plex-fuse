@@ -1,55 +1,49 @@
 import errno
+from functools import cache
 
 import fuse
 
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
+from plexfuse.fs.PlexVFS import PlexVFS
 from plexfuse.plex.PlexApi import PlexApi
 
 
 class PlexFS(fuse.Fuse):
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
-        self.plex = PlexApi()
+        self.vfs = PlexVFS(PlexApi())
 
+    @cache
     def getattr(self, path: str):
-        pe = path.split("/")[1:]
-        pc = len(pe)
-        st = PlexDirectory()
-
-        if path == "/":
-            pass
-        elif pc == 1 and pe[0] in self.plex.section_types:
-            pass
-        elif pc == 2 and pe[1] in self.plex.sections_by_type(pe[0]):
-            pass
-        elif pc == 3 and pe[2] in self.plex.library_items_titles(pe[1]):
-            pass
-        elif pc == 4 and pe[0] == "movie" \
-                and (m := self.plex.library_item(pe[1], pe[2])) \
-                and pe[3] in self.plex.media_part_names(m) \
-                and (part := self.plex.media_parts_by_name(m, pe[3])):
-
-            return PlexFile(st_size=part.size)
-        else:
+        try:
+            item = self.vfs[path]
+        except IndexError as e:
+            print(e)
             return -errno.ENOENT
-        return st
 
-    def readdir(self, path: str, offset: int):
         pe = path.split("/")[1:]
         pc = len(pe)
 
-        dirents = [".", ".."]
-        if path == "/":
-            dirents.extend(self.plex.section_types)
-        elif pc == 1 and pe[0] in self.plex.section_types:
-            dirents.extend(self.plex.sections_by_type(pe[0]))
-        elif pc == 2:
-            dirents.extend(self.plex.library_items_titles(pe[1]))
-        elif pc == 3 and pe[0] == "movie":
-            item = self.plex.library_item(pe[1], pe[2])
-            parts = self.plex.media_part_names(item)
-            dirents.extend(parts)
+        if pc == 4 and pe[0] == "movie":
+            part = item[0]
+            return PlexFile(st_size=part.size)
 
-        for r in dirents:
+        return PlexDirectory(st_nlink=2 + len(item))
+
+    @cache
+    def readdir(self, path: str, offset: int):
+        return list(self._readdir(path, offset))
+
+    def _readdir(self, path: str, offset: int):
+        for r in [".", ".."]:
+            yield fuse.Direntry(r)
+
+        try:
+            it = self.vfs[path]
+        except IndexError as e:
+            print(e)
+            return
+
+        for r in it:
             yield fuse.Direntry(r)

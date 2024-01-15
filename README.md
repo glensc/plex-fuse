@@ -14,6 +14,8 @@ Currently implemented:
 - [x] Listing titles from a library
 - [x] Listing of Movie files
 - [x] Report file size for media part
+- [x] Report accurate nlink for directories
+- [x] Memoize readdir and getattr calls
 - [ ] Listing of Show seasons
 - [ ] Listing of Season episodes
 - [ ] Listing of Episode files

@@ -34,8 +34,13 @@ class PlexApi:
     def sections_by_type(self, type: str) -> set[str]:
         return {s.title for s in self.sections if s.type == type}
 
-    def section_by_title(self, title: str) -> SectionTypes:
-        return next(s for s in self.sections if s.title == title)
+    def section_by_title(self, title: str) -> SectionTypes | None:
+        it = (s for s in self.sections if s.title == title)
+
+        try:
+            return next(it)
+        except StopIteration:
+            return None
 
     @cache
     def library_items(self, library: str):
@@ -47,24 +52,40 @@ class PlexApi:
 
     def _library_items(self, library: str):
         section = self.section_by_title(library)
+        if section is None:
+            return None
         for m in section.search():
             title = m.title
-            if m.TYPE != "artist" and m.year:
-                title += f" ({m.year})"
-            for guid in m.guids:
+            year = m.__dict__.get("year", None)
+            if m.TYPE != "artist" and year:
+                title += f" ({year})"
+
+            guids = m.guids if m.guid.startswith("plex://") else []
+            for guid in guids:
                 title += f" {{{guid.id.replace('://', '-')}}}"
             yield title, m
 
     def library_item(self, library: str, title: str):
         it = (m for m_title, m in self.library_items(library) if m_title == title)
-        return next(it)
+
+        try:
+            return next(it)
+        except StopIteration:
+            return None
 
     def media_part_names(self, item: Movie):
+        if item is None:
+            return None
         yield from (fn for fn, part in self.media_parts(item))
 
-    def media_parts_by_name(self, item: Movie, filename: str) -> MediaPart:
-        return next(part for fn, part in self.media_parts(item)
-                    if PureWindowsPath(part.file).name == filename)
+    def media_parts_by_name(self, item: Movie, filename: str) -> MediaPart | None:
+        it = (part for fn, part in self.media_parts(item)
+              if PureWindowsPath(part.file).name == filename)
+
+        try:
+            return next(it)
+        except StopIteration:
+            return None
 
     @staticmethod
     def media_parts(item: Movie):
