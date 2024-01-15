@@ -15,13 +15,16 @@ class PlexFS(fuse.Fuse):
         self.vfs = PlexVFS(self.plex)
 
     def getattr(self, path: str):
-        pe = path.split("/")[1:]
-        pc = len(pe)
         st = PlexDirectory()
 
         if path == "/":
-            pass
-        elif pc == 1 and pe[0] in self.plex.section_types:
+            st.st_nlink = 2 + len(self.vfs[path])
+            return st
+
+        pe = path.split("/")[1:]
+        pc = len(pe)
+
+        if pc == 1 and pe[0] in self.plex.section_types:
             pass
         elif pc == 2 and pe[1] in self.plex.sections_by_type(pe[0]):
             pass
