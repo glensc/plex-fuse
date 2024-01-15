@@ -59,6 +59,9 @@ class PlexApi:
         it = (m for m_title, m in self.library_items(library) if m_title == title)
         return next(it)
 
+    def media_part_names(self, item: Movie):
+        yield from (fn for fn, part in self.media_parts(item))
+
     @staticmethod
     def media_parts(item: Movie):
         for media in item.media:
@@ -66,4 +69,4 @@ class PlexApi:
                 # Remove directory part (Windows server on Unix)
                 # We need to handle Windows and Unix differences,
                 # hence the PureWindowsPath class
-                yield PureWindowsPath(part.file).name
+                yield PureWindowsPath(part.file).name, part
