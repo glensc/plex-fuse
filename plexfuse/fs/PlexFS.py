@@ -30,10 +30,8 @@ class PlexFS(fuse.Fuse):
             st.st_nlink = 2 + len(self.vfs[path])
         elif pc == 3 and pe[2] in self.plex.library_items_titles(pe[1]):
             st.st_nlink = 2 + len(self.vfs[path])
-        elif pc == 4 and pe[0] == "movie" \
-                and (m := self.plex.library_item(pe[1], pe[2])) \
-                and pe[3] in self.plex.media_part_names(m) \
-                and (part := self.plex.media_parts_by_name(m, pe[3])):
+        elif pc == 4 and pe[0] == "movie":
+            part = self.vfs[path][0]
 
             return PlexFile(st_size=part.size)
         else:
