@@ -38,18 +38,11 @@ class PlexFS(fuse.Fuse):
         return st
 
     def readdir(self, path: str, offset: int):
-        pe = path.split("/")[1:]
-        pc = len(pe)
-
-        dirents = [".", ".."]
-        if path == "/":
-            dirents.extend(self.vfs["/"])
-        elif pc == 1 and pe[0] in self.plex.section_types:
-            dirents.extend(self.vfs[path])
-        elif pc == 2:
-            dirents.extend(self.vfs[path])
-        elif pc == 3 and pe[0] == "movie":
-            dirents.extend(self.vfs[path])
-
-        for r in dirents:
+        for r in [".", ".."]:
             yield fuse.Direntry(r)
+
+        try:
+            for r in self.vfs[path]:
+                yield fuse.Direntry(r)
+        except ValueError as e:
+            print(e)
