@@ -12,8 +12,7 @@ from plexfuse.plex.PlexApi import PlexApi
 class PlexFS(fuse.Fuse):
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
-        self.plex = PlexApi()
-        self.vfs = PlexVFS(self.plex)
+        self.vfs = PlexVFS(PlexApi())
 
     @cache
     def getattr(self, path: str):
