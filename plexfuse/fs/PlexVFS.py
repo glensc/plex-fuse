@@ -13,11 +13,16 @@ class PlexVFS(UserDict):
         self.plex = plex
 
     def __missing__(self, path: str):
-        if path == "/":
-            entry = self.plex.section_types
-        else:
+        entry = self.resolve(path)
+        if entry is None:
             raise ValueError(f"Unsupported path: {path}")
 
         self[path] = entry
 
         return entry
+
+    def resolve(self, path: str):
+        if path == "/":
+            return self.plex.section_types
+
+        return None
