@@ -6,6 +6,9 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi
 
+# https://stackoverflow.com/questions/6416538/how-to-check-if-an-object-is-a-generator-object-in-python/62203383#62203383
+GeneratorType = type(1 for i in "")
+
 
 class PlexVFS(UserDict):
     def __init__(self, plex: PlexApi):
@@ -14,12 +17,15 @@ class PlexVFS(UserDict):
 
     def __missing__(self, path: str):
         entry = self.resolve(path)
-        if entry is None:
+        if self.is_generator(entry):
+            entry = list(entry)
+
+        if entry is None or len(entry) == 0:
             raise IndexError(f"Unsupported path: {path}")
 
-        self[path] = list(entry)
+        self[path] = entry
 
-        return self[path]
+        return entry
 
     def resolve(self, path: str):
         if path == "/":
@@ -42,3 +48,7 @@ class PlexVFS(UserDict):
             return [part]
 
         return None
+
+    @staticmethod
+    def is_generator(gen):
+        return isinstance(gen, GeneratorType)
