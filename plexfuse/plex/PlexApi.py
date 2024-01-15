@@ -49,7 +49,7 @@ class PlexApi:
         section = self.section_by_title(library)
         for m in section.search():
             title = m.title
-            if m.year:
+            if m.TYPE != "artist" and m.year:
                 title += f" ({m.year})"
             for guid in m.guids:
                 title += f" {{{guid.id.replace('://', '-')}}}"
