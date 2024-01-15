@@ -19,7 +19,7 @@ class PlexVFS(UserDict):
 
         self[path] = list(entry)
 
-        return entry
+        return self[path]
 
     def resolve(self, path: str):
         if path == "/":
