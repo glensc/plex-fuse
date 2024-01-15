@@ -4,6 +4,7 @@ import fuse
 
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
+from plexfuse.fs.PlexVFS import PlexVFS
 from plexfuse.plex.PlexApi import PlexApi
 
 
@@ -11,6 +12,7 @@ class PlexFS(fuse.Fuse):
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
         self.plex = PlexApi()
+        self.vfs = PlexVFS(self.plex)
 
     def getattr(self, path: str):
         pe = path.split("/")[1:]
@@ -41,7 +43,7 @@ class PlexFS(fuse.Fuse):
 
         dirents = [".", ".."]
         if path == "/":
-            dirents.extend(self.plex.section_types)
+            dirents.extend(self.vfs["/"])
         elif pc == 1 and pe[0] in self.plex.section_types:
             dirents.extend(self.plex.sections_by_type(pe[0]))
         elif pc == 2:
