@@ -39,7 +39,10 @@ class PlexFS(fuse.Fuse):
             yield fuse.Direntry(r)
 
         try:
-            for r in self.vfs[path]:
-                yield fuse.Direntry(r)
+            it = self.vfs[path]
         except IndexError as e:
             print(e)
+            return
+
+        for r in it:
+            yield fuse.Direntry(r)
