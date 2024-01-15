@@ -12,6 +12,12 @@ Currently implemented:
 - [x] Listing of library types in root directory
 - [x] Listing library titles in library type sub-directory
 - [x] Listing titles from a library
+- [x] Listing of Movie files
+- [ ] Listing of Show seasons
+- [ ] Listing of Season episodes
+- [ ] Listing of Episode files
+- [ ] Handling of "artist" library type
+- [ ] Fix "/" in directory names
 
 ## Usage
 
