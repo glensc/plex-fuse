@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import cache, cached_property
+from pathlib import PureWindowsPath
 from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
@@ -8,6 +9,7 @@ from plexapi.server import PlexServer
 if TYPE_CHECKING:
     from plexapi.library import (MovieSection, MusicSection, PhotoSection,
                                  ShowSection)
+    from plexapi.video import Movie
 
     SectionTypes = MovieSection | ShowSection | MusicSection | PhotoSection
 
@@ -39,6 +41,10 @@ class PlexApi:
     def library_items(self, library: str):
         return set(self._library_items(library))
 
+    def library_items_titles(self, library: str):
+        for title, m in self.library_items(library):
+            yield title
+
     def _library_items(self, library: str):
         section = self.section_by_title(library)
         for m in section.search():
@@ -47,4 +53,17 @@ class PlexApi:
                 title += f" ({m.year})"
             for guid in m.guids:
                 title += f" {{{guid.id.replace('://', '-')}}}"
-            yield title
+            yield title, m
+
+    def library_item(self, library: str, title: str):
+        it = (m for m_title, m in self.library_items(library) if m_title == title)
+        return next(it)
+
+    @staticmethod
+    def media_parts(item: Movie):
+        for media in item.media:
+            for part in media.parts:
+                # Remove directory part (Windows server on Unix)
+                # We need to handle Windows and Unix differences,
+                # hence the PureWindowsPath class
+                yield PureWindowsPath(part.file).name
