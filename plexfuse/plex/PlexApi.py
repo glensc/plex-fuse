@@ -9,8 +9,8 @@ from plexapi.server import PlexServer
 if TYPE_CHECKING:
     from plexapi.library import (MovieSection, MusicSection, PhotoSection,
                                  ShowSection)
+    from plexapi.media import MediaPart
     from plexapi.video import Movie
-
     SectionTypes = MovieSection | ShowSection | MusicSection | PhotoSection
 
 
@@ -59,6 +59,13 @@ class PlexApi:
         it = (m for m_title, m in self.library_items(library) if m_title == title)
         return next(it)
 
+    def media_part_names(self, item: Movie):
+        yield from (fn for fn, part in self.media_parts(item))
+
+    def media_parts_by_name(self, item: Movie, filename: str) -> MediaPart:
+        return next(part for fn, part in self.media_parts(item)
+                    if PureWindowsPath(part.file).name == filename)
+
     @staticmethod
     def media_parts(item: Movie):
         for media in item.media:
@@ -66,4 +73,4 @@ class PlexApi:
                 # Remove directory part (Windows server on Unix)
                 # We need to handle Windows and Unix differences,
                 # hence the PureWindowsPath class
-                yield PureWindowsPath(part.file).name
+                yield PureWindowsPath(part.file).name, part
