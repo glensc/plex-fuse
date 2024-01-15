@@ -49,8 +49,9 @@ class PlexApi:
         section = self.section_by_title(library)
         for m in section.search():
             title = m.title
-            if m.TYPE != "artist" and m.year:
-                title += f" ({m.year})"
+            year = m.__dict__.get("year", None)
+            if m.TYPE != "artist" and year:
+                title += f" ({year})"
 
             guids = m.guids if m.guid.startswith("plex://") else []
             for guid in guids:
