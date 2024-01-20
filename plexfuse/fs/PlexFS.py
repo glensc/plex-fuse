@@ -30,9 +30,9 @@ class PlexFS(fuse.Fuse):
 
     @cache
     def readdir(self, path: str, offset: int):
-        return list(self._readdir(path, offset))
+        return list(self._readdir(path))
 
-    def _readdir(self, path: str, offset: int):
+    def _readdir(self, path: str):
         for r in [".", ".."]:
             yield fuse.Direntry(r)
 
