@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
+from plexfuse.fs.PlexVFSMovie import PlexVFSMovie
 from plexfuse.fs.PlexVFSSection import PlexVFSSection
 
 if TYPE_CHECKING:
@@ -61,7 +62,7 @@ class PlexApi:
 
     def library_items_titles(self, library: str):
         for title, m in self.library_items(library):
-            yield title
+            yield PlexVFSMovie(m, title)
 
     def _library_items(self, library: str):
         section = self.section_by_title(library)
