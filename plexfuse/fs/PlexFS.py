@@ -55,11 +55,12 @@ class PlexFS(fuse.Fuse):
     def read(self, path, size, offset):
         try:
             cache_path = self.cache_map[path]
-            with self.files[cache_path] as fh:
-                fh.seek(offset, os.SEEK_SET)
-                return fh.read(size)
+            fh = self.files[cache_path]
         except KeyError:
             return -errno.EINVAL
+
+        fh.seek(offset, os.SEEK_SET)
+        return fh.read(size)
 
     def release(self, path, flags):
         try:
