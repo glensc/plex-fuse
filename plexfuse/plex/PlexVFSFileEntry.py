@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 class PlexVFSFileEntry:
     def __init__(self, part: MediaPart):
         self.size = part.size
+        self.key = part.key
 
     def __len__(self):
         return self.size
