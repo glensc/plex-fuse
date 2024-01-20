@@ -143,3 +143,5 @@ class PlexApi:
         with open(savepath, "wb") as handle:
             for chunk in response.iter_content(chunk_size=None):
                 handle.write(chunk)
+
+        return savepath
