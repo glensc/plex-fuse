@@ -26,7 +26,7 @@ class PlexVFS(UserDict):
 
     def resolve(self, path: str):
         if path == "/":
-            return self.plex.section_types
+            return PlexVFSDirEntry(self.plex.section_types)
 
         pe = path.split("/")[1:]
         pc = len(pe)
