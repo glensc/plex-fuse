@@ -46,4 +46,4 @@ class PlexFS(fuse.Fuse):
             return
 
         for r in it:
-            yield fuse.Direntry(r)
+            yield fuse.Direntry(str(r))
