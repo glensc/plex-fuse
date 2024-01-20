@@ -18,7 +18,7 @@ class PlexVFS(UserDict):
     def __missing__(self, path: str):
         entry = self.resolve(path)
         if entry is None:
-            raise IndexError(f"Unsupported path: {path}")
+            raise KeyError(f"Unsupported path: {path}")
 
         self[path] = entry
 
