@@ -16,11 +16,12 @@ Currently implemented:
 - [x] Report file size for media part
 - [x] Report accurate nlink for directories
 - [x] Memoize readdir and getattr calls
+- [x] Fix "/" in directory names
+- [x] Download movie files to cache, serve read operations from cache
 - [ ] Listing of Show seasons
 - [ ] Listing of Season episodes
 - [ ] Listing of Episode files
 - [ ] Handling of "artist" library type
-- [x] Fix "/" in directory names
 
 ## Usage
 
