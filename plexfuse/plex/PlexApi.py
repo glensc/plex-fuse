@@ -67,7 +67,8 @@ class PlexApi:
         if section is None:
             return None
         for m in section.search():
-            title = m.title
+            # Handle directory separator in filename
+            title = m.title.replace("/", "∕")
             year = m.__dict__.get("year", None)
             if m.TYPE != "artist" and year:
                 title += f" ({year})"
