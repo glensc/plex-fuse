@@ -20,7 +20,7 @@ Currently implemented:
 - [ ] Listing of Season episodes
 - [ ] Listing of Episode files
 - [ ] Handling of "artist" library type
-- [ ] Fix "/" in directory names
+- [x] Fix "/" in directory names
 
 ## Usage
 
