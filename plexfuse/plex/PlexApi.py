@@ -8,11 +8,10 @@ from typing import TYPE_CHECKING
 from plexapi.server import PlexServer
 
 if TYPE_CHECKING:
-    from plexapi.library import (MovieSection, MusicSection, PhotoSection,
-                                 ShowSection)
     from plexapi.media import MediaPart
     from plexapi.video import Movie
-    SectionTypes = MovieSection | ShowSection | MusicSection | PhotoSection
+
+    from plexfuse.plex.types import SectionTypes
 
 
 class PlexApi:
