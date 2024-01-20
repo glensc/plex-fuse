@@ -6,6 +6,7 @@ import fuse
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
 from plexfuse.fs.PlexVFS import PlexVFS
+from plexfuse.fs.PlexVFSFileEntry import PlexVFSFileEntry
 from plexfuse.plex.PlexApi import PlexApi
 
 
@@ -22,12 +23,8 @@ class PlexFS(fuse.Fuse):
             print(e)
             return -errno.ENOENT
 
-        pe = path.split("/")[1:]
-        pc = len(pe)
-
-        if pc == 4 and pe[0] == "movie":
-            part = item[0]
-            return PlexFile(st_size=part.size)
+        if isinstance(item, PlexVFSFileEntry):
+            return PlexFile(st_size=item.size)
 
         return PlexDirectory(st_nlink=2 + len(item))
 
@@ -46,4 +43,4 @@ class PlexFS(fuse.Fuse):
             return
 
         for r in it:
-            yield fuse.Direntry(r)
+            yield fuse.Direntry(str(r))

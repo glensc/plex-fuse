@@ -7,12 +7,14 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
+from plexfuse.fs.PlexVFSMovie import PlexVFSMovie
+from plexfuse.fs.PlexVFSSection import PlexVFSSection
+
 if TYPE_CHECKING:
-    from plexapi.library import (MovieSection, MusicSection, PhotoSection,
-                                 ShowSection)
     from plexapi.media import MediaPart
     from plexapi.video import Movie
-    SectionTypes = MovieSection | ShowSection | MusicSection | PhotoSection
+
+    from plexfuse.plex.types import SectionTypes
 
 
 class PlexApi:
@@ -44,7 +46,7 @@ class PlexApi:
         return {s.type for s in self.sections}
 
     def sections_by_type(self, type: str) -> set[str]:
-        return {s.title for s in self.sections if s.type == type}
+        return {PlexVFSSection(s) for s in self.sections if s.type == type}
 
     def section_by_title(self, title: str) -> SectionTypes | None:
         it = (s for s in self.sections if s.title == title)
@@ -60,7 +62,7 @@ class PlexApi:
 
     def library_items_titles(self, library: str):
         for title, m in self.library_items(library):
-            yield title
+            yield PlexVFSMovie(m, title)
 
     def _library_items(self, library: str):
         section = self.section_by_title(library)
