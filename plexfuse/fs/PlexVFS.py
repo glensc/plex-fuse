@@ -4,6 +4,7 @@ from collections import UserDict
 from typing import TYPE_CHECKING
 
 from plexfuse.fs.PlexVFSDirEntry import PlexVFSDirEntry
+from plexfuse.fs.PlexVFSFileEntry import PlexVFSFileEntry
 
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi
@@ -47,7 +48,7 @@ class PlexVFS(UserDict):
                 and (m := self.plex.library_item(pe[1], pe[2])) \
                 and pe[3] in self.plex.media_part_names(m) \
                 and (part := self.plex.media_parts_by_name(m, pe[3])):
-            return [part]
+            return PlexVFSFileEntry(part)
 
         return None
 
