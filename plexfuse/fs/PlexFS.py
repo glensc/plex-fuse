@@ -5,9 +5,9 @@ import fuse
 
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
-from plexfuse.fs.PlexVFS import PlexVFS
-from plexfuse.fs.PlexVFSFileEntry import PlexVFSFileEntry
 from plexfuse.plex.PlexApi import PlexApi
+from plexfuse.plex.PlexVFS import PlexVFS
+from plexfuse.plex.PlexVFSFileEntry import PlexVFSFileEntry
 
 
 class PlexFS(fuse.Fuse):
