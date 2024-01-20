@@ -19,7 +19,7 @@ class PlexFS(fuse.Fuse):
     def getattr(self, path: str):
         try:
             item = self.vfs[path]
-        except IndexError as e:
+        except KeyError as e:
             print(e)
             return -errno.ENOENT
 
@@ -38,7 +38,7 @@ class PlexFS(fuse.Fuse):
 
         try:
             it = self.vfs[path]
-        except IndexError as e:
+        except KeyError as e:
             print(e)
             return
 
