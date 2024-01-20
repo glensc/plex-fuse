@@ -1,10 +1,7 @@
 from __future__ import annotations
 
 from collections import UserDict, defaultdict
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from typing import BinaryIO
+from typing import BinaryIO
 
 
 class FileCache(UserDict[str, BinaryIO]):
