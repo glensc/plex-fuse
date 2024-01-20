@@ -20,10 +20,7 @@ class PlexVFS(UserDict):
 
     def __missing__(self, path: str):
         entry = self.resolve(path)
-        if self.is_generator(entry):
-            entry = list(entry)
-
-        if entry is None or len(entry) == 0:
+        if entry is None:
             raise IndexError(f"Unsupported path: {path}")
 
         self[path] = entry
