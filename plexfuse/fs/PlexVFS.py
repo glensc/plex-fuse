@@ -3,6 +3,8 @@ from __future__ import annotations
 from collections import UserDict
 from typing import TYPE_CHECKING
 
+from plexfuse.fs.PlexVFSDirEntry import PlexVFSDirEntry
+
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi
 
@@ -35,12 +37,12 @@ class PlexVFS(UserDict):
         pc = len(pe)
 
         if pc == 1 and pe[0] in self["/"]:
-            return self.plex.sections_by_type(pe[0])
+            return PlexVFSDirEntry(list(self.plex.sections_by_type(pe[0])))
         elif pc == 2:
-            return self.plex.library_items_titles(pe[1])
+            return PlexVFSDirEntry(list(self.plex.library_items_titles(pe[1])))
         elif pc == 3 and pe[0] == "movie":
             item = self.plex.library_item(pe[1], pe[2])
-            return self.plex.media_part_names(item)
+            return PlexVFSDirEntry(list(self.plex.media_part_names(item)))
         elif pc == 4 and pe[0] == "movie" \
                 and (m := self.plex.library_item(pe[1], pe[2])) \
                 and pe[3] in self.plex.media_part_names(m) \
