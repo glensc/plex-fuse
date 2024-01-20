@@ -1,5 +1,4 @@
 import errno
-import os
 from functools import cache
 
 import fuse
@@ -59,7 +58,7 @@ class PlexFS(fuse.Fuse):
         except KeyError:
             return -errno.EINVAL
 
-        fh.seek(offset, os.SEEK_SET)
+        fh.seek(offset)
         return fh.read(size)
 
     def release(self, path, flags):
