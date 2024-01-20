@@ -9,9 +9,6 @@ from plexfuse.fs.PlexVFSFileEntry import PlexVFSFileEntry
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi
 
-# https://stackoverflow.com/questions/6416538/how-to-check-if-an-object-is-a-generator-object-in-python/62203383#62203383
-GeneratorType = type(1 for i in "")
-
 
 class PlexVFS(UserDict):
     def __init__(self, plex: PlexApi):
@@ -48,7 +45,3 @@ class PlexVFS(UserDict):
             return PlexVFSFileEntry(part)
 
         return None
-
-    @staticmethod
-    def is_generator(gen):
-        return isinstance(gen, GeneratorType)
