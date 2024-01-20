@@ -20,7 +20,7 @@ class PlexFS(fuse.Fuse):
         try:
             item = self.vfs[path]
         except KeyError as e:
-            print(e)
+            print(f"getattr({path}): {e}")
             return -errno.ENOENT
 
         if isinstance(item, PlexVFSFileEntry):
@@ -39,7 +39,7 @@ class PlexFS(fuse.Fuse):
         try:
             it = self.vfs[path]
         except KeyError as e:
-            print(e)
+            print(f"readdir({path}): {e}")
             return
 
         for r in it:
