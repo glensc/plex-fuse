@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
+from plexfuse.fs.PlexVFSSection import PlexVFSSection
+
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
     from plexapi.video import Movie
@@ -43,7 +45,7 @@ class PlexApi:
         return {s.type for s in self.sections}
 
     def sections_by_type(self, type: str) -> set[str]:
-        return {s.title for s in self.sections if s.type == type}
+        return {PlexVFSSection(s) for s in self.sections if s.type == type}
 
     def section_by_title(self, title: str) -> SectionTypes | None:
         it = (s for s in self.sections if s.title == title)
