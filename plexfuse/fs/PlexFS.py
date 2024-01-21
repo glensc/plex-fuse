@@ -1,5 +1,6 @@
 import errno
 from functools import cache
+from pathlib import Path
 
 import fuse
 
@@ -17,9 +18,16 @@ class PlexFS(fuse.Fuse):
         super().__init__(*args, **kw)
         plex = PlexApi()
         self.vfs = PlexVFS(plex)
+        self.cache_path = None
         self.cache = DownloadCache(plex)
         self.cache_map = {}
         self.files = FileCache()
+
+    def fsinit(self):
+        # "cache_path" property doesn't get always initialized from options:
+        # https://github.com/libfuse/python-fuse/issues/61#issuecomment-1902472620
+        cache_path = self.cache_path if self.cache_path else PlexApi.CACHE_PATH
+        PlexApi.CACHE_PATH = Path(cache_path).absolute()
 
     @cache
     def getattr(self, path: str):
