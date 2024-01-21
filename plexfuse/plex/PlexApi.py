@@ -126,23 +126,36 @@ class PlexApi:
             / self.CACHE_VERSION \
             / item.key.lstrip("/")
 
-    def download_part(self, part, overwrite=False):
-        url = self.url(part.key)
+    def request_file(self, key: str, size=None, offset=None):
+        url = self.url(key)
         headers = {"X-Plex-Token": self.token}
+        accepted_status = (200, 201, 204)
+        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range
+        if offset is not None:
+            if size is not None:
+                headers["Range"] = f"bytes={offset}-{offset + size - 1}"
+            else:
+                headers["Range"] = f"bytes={offset}-"
+            accepted_status = (206,)
+        elif size is not None:
+            raise ValueError("size not supported without offset")
+
         response = self.session.get(url, headers=headers, stream=True)
-        if response.status_code not in (200, 201, 204):
-            errtext = response.text.replace("\n", " ")
-            message = f"({response.status_code}): {response.url} {errtext}"
+        if response.status_code not in accepted_status:
+            message = f"({response.status_code}): {response.url}"
             raise RuntimeError(message)
 
+        yield from response.iter_content(chunk_size=self.CHUNK_SIZE)
+
+    def download_part(self, part, overwrite=False):
         savepath = self.cache_path(part)
         if overwrite is False and savepath.exists():
             return savepath
 
+        content = self.request_file(part.key)
         makedirs(Path(savepath).parent, exist_ok=True)
-
         with open(savepath, "wb") as handle:
-            for chunk in response.iter_content(chunk_size=self.CHUNK_SIZE):
+            for chunk in content:
                 handle.write(chunk)
 
         return savepath

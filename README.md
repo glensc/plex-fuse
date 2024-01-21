@@ -19,6 +19,7 @@ Currently implemented:
 - [x] Fix "/" in directory names
 - [x] Download movie files to cache, serve read operations from cache
 - [x] Add `-o cache_path` option
+- [x] Test that Plex Media Server allows requesting file by range
 - [ ] Listing of Show seasons
 - [ ] Listing of Season episodes
 - [ ] Listing of Episode files
