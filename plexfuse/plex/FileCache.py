@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import UserDict, defaultdict
+from contextlib import contextmanager
 from typing import BinaryIO
 
 
@@ -8,6 +9,13 @@ class FileCache(UserDict[str, BinaryIO]):
     def __init__(self):
         super().__init__()
         self.nopen = defaultdict(int)
+
+    @contextmanager
+    def cached_fh(self, path: str):
+        try:
+            yield self.open(path)
+        finally:
+            self.release(path)
 
     def open(self, path: str):
         if path not in self:
