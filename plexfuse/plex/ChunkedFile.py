@@ -14,17 +14,18 @@ class ChunkedFile:
 
     def read(self, path: str, offset: int, size: int):
         chunk_number = self.chunk_number(offset)
+        chunk_offset = self.chunk_offset(offset)
 
         reads = []
         while size > 0:
             cache_path = self.cache_path(path, chunk_number)
             with cache_path.open("rb") as fp:
-                chunk_offset = self.chunk_offset(offset)
                 fp.seek(chunk_offset)
                 buffer = fp.read(size)
                 read_bytes = len(buffer)
                 size -= read_bytes
                 reads.append(buffer)
+            chunk_offset = 0
             chunk_number += 1
 
         return b"".join(reads)
