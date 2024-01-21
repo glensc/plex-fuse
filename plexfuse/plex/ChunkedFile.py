@@ -25,6 +25,9 @@ class ChunkedFile:
             size = max_size - offset
             print(f"avoid reading beyond end of file, adjusting size to {size}")
             warning = True
+        if offset == 663977984 and size == 1156:
+            print("On macos, set warning true")
+            warning = True
         chunk_number = self.chunk_number(offset)
         chunk_offset = self.chunk_offset(offset)
 
