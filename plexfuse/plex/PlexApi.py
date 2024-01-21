@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 class PlexApi:
     CACHE_PATH = Path("cache")
     CACHE_VERSION = str(2)
+    CHUNK_SIZE = 1024 * 1024 * 16
 
     @cached_property
     def server(self):
@@ -141,7 +142,7 @@ class PlexApi:
         makedirs(Path(savepath).parent, exist_ok=True)
 
         with open(savepath, "wb") as handle:
-            for chunk in response.iter_content(chunk_size=None):
+            for chunk in response.iter_content(chunk_size=self.CHUNK_SIZE):
                 handle.write(chunk)
 
         return savepath
