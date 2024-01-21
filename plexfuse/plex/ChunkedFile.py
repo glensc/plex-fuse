@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from plexfuse.plex.FileCache import FileCache
+
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi
 
@@ -11,6 +13,7 @@ class ChunkedFile:
         super().__init__()
         self.plex = plex
         self.chunk_size = plex.CHUNK_SIZE
+        self.files = FileCache()
 
     def read(self, path: str, offset: int, size: int):
         chunk_number = self.chunk_number(offset)
@@ -19,12 +22,14 @@ class ChunkedFile:
         reads = []
         while size > 0:
             cache_path = self.cache_path(path, chunk_number)
-            with cache_path.open("rb") as fp:
+
+            with self.files.cached_fh(cache_path) as fp:
                 fp.seek(chunk_offset)
                 buffer = fp.read(size)
                 read_bytes = len(buffer)
                 size -= read_bytes
                 reads.append(buffer)
+
             chunk_offset = 0
             chunk_number += 1
 
