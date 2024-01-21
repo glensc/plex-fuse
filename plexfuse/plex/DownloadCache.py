@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from collections import UserDict
 from typing import TYPE_CHECKING
 
@@ -12,6 +13,15 @@ class DownloadCache(UserDict):
     def __init__(self, plex: PlexApi):
         super().__init__()
         self.plex = plex
+
+    def __getitem__(self, key):
+        if key in self.data:
+            # Invalidate cache if file has gone missing
+            path = self.data[key]
+            if not os.path.exists(path):
+                del self[key]
+
+        return super().__getitem__(key)
 
     def __missing__(self, part: PlexVFSFileEntry):
         path = self.resolve(part)
