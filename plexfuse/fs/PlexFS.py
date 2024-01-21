@@ -1,6 +1,7 @@
 import errno
 from functools import cache
 from pathlib import Path
+from threading import Lock
 
 import fuse
 
@@ -20,6 +21,7 @@ class PlexFS(fuse.Fuse):
         self.cache_path = None
         self.file_map = {}
         self.reader = ChunkedFile(plex)
+        self.iolock = Lock()
 
     def fsinit(self):
         # "cache_path" property doesn't get always initialized from options:
@@ -60,7 +62,8 @@ class PlexFS(fuse.Fuse):
     def read(self, path, size, offset):
         file_path = self.file_map[path]
 
-        return self.reader.read(file_path, size=size, offset=offset)
+        with self.iolock:
+            return self.reader.read(file_path, size=size, offset=offset)
 
     def release(self, path, flags):
         try:
