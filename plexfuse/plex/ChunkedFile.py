@@ -15,7 +15,7 @@ class ChunkedFile:
         self.chunk_size = plex.CHUNK_SIZE
         self.files = FileCache()
 
-    def read(self, path: str, offset: int, size: int):
+    def read(self, path: str, offset: int, size: int, max_size: int):
         chunk_number = self.chunk_number(offset)
         chunk_offset = self.chunk_offset(offset)
 
