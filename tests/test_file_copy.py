@@ -15,4 +15,4 @@ def test_file():
     if part:
         savepath = plex.cache_path(part.key)
         logger.error(savepath)
-        plex.download_part(part)
+        plex.download_part(part.key)
