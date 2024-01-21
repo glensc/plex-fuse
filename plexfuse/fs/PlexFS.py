@@ -63,8 +63,12 @@ class PlexFS(fuse.Fuse):
         file_path = self.file_map[path].key
         max_size = self.file_map[path].size
 
-        with self.iolock:
-            return self.reader.read(file_path, size=size, offset=offset, max_size=max_size)
+        try:
+            with self.iolock:
+                return self.reader.read(file_path, size=size, offset=offset, max_size=max_size)
+        except EOFError as e:
+            print(f"read({path}): {e}")
+            return -errno.ENXIO
 
     def release(self, path, flags):
         try:
