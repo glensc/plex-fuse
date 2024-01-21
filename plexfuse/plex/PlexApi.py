@@ -131,8 +131,7 @@ class PlexApi:
         headers = {"X-Plex-Token": self.token}
         response = self.session.get(url, headers=headers, stream=True)
         if response.status_code not in (200, 201, 204):
-            errtext = response.text.replace("\n", " ")
-            message = f"({response.status_code}): {response.url} {errtext}"
+            message = f"({response.status_code}): {response.url}"
             raise RuntimeError(message)
 
         yield from response.iter_content(chunk_size=self.CHUNK_SIZE)
