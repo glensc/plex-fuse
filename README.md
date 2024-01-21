@@ -20,6 +20,7 @@ Currently implemented:
 - [x] Download movie files to cache, serve read operations from cache
 - [x] Add `-o cache_path` option
 - [x] Test that Plex Media Server allows requesting file by range
+- [x] Use chunked read for file cache
 - [ ] Listing of Show seasons
 - [ ] Listing of Season episodes
 - [ ] Listing of Episode files
