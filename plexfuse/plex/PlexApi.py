@@ -143,6 +143,9 @@ class PlexApi:
         response = self.session.get(url, headers=headers, stream=True)
         if response.status_code not in accepted_status:
             message = f"({response.status_code}): {response.url}"
+            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/416
+            if response.status_code == 416:
+                message += f" Range: {headers.get('range', None)}"
             raise RuntimeError(message)
 
         yield from response.iter_content(chunk_size=self.CHUNK_SIZE)
