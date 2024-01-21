@@ -18,6 +18,7 @@ Currently implemented:
 - [x] Memoize readdir and getattr calls
 - [x] Fix "/" in directory names
 - [x] Download movie files to cache, serve read operations from cache
+- [x] Add `-o cache_path` option
 - [ ] Listing of Show seasons
 - [ ] Listing of Season episodes
 - [ ] Listing of Episode files
