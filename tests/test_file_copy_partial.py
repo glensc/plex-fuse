@@ -12,7 +12,6 @@ def test_file():
 
     item = plex.fetch_item(path)
     part = plex.media_parts_by_name(item, filename)
-    plex.download_part(part)
 
     def sizes(gen):
         return list(map(lambda x: len(x), gen))
