@@ -16,10 +16,13 @@ class ChunkedFile:
         self.files = FileCache()
 
     def read(self, path: str, offset: int, size: int, max_size: int):
-        print(f"read: {path}, offset={offset}, size={size}, max_size={max_size} -> remaining {max_size-offset} to read {max_size-offset+size}")
-#        if max_size-offset+size > max_size-offset:
-#            size = max_size - offset
-#            print(f"avoid reading beyond end of file, adjusting size to {size}")
+        start_pos = max_size - offset
+        end_pos = start_pos + size
+        print(f"read: {path}, offset={offset}, size={size}, max_size={max_size}"
+              f" -> remaining {start_pos} to read {end_pos}")
+        if offset + size > max_size:
+            size = max_size - offset
+            print(f"avoid reading beyond end of file, adjusting size to {size}")
         chunk_number = self.chunk_number(offset)
         chunk_offset = self.chunk_offset(offset)
 
