@@ -19,7 +19,7 @@ class ChunkedFile:
         print(f"read: {path}, offset={offset}, size={size}, max_size={max_size} -> remaining {max_size-offset} to read {max_size-offset+size}")
         if max_size-offset+size > max_size-offset:
             size = max_size - offset
-            print(f"avoid reading beyond end of file, adjusting size to {size}"
+            print(f"avoid reading beyond end of file, adjusting size to {size}")
         chunk_number = self.chunk_number(offset)
         chunk_offset = self.chunk_offset(offset)
 
