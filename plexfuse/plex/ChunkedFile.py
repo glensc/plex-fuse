@@ -15,13 +15,13 @@ class ChunkedFile:
         self.chunk_size = plex.CHUNK_SIZE
         self.files = FileCache()
 
-    def read(self, path: str, offset: int, size: int):
+    def read(self, path: str, offset: int, size: int, max_size: int):
         chunk_number = self.chunk_number(offset)
         chunk_offset = self.chunk_offset(offset)
 
         reads = []
         while size > 0:
-            cache_path = self.cache_path(path, chunk_number)
+            cache_path = self.cache_path(path, chunk_number, max_size=max_size)
 
             with self.files.cached_fh(cache_path) as fp:
                 fp.seek(chunk_offset)
@@ -35,7 +35,7 @@ class ChunkedFile:
 
         return b"".join(reads)
 
-    def cache_path(self, path: str, chunk_number: int):
+    def cache_path(self, path: str, chunk_number: int, max_size: int):
         file = self.plex.cache_path(path)
         filename = f"{file.stem}-{self.chunk_size}-{chunk_number}{file.suffix}"
         cache_path = file.parent / filename
@@ -43,6 +43,8 @@ class ChunkedFile:
         if not cache_path.exists():
             print(f"Downloading: {cache_path}")
             base_offset = self.base_offset(chunk_number)
+            if base_offset > max_size:
+                raise EOFError(f"file read beyond end of file: {base_offset} > {max_size}")
             self.plex.download_part(path, cache_path,
                                     offset=base_offset, size=self.chunk_size)
 
