@@ -6,8 +6,7 @@ import fuse
 
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
-from plexfuse.plex.DownloadCache import DownloadCache
-from plexfuse.plex.FileCache import FileCache
+from plexfuse.plex.ChunkedFile import ChunkedFile
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.plex.PlexVFS import PlexVFS
 from plexfuse.plex.PlexVFSFileEntry import PlexVFSFileEntry
@@ -19,9 +18,8 @@ class PlexFS(fuse.Fuse):
         plex = PlexApi()
         self.vfs = PlexVFS(plex)
         self.cache_path = None
-        self.cache = DownloadCache(plex)
-        self.cache_map = {}
-        self.files = FileCache()
+        self.file_map = {}
+        self.reader = ChunkedFile(plex)
 
     def fsinit(self):
         # "cache_path" property doesn't get always initialized from options:
@@ -60,19 +58,13 @@ class PlexFS(fuse.Fuse):
             yield fuse.Direntry(str(r))
 
     def read(self, path, size, offset):
-        try:
-            cache_path = self.cache_map[path]
-            fh = self.files[cache_path]
-        except KeyError:
-            return -errno.EINVAL
+        file_path = self.file_map[path]
 
-        fh.seek(offset)
-        return fh.read(size)
+        return self.reader.read(file_path, size=size, offset=offset)
 
     def release(self, path, flags):
         try:
-            cache_path = self.cache_map[path]
-            self.files.release(cache_path)
+            del self.file_map[path]
         except KeyError as e:
             print(f"release({path}): {e}")
             return -errno.EINVAL
@@ -89,17 +81,6 @@ class PlexFS(fuse.Fuse):
         if not isinstance(part, PlexVFSFileEntry):
             return -errno.EISDIR
 
-        try:
-            cache_path = self.cache[part]
-        except KeyError as e:
-            print(f"open cache({path}): {e}")
-            self.cache[part] = None
-            return -errno.ENOMEM
-
-        if cache_path is None:
-            return -errno.ENOMEM
-
-        self.cache_map[path] = cache_path
-        self.files.open(cache_path)
+        self.file_map[path] = part.key
 
         return 0
