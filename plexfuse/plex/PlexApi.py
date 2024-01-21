@@ -137,6 +137,8 @@ class PlexApi:
             else:
                 headers["Range"] = f"bytes={offset}-"
             accepted_status = (206,)
+        elif size is not None:
+            raise ValueError("size not supported without offset")
 
         response = self.session.get(url, headers=headers, stream=True)
         if response.status_code not in accepted_status:
