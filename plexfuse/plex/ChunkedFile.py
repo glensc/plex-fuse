@@ -18,11 +18,13 @@ class ChunkedFile:
     def read(self, path: str, offset: int, size: int, max_size: int):
         start_pos = max_size - offset
         end_pos = start_pos + size
+        warning = False
         print(f"read: {path}, offset={offset}, size={size}, max_size={max_size}"
               f" -> remaining {start_pos} to read {end_pos}")
         if offset + size > max_size:
             size = max_size - offset
             print(f"avoid reading beyond end of file, adjusting size to {size}")
+            warning = True
         chunk_number = self.chunk_number(offset)
         chunk_offset = self.chunk_offset(offset)
 
@@ -34,6 +36,9 @@ class ChunkedFile:
                 fp.seek(chunk_offset)
                 buffer = fp.read(size)
                 read_bytes = len(buffer)
+                if warning:
+                    print(f"Check condition: seek:{chunk_offset}, must_read:{size},"
+                          f"  actual_read:{read_bytes}, remaining size={size - read_bytes}")
                 size -= read_bytes
                 reads.append(buffer)
 
