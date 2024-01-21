@@ -147,13 +147,12 @@ class PlexApi:
 
         yield from response.iter_content(chunk_size=self.CHUNK_SIZE)
 
-    def download_part(self, path: str, overwrite=False):
-        savepath = self.cache_path(path)
+    def download_part(self, key: str, savepath: Path, overwrite=False):
         if overwrite is False and savepath.exists():
             return savepath
 
-        content = self.request_file(path)
-        makedirs(Path(savepath).parent, exist_ok=True)
+        content = self.request_file(key)
+        makedirs(savepath.parent, exist_ok=True)
         with open(savepath, "wb") as handle:
             for chunk in content:
                 handle.write(chunk)
