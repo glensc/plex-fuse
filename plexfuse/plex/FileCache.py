@@ -31,8 +31,8 @@ class FileCache(UserDict[str, BinaryIO]):
         self.nopen[path] -= 1
         if self.nopen[path] <= 0:
             fh = self[path]
-            fh.close()
             del self[path]
+            fh.close()
 
     def _open(self, path: str):
         try:
