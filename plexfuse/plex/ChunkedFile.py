@@ -40,7 +40,7 @@ class ChunkedFile:
                 buffer = fp.read(size)
                 read_bytes = len(buffer)
                 if warning:
-                    print(f"Check condition: seek:{chunk_offset}, must_read:{size},"
+                    print(f"Check condition: chunk:{chunk_number}, seek:{chunk_offset}, must_read:{size},"
                           f"  actual_read:{read_bytes}, remaining size={size - read_bytes}")
                 size -= read_bytes
                 reads.append(buffer)
