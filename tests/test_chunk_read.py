@@ -1,12 +1,10 @@
 from plexfuse.plex.ChunkedFile import ChunkedFile
 from plexfuse.plex.PlexApi import PlexApi
-from plexfuse.plex.PlexVFS import PlexVFS
 
 
 def test_file():
     plex = PlexApi()
-    plexvfs = PlexVFS(plex)
-    cf = ChunkedFile(plex, plexvfs)
+    cf = ChunkedFile(plex)
     cf.chunk_size = 16
 
     key = "/library/parts/38908/1705801932/file.avi"
