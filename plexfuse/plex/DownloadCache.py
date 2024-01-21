@@ -33,4 +33,5 @@ class DownloadCache(UserDict):
         return path
 
     def resolve(self, part: PlexVFSFileEntry):
-        return self.plex.download_part(part)
+        savepath = self.plex.cache_path(part.key)
+        return self.plex.download_part(part.key, savepath)

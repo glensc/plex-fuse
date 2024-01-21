@@ -13,6 +13,6 @@ def test_file():
     item = plex.fetch_item(path)
     part = plex.media_parts_by_name(item, filename)
     if part:
-        savepath = plex.cache_path(part)
+        savepath = plex.cache_path(part.key)
         logger.error(savepath)
-        plex.download_part(part)
+        plex.download_part(part.key, savepath)

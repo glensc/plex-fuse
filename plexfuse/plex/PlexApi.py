@@ -118,13 +118,13 @@ class PlexApi:
     def fetch_item(self, key: str):
         return self.library.fetchItem(key)
 
-    def cache_path(self, item):
-        """Return cache path of item consisting machine uuid and item key"""
+    def cache_path(self, path: str):
+        """Return cache path of item consisting machine uuid and a path"""
         return \
             self.CACHE_PATH \
             / self.server.machineIdentifier \
             / self.CACHE_VERSION \
-            / item.key.lstrip("/")
+            / path.lstrip("/")
 
     def request_file(self, key: str, size=None, offset=None):
         url = self.url(key)
@@ -147,13 +147,13 @@ class PlexApi:
 
         yield from response.iter_content(chunk_size=self.CHUNK_SIZE)
 
-    def download_part(self, part, overwrite=False):
-        savepath = self.cache_path(part)
+    def download_part(self, key: str, savepath: Path,
+                      size=None, offset=None, overwrite=False):
         if overwrite is False and savepath.exists():
             return savepath
 
-        content = self.request_file(part.key)
-        makedirs(Path(savepath).parent, exist_ok=True)
+        content = self.request_file(key, size, offset)
+        makedirs(savepath.parent, exist_ok=True)
         with open(savepath, "wb") as handle:
             for chunk in content:
                 handle.write(chunk)
