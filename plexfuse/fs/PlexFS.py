@@ -60,31 +60,33 @@ class PlexFS(fuse.Fuse):
             yield fuse.Direntry(str(r))
 
     def read(self, path, size, offset):
-        file_path = self.file_map[path].key
-        max_size = self.file_map[path].size
-
         with self.iolock:
+            file_path = self.file_map[path].key
+            max_size = self.file_map[path].size
+
             return self.reader.read(file_path, size=size, offset=offset, max_size=max_size)
 
     def release(self, path, flags):
-        try:
-            del self.file_map[path]
-        except KeyError as e:
-            print(f"release({path}): {e}")
-            return -errno.EINVAL
+        with self.iolock:
+            try:
+                del self.file_map[path]
+            except KeyError as e:
+                print(f"release({path}): {e}")
+                return -errno.EINVAL
 
-        return 0
+            return 0
 
     def open(self, path, flags):
-        try:
-            part = self.vfs[path]
-        except KeyError as e:
-            print(f"open vfs({path}): {e}")
-            return -errno.ENOENT
+        with self.iolock:
+            try:
+                part = self.vfs[path]
+            except KeyError as e:
+                print(f"open vfs({path}): {e}")
+                return -errno.ENOENT
 
-        if not isinstance(part, PlexVFSFileEntry):
-            return -errno.EISDIR
+            if not isinstance(part, PlexVFSFileEntry):
+                return -errno.EISDIR
 
-        self.file_map[path] = part
+            self.file_map[path] = part
 
-        return 0
+            return 0
