@@ -127,6 +127,10 @@ class PlexApi:
             / item.key.lstrip("/")
 
     def download_part(self, part, overwrite=False):
+        savepath = self.cache_path(part)
+        if overwrite is False and savepath.exists():
+            return savepath
+
         url = self.url(part.key)
         headers = {"X-Plex-Token": self.token}
         response = self.session.get(url, headers=headers, stream=True)
@@ -134,10 +138,6 @@ class PlexApi:
             errtext = response.text.replace("\n", " ")
             message = f"({response.status_code}): {response.url} {errtext}"
             raise RuntimeError(message)
-
-        savepath = self.cache_path(part)
-        if overwrite is False and savepath.exists():
-            return savepath
 
         makedirs(Path(savepath).parent, exist_ok=True)
 
