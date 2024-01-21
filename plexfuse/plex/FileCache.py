@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import UserDict, defaultdict
 from contextlib import contextmanager
+from pathlib import Path
 from typing import BinaryIO
 
 
@@ -11,7 +12,8 @@ class FileCache(UserDict[str, BinaryIO]):
         self.nopen = defaultdict(int)
 
     @contextmanager
-    def cached_fh(self, path: str):
+    def cached_fh(self, path: str | Path):
+        path = str(path)
         try:
             yield self.open(path)
         finally:
