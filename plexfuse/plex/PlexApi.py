@@ -12,7 +12,7 @@ from plexfuse.plex.PlexVFSSection import PlexVFSSection
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
-    from plexapi.video import Movie
+    from plexapi.video import Movie, Show
 
     from plexfuse.plex.types import SectionTypes
 
@@ -88,6 +88,12 @@ class PlexApi:
             return next(it)
         except StopIteration:
             return None
+
+    def show_seasons(self, library: str, title: str):
+        show: Show = self.library_item(library, title)
+        if not show:
+            return None
+        return [season.title for season in show.seasons()]
 
     def media_part_names(self, item: Movie):
         if item is None:
