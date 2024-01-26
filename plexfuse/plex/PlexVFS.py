@@ -37,7 +37,7 @@ class PlexVFS(UserDict):
             return PlexVFSDirEntry(list(self.plex.library_items_titles(pe[1])))
         elif pc == 3 and pe[0] == "movie":
             movie = self.plex.library_item(pe[1], pe[2])
-            if not movie:
+            if movie is None:
                 print(f"Movie not found: {pe[1], pe[2]}")
                 return None
             return PlexVFSDirEntry(list(self.plex.media_part_names(movie)))
