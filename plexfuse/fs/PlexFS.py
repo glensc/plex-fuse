@@ -10,8 +10,8 @@ from plexfuse.fs.PlexFile import PlexFile
 from plexfuse.plex.ChunkedFile import ChunkedFile
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.plex.RefCountedDict import RefCountedDict
+from plexfuse.plexvfs.FileEntry import FileEntry
 from plexfuse.plexvfs.PlexVFS import PlexVFS
-from plexfuse.plexvfs.PlexVFSFileEntry import PlexVFSFileEntry
 
 
 class PlexFS(fuse.Fuse):
@@ -38,7 +38,7 @@ class PlexFS(fuse.Fuse):
             print(f"getattr({path}): {e}")
             return -errno.ENOENT
 
-        if isinstance(item, PlexVFSFileEntry):
+        if isinstance(item, FileEntry):
             return PlexFile(st_size=item.size)
 
         return PlexDirectory(st_nlink=2 + len(item))
@@ -85,7 +85,7 @@ class PlexFS(fuse.Fuse):
                 print(f"open vfs({path}): {e}")
                 return -errno.ENOENT
 
-            if not isinstance(part, PlexVFSFileEntry):
+            if not isinstance(part, FileEntry):
                 return -errno.EISDIR
 
             self.file_map[path] = part
