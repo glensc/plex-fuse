@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from plexfuse.plex.types import SectionTypes
 
 
-class PlexVFSSection:
+class SectionEntry:
     def __init__(self, section: SectionTypes):
         self.title = section.title
 

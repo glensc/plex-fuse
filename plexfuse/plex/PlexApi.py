@@ -7,9 +7,9 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
-from plexfuse.plex.PlexVFSEpisode import PlexVFSEpisode
-from plexfuse.plex.PlexVFSMovie import PlexVFSMovie
-from plexfuse.plex.PlexVFSSection import PlexVFSSection
+from plexfuse.plexvfs.EpisodeEntry import EpisodeEntry
+from plexfuse.plexvfs.MovieEntry import MovieEntry
+from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
@@ -47,8 +47,8 @@ class PlexApi:
     def section_types(self) -> set[str]:
         return {s.type for s in self.sections}
 
-    def sections_by_type(self, type: str) -> set[PlexVFSSection]:
-        return {PlexVFSSection(s) for s in self.sections if s.type == type}
+    def sections_by_type(self, type: str) -> set[SectionEntry]:
+        return {SectionEntry(s) for s in self.sections if s.type == type}
 
     def section_by_title(self, title: str) -> SectionTypes | None:
         it = (s for s in self.sections if s.title == title)
@@ -64,7 +64,7 @@ class PlexApi:
 
     def library_items_titles(self, library: str):
         for title, m in self.library_items(library):
-            yield PlexVFSMovie(m, title)
+            yield MovieEntry(m, title)
 
     def _library_items(self, library: str):
         section = self.section_by_title(library)
@@ -102,7 +102,7 @@ class PlexApi:
             return None
 
         season_number = [season.seasonNumber for season in show.seasons() if season.title == season_name][0]
-        return [PlexVFSEpisode(season) for season in show.episodes() if season.seasonNumber == season_number]
+        return [EpisodeEntry(season) for season in show.episodes() if season.seasonNumber == season_number]
 
     def media_part_names(self, item: Movie):
         if item is None:

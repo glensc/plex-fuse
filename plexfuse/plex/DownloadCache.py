@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi
-    from plexfuse.plex.PlexVFSFileEntry import PlexVFSFileEntry
+    from plexfuse.plexvfs.FileEntry import FileEntry
 
 
 class DownloadCache(UserDict):
@@ -23,7 +23,7 @@ class DownloadCache(UserDict):
 
         return super().__getitem__(key)
 
-    def __missing__(self, part: PlexVFSFileEntry):
+    def __missing__(self, part: FileEntry):
         path = self.resolve(part)
         if path is None:
             raise KeyError(f"Unsupported part: {part}")
@@ -32,6 +32,6 @@ class DownloadCache(UserDict):
 
         return path
 
-    def resolve(self, part: PlexVFSFileEntry):
+    def resolve(self, part: FileEntry):
         savepath = self.plex.cache_path(part.key)
         return self.plex.download_part(part.key, savepath)

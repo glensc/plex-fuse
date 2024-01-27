@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from plexapi.video import Episode
 
 
-class PlexVFSEpisode:
+class EpisodeEntry:
     def __init__(self, item: Episode):
         self.item = item
 

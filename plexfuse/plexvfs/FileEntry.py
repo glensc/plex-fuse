@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from plexapi.media import MediaPart
 
 
-class PlexVFSFileEntry:
+class FileEntry:
     def __init__(self, part: MediaPart):
         self.size = part.size
         self.key = part.key
