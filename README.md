@@ -22,7 +22,7 @@ Currently implemented:
 - [x] Test that Plex Media Server allows requesting file by range
 - [x] Use chunked read for file cache
 - [x] Listing of Show seasons
-- [ ] Listing of Season episodes
+- [x] Listing of Season episodes
 - [ ] Listing of Episode files
 - [ ] Handling of "artist" library type
 
