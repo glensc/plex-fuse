@@ -21,7 +21,7 @@ Currently implemented:
 - [x] Add `-o cache_path` option
 - [x] Test that Plex Media Server allows requesting file by range
 - [x] Use chunked read for file cache
-- [ ] Listing of Show seasons
+- [x] Listing of Show seasons
 - [ ] Listing of Season episodes
 - [ ] Listing of Episode files
 - [ ] Handling of "artist" library type
