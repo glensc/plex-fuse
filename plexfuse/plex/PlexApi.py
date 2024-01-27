@@ -95,6 +95,14 @@ class PlexApi:
             return None
         return [season.title for season in show.seasons()]
 
+    def season_episodes(self, library: str, show_title: str, season_name: str):
+        show: Show = self.library_item(library, show_title)
+        if not show:
+            return None
+
+        season_number = [season.seasonNumber for season in show.seasons() if season.title == season_name][0]
+        return [season.title for season in show.episodes() if season.seasonNumber == season_number]
+
     def media_part_names(self, item: Movie):
         if item is None:
             return None
