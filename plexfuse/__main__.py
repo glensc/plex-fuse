@@ -1,4 +1,5 @@
 import sys
+from os.path import basename
 
 if len(__package__) == 0:
 
@@ -17,6 +18,6 @@ Usage: {sys.executable} -m plexfuse {' '.join(sys.argv[1:])}
 from plexfuse.fs.main import main
 
 # Ensure that program shows in usage (not __main__.py)
-sys.argv[0] = __package__
+sys.argv[0] = basename(__package__)
 
 main()
