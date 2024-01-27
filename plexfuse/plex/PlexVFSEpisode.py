@@ -16,8 +16,9 @@ class PlexVFSEpisode:
 
     @cached_property
     def title(self):
+        title = f"{self.item.seasonEpisode} "
         # Handle directory separator in filename
-        title = self.item.title.replace("/", "∕")
+        title += self.item.title.replace("/", "∕")
         year = self.item.__dict__.get("year", None)
         if year:
             title += f" ({year})"
