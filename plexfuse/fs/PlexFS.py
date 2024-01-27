@@ -11,6 +11,7 @@ from plexfuse.plex.ChunkedFile import ChunkedFile
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.plex.PlexVFS import PlexVFS
 from plexfuse.plex.PlexVFSFileEntry import PlexVFSFileEntry
+from plexfuse.plex.RefCountedDict import RefCountedDict
 
 
 class PlexFS(fuse.Fuse):
@@ -19,7 +20,7 @@ class PlexFS(fuse.Fuse):
         plex = PlexApi()
         self.vfs = PlexVFS(plex)
         self.cache_path = None
-        self.file_map = {}
+        self.file_map = RefCountedDict()
         self.reader = ChunkedFile(plex)
         self.iolock = Lock()
 
