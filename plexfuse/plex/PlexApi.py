@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
+from plexfuse.plex.PlexVFSEpisode import PlexVFSEpisode
 from plexfuse.plex.PlexVFSMovie import PlexVFSMovie
 from plexfuse.plex.PlexVFSSection import PlexVFSSection
 
@@ -101,7 +102,7 @@ class PlexApi:
             return None
 
         season_number = [season.seasonNumber for season in show.seasons() if season.title == season_name][0]
-        return [season.title for season in show.episodes() if season.seasonNumber == season_number]
+        return [PlexVFSEpisode(season) for season in show.episodes() if season.seasonNumber == season_number]
 
     def media_part_names(self, item: Movie):
         if item is None:
