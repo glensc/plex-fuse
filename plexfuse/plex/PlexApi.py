@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
+from plexfuse.plex.PlexVFSEpisode import PlexVFSEpisode
 from plexfuse.plex.PlexVFSMovie import PlexVFSMovie
 from plexfuse.plex.PlexVFSSection import PlexVFSSection
 
@@ -46,7 +47,7 @@ class PlexApi:
     def section_types(self) -> set[str]:
         return {s.type for s in self.sections}
 
-    def sections_by_type(self, type: str) -> set[str]:
+    def sections_by_type(self, type: str) -> set[PlexVFSSection]:
         return {PlexVFSSection(s) for s in self.sections if s.type == type}
 
     def section_by_title(self, title: str) -> SectionTypes | None:
@@ -94,6 +95,14 @@ class PlexApi:
         if not show:
             return None
         return [season.title for season in show.seasons()]
+
+    def season_episodes(self, library: str, show_title: str, season_name: str):
+        show: Show = self.library_item(library, show_title)
+        if not show:
+            return None
+
+        season_number = [season.seasonNumber for season in show.seasons() if season.title == season_name][0]
+        return [PlexVFSEpisode(season) for season in show.episodes() if season.seasonNumber == season_number]
 
     def media_part_names(self, item: Movie):
         if item is None:
