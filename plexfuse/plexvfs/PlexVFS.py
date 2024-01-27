@@ -3,8 +3,8 @@ from __future__ import annotations
 from collections import UserDict
 from typing import TYPE_CHECKING
 
-from plexfuse.plex.PlexVFSDirEntry import PlexVFSDirEntry
-from plexfuse.plex.PlexVFSFileEntry import PlexVFSFileEntry
+from plexfuse.plexvfs.PlexVFSDirEntry import PlexVFSDirEntry
+from plexfuse.plexvfs.PlexVFSFileEntry import PlexVFSFileEntry
 
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi

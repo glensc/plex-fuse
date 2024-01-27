@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi
-    from plexfuse.plex.PlexVFSFileEntry import PlexVFSFileEntry
+    from plexfuse.plexvfs.PlexVFSFileEntry import PlexVFSFileEntry
 
 
 class DownloadCache(UserDict):

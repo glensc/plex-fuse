@@ -7,9 +7,9 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
-from plexfuse.plex.PlexVFSEpisode import PlexVFSEpisode
-from plexfuse.plex.PlexVFSMovie import PlexVFSMovie
-from plexfuse.plex.PlexVFSSection import PlexVFSSection
+from plexfuse.plexvfs.PlexVFSEpisode import PlexVFSEpisode
+from plexfuse.plexvfs.PlexVFSMovie import PlexVFSMovie
+from plexfuse.plexvfs.PlexVFSSection import PlexVFSSection
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
