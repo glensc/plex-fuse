@@ -46,7 +46,7 @@ class PlexApi:
     def section_types(self) -> set[str]:
         return {s.type for s in self.sections}
 
-    def sections_by_type(self, type: str) -> set[str]:
+    def sections_by_type(self, type: str) -> set[PlexVFSSection]:
         return {PlexVFSSection(s) for s in self.sections if s.type == type}
 
     def section_by_title(self, title: str) -> SectionTypes | None:
