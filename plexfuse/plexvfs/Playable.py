@@ -11,6 +11,9 @@ class Playable:
     def __init__(self, item: Episode):
         self.item = item
 
+    def __str__(self):
+        return self.title
+
     @cached_property
     def title(self):
         title = f"{self.item.seasonEpisode} "
