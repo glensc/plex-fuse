@@ -88,7 +88,8 @@ class PlexApi:
         show: Show = self.library_item(library, title)
         if not show:
             return None
-        return [season.title for season in show.item.seasons()]
+        return [season.title for season in self.all_seasons(library)
+                if season.parentRatingKey == show.item.ratingKey]
 
     def season_episodes(self, library: str, show_title: str, season_name: str):
         m = self.library_item(library, show_title)
