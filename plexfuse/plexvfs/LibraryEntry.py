@@ -27,6 +27,9 @@ class LibraryEntry:
     def sections_by_type(self):
         d = defaultdict(list)
         for s in self.sections:
+            # Not yet there
+            if s.type == "artist":
+                continue
             d[s.type].append(s)
         return d
 
