@@ -26,6 +26,7 @@ Currently implemented:
 - [x] Listing of Episode files
 - [x] Downloading episode files
 - [x] Unicode normalize titles
+- [x] Support .plexmatch for Movies
 - [ ] Handling of "artist" library type
 
 ## Usage
