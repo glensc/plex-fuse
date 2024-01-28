@@ -18,6 +18,21 @@ class Playable:
         return self.title
 
     @property
+    def ctime(self):
+        return self.item.addedAt.timestamp()
+
+    @property
+    def atime(self):
+        try:
+            return self.item.lastViewedAt.timestamp()
+        except AttributeError:
+            return 0
+
+    @property
+    def mtime(self):
+        return self.item.updatedAt.timestamp()
+
+    @property
     def guids(self) -> list[Guid]:
         return self.item.guids if self.item.guid.startswith("plex://") else []
 
