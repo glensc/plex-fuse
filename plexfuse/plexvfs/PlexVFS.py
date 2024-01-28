@@ -34,12 +34,12 @@ class PlexVFS(UserDict):
         if pc == 1 and pe[0] in self["/"]:
             return DirEntry(list(self.plex.sections_by_type(pe[0])))
         elif pc == 2:
-            return DirEntry(list(self.plex.library_items_titles(pe[1])))
+            return DirEntry(self.plex.library_items(pe[1]))
         elif pc == 3 and pe[0] == "movie":
             movie = self.plex.library_item(*pe[1:])
             if movie is None:
                 raise KeyError(pe)
-            return DirEntry(list(self.plex.media_part_names(movie)))
+            return DirEntry(list(self.plex.media_part_names(movie.item)))
         elif pc == 3 and pe[0] == "show":
             seasons = self.plex.show_seasons(*pe[1:])
             if seasons is None:
@@ -62,8 +62,8 @@ class PlexVFS(UserDict):
             return FileEntry(part)
         elif pc == 4 and pe[0] == "movie" \
                 and (m := self.plex.library_item(pe[1], pe[2])) \
-                and pe[3] in self.plex.media_part_names(m) \
-                and (part := self.plex.media_parts_by_name(m, pe[3])):
+                and pe[3] in self.plex.media_part_names(m.item) \
+                and (part := self.plex.media_parts_by_name(m.item, pe[3])):
             return FileEntry(part)
 
         return None

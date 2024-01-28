@@ -60,30 +60,17 @@ class PlexApi:
 
     @cache
     def library_items(self, library: str):
-        return set(self._library_items(library))
-
-    def library_items_titles(self, library: str):
-        for title, m in self.library_items(library):
-            yield MovieEntry(m)
+        return list(self._library_items(library))
 
     def _library_items(self, library: str):
         section = self.section_by_title(library)
         if section is None:
             return None
         for m in section.search():
-            # Handle directory separator in filename
-            title = m.title.replace("/", "∕")
-            year = m.__dict__.get("year", None)
-            if m.TYPE != "artist" and year:
-                title += f" ({year})"
-
-            guids = m.guids if m.guid.startswith("plex://") else []
-            for guid in guids:
-                title += f" {{{guid.id.replace('://', '-')}}}"
-            yield title, m
+            yield MovieEntry(m)
 
     def library_item(self, library: str, title: str):
-        it = (m for m_title, m in self.library_items(library) if m_title == title)
+        it = (m for m in self.library_items(library) if m.title == title)
 
         try:
             return next(it)
@@ -94,12 +81,13 @@ class PlexApi:
         show: Show = self.library_item(library, title)
         if not show:
             return None
-        return [season.title for season in show.seasons()]
+        return [season.title for season in show.item.seasons()]
 
     def season_episodes(self, library: str, show_title: str, season_name: str):
-        show: Show = self.library_item(library, show_title)
-        if not show:
+        m = self.library_item(library, show_title)
+        if not m:
             return None
+        show: Show = m.item
 
         try:
             season_number = [season.seasonNumber for season in show.seasons() if season.title == season_name][0]
