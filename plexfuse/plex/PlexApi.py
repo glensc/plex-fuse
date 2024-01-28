@@ -121,7 +121,7 @@ class PlexApi:
             return None
         yield from (fn for fn, part in self.media_parts(item))
 
-    def media_parts_by_name(self, item: Movie, filename: str) -> MediaPart | None:
+    def media_parts_by_name(self, item: Movie | Episode, filename: str) -> MediaPart | None:
         it = (part for fn, part in self.media_parts(item)
               if PureWindowsPath(part.file).name == filename)
 
