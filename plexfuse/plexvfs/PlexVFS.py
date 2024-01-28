@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from plexfuse.plexvfs.DirEntry import DirEntry
 from plexfuse.plexvfs.FileEntry import FileEntry
+from plexfuse.plexvfs.PlexMatchEntry import PlexMatchEntry
 
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi
@@ -63,6 +64,11 @@ class PlexVFS(UserDict):
             if part is None:
                 raise KeyError(pe)
             return FileEntry(part)
+        elif pc == 4 and pe[0] == "movie" and pe[3].endswith(".plexmatch"):
+            content = self.plex.plexmatch_content(*pe[1:-1])
+            if content is None:
+                raise KeyError(pe)
+            return PlexMatchEntry(content)
         elif pc == 4 and pe[0] == "movie" \
                 and (m := self.plex.library_item(pe[1], pe[2])) \
                 and pe[3] in self.plex.media_part_names(m.item) \
