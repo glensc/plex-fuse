@@ -4,11 +4,11 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from plexapi.video import Episode
+    from plexapi.video import Episode, Movie
 
 
 class Playable:
-    def __init__(self, item: Episode):
+    def __init__(self, item: Episode | Movie):
         self.item = item
 
     def __str__(self):
@@ -16,7 +16,7 @@ class Playable:
 
     @cached_property
     def title(self):
-        title = f"{self.item.seasonEpisode} "
+        title = f"{self.item.seasonEpisode} " if self.item.TYPE == "episode" else ""
         # Handle directory separator in filename
         title += self.item.title.replace("/", "∕")
         year = self.item.__dict__.get("year", None)
