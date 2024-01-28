@@ -73,6 +73,6 @@ class PlexVFS(UserDict):
             part = self.plex.movie_part(*pe[1:])
             if part is None:
                 raise KeyError(pe)
-            return FileEntry(part)
+            return part
 
         return None
