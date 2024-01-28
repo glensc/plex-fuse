@@ -53,6 +53,12 @@ class PlexVFS(UserDict):
                 print(f"Season not found: {pe[1]}, {pe[2]}, {pe[3]}")
                 return None
             return DirEntry(episodes)
+        elif pc == 5 and pe[0] == "show":
+            names = self.plex.episode_files(pe[1], pe[2], pe[3], pe[4])
+            if names is None:
+                print(f"Episode not found: {pe[1]}, {pe[2]}, {pe[3]}, {pe[4]}")
+                return None
+            return DirEntry(names)
         elif pc == 4 and pe[0] == "movie" \
                 and (m := self.plex.library_item(pe[1], pe[2])) \
                 and pe[3] in self.plex.media_part_names(m) \

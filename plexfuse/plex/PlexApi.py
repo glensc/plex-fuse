@@ -13,7 +13,7 @@ from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
-    from plexapi.video import Movie, Show
+    from plexapi.video import Episode, Movie, Show
 
     from plexfuse.plex.types import SectionTypes
 
@@ -104,7 +104,19 @@ class PlexApi:
         season_number = [season.seasonNumber for season in show.seasons() if season.title == season_name][0]
         return [EpisodeEntry(season) for season in show.episodes() if season.seasonNumber == season_number]
 
-    def media_part_names(self, item: Movie):
+    def episode_files(self, library: str, show_title: str, season_name: str, episode_title: str):
+        show: Show = self.library_item(library, show_title)
+        if not show:
+            return None
+
+        episodes = self.season_episodes(library, show_title, season_name)
+        episode = [episode for episode in episodes if episode.title == episode_title][0]
+        parts = self.media_part_names(episode.item)
+        if parts is None:
+            return None
+        return list(parts)
+
+    def media_part_names(self, item: Movie | Episode):
         if item is None:
             return None
         yield from (fn for fn, part in self.media_parts(item))
