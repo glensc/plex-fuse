@@ -17,10 +17,6 @@ class SectionEntry:
         self.title: str = section.title
         self.type: str = section.type
 
-    @property
-    def name(self):
-        return self.title
-
     @cached_property
     def items(self):
         return [MovieEntry(m) for m in self.section.search()]
@@ -38,4 +34,4 @@ class SectionEntry:
         return [EpisodeEntry(m) for m in self.section.search(libtype="episode")]
 
     def __str__(self):
-        return self.name
+        return self.title
