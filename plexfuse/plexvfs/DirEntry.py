@@ -1,6 +1,9 @@
+from plexfuse.plexvfs.normalize import normalize
+
+
 class DirEntry:
     def __init__(self, entries):
-        self.entries = entries
+        self.entries = [normalize(str(s)) for s in entries]
 
     def __len__(self):
         return len(self.entries)

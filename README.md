@@ -25,6 +25,7 @@ Currently implemented:
 - [x] Listing of Season episodes
 - [x] Listing of Episode files
 - [x] Downloading episode files
+- [x] Unicode normalize titles
 - [ ] Handling of "artist" library type
 
 ## Usage

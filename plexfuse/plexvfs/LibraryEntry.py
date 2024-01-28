@@ -4,6 +4,7 @@ from collections import defaultdict
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from plexfuse.plexvfs.normalize import normalize
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
@@ -31,4 +32,4 @@ class LibraryEntry:
 
     @cached_property
     def section_by_title(self):
-        return dict({(s.title, s) for s in self.sections})
+        return dict({(normalize(s.title), s) for s in self.sections})

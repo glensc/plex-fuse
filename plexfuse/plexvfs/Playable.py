@@ -3,6 +3,8 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from plexfuse.plexvfs.normalize import normalize
+
 if TYPE_CHECKING:
     from plexapi.video import Episode, Movie
 
@@ -17,8 +19,7 @@ class Playable:
     @cached_property
     def title(self):
         title = f"{self.item.seasonEpisode} " if self.item.TYPE == "episode" else ""
-        # Handle directory separator in filename
-        title += self.item.title.replace("/", "∕")
+        title += self.item.title
         year = self.item.__dict__.get("year", None)
         if year:
             title += f" ({year})"
@@ -27,4 +28,4 @@ class Playable:
         for guid in guids:
             title += f" {{{guid.id.replace('://', '-')}}}"
 
-        return title
+        return normalize(title)

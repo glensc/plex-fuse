@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from plexfuse.plexvfs.EpisodeEntry import EpisodeEntry
 from plexfuse.plexvfs.MovieEntry import MovieEntry
+from plexfuse.plexvfs.normalize import normalize
 from plexfuse.plexvfs.SeasonEntry import SeasonEntry
 
 if TYPE_CHECKING:
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 class SectionEntry:
     def __init__(self, section: SectionTypes):
         self.section = section
-        self.title: str = section.title
+        self.title: str = normalize(section.title)
         self.type: str = section.type
 
     @cached_property
@@ -23,7 +24,7 @@ class SectionEntry:
 
     @cached_property
     def items_by_title(self):
-        return dict({(m.title, m) for m in self.items})
+        return dict({(normalize(m.title), m) for m in self.items})
 
     @cached_property
     def seasons(self):
