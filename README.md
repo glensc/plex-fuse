@@ -24,6 +24,7 @@ Currently implemented:
 - [x] Listing of Show seasons
 - [x] Listing of Season episodes
 - [x] Listing of Episode files
+- [x] Downloading episode files
 - [ ] Handling of "artist" library type
 
 ## Usage

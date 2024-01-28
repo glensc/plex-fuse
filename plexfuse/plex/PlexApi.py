@@ -116,12 +116,22 @@ class PlexApi:
             return None
         return list(parts)
 
+    def episode_part(self, library: str, show_title: str, season_name: str, episode_title: str, part_name: str):
+        show: Show = self.library_item(library, show_title)
+        if not show:
+            return None
+
+        episodes = self.season_episodes(library, show_title, season_name)
+        episode = [episode for episode in episodes if episode.title == episode_title][0]
+        part = self.media_parts_by_name(episode.item, part_name)
+        return part
+
     def media_part_names(self, item: Movie | Episode):
         if item is None:
             return None
         yield from (fn for fn, part in self.media_parts(item))
 
-    def media_parts_by_name(self, item: Movie, filename: str) -> MediaPart | None:
+    def media_parts_by_name(self, item: Movie | Episode, filename: str) -> MediaPart | None:
         it = (part for fn, part in self.media_parts(item)
               if PureWindowsPath(part.file).name == filename)
 
