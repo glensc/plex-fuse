@@ -126,8 +126,10 @@ class PlexApi:
             return None
 
         episodes = self.season_episodes(library, show_title, season_name)
-        episode = [episode for episode in episodes if episode.title == episode_title][0]
-        return episode
+        try:
+            return [episode for episode in episodes if episode.title == episode_title][0]
+        except IndexError:
+            return None
 
     def media_part_names(self, item: Movie | Episode):
         if item is None:
