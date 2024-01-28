@@ -142,6 +142,8 @@ class PlexApi:
         if item is None:
             return None
         yield from (fn for fn, part in self.media_parts(item))
+        if item.type == "movie":
+            yield ".plexmatch"
 
     def media_parts_by_name(self, item: Movie | Episode, filename: str) -> MediaPart | None:
         it = (part for fn, part in self.media_parts(item)
