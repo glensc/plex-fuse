@@ -23,5 +23,9 @@ class SectionEntry:
     def items(self):
         return [MovieEntry(m) for m in self.section.search()]
 
+    @cached_property
+    def items_by_title(self):
+        return dict({(m.title, m) for m in self.items})
+
     def __str__(self):
         return self.name
