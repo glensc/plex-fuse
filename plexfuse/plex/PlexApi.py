@@ -77,6 +77,13 @@ class PlexApi:
         except StopIteration:
             return None
 
+    @cache
+    def all_seasons(self, library):
+        section = self.section_by_title(library)
+        if section is None:
+            return None
+        return section.search(libtype="season")
+
     def show_seasons(self, library: str, title: str):
         show: Show = self.library_item(library, title)
         if not show:
