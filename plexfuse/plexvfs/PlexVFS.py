@@ -18,7 +18,7 @@ class PlexVFS(UserDict):
     def __missing__(self, path: str):
         entry = self.resolve(path)
         if entry is None:
-            raise KeyError(f"Unsupported path: {path}")
+            raise KeyError(path)
 
         self[path] = entry
 
@@ -38,19 +38,19 @@ class PlexVFS(UserDict):
         elif pc == 3 and pe[0] == "movie":
             movie = self.plex.library_item(pe[1], pe[2])
             if movie is None:
-                print(f"Movie not found: {pe[1], pe[2]}")
+                print(f"Movie not found: {pe[1]}, {pe[2]}")
                 return None
             return DirEntry(list(self.plex.media_part_names(movie)))
         elif pc == 3 and pe[0] == "show":
             seasons = self.plex.show_seasons(pe[1], pe[2])
             if seasons is None:
-                print(f"Show not found: {pe[1], pe[2]}")
+                print(f"Show not found: {pe[1]}, {pe[2]}")
                 return None
             return DirEntry(seasons)
         elif pc == 4 and pe[0] == "show":
             episodes = self.plex.season_episodes(pe[1], pe[2], pe[3])
             if episodes is None:
-                print(f"Season not found: {pe[1], pe[2]}, {pe[3]}")
+                print(f"Season not found: {pe[1]}, {pe[2]}, {pe[3]}")
                 return None
             return DirEntry(episodes)
         elif pc == 4 and pe[0] == "movie" \

@@ -35,7 +35,7 @@ class PlexFS(fuse.Fuse):
         try:
             item = self.vfs[path]
         except KeyError as e:
-            print(f"getattr({path}): {e}")
+            print(f"ERROR: getattr: Unsupported path: {e}")
             return -errno.ENOENT
 
         if isinstance(item, FileEntry):
