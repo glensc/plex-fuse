@@ -84,6 +84,13 @@ class PlexApi:
             return None
         return section.search(libtype="season")
 
+    @cache
+    def all_episodes(self, library):
+        section = self.section_by_title(library)
+        if section is None:
+            return None
+        return section.search(libtype="episode")
+
     def show_seasons(self, library: str, title: str):
         show: Show = self.library_item(library, title)
         if not show:
