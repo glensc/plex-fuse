@@ -22,3 +22,6 @@ class PlexMatch:
         for guid in guids:
             provider, value = guid.id.split("://")
             yield f"{provider}id: {value}"
+
+        # Add newline to end of the file
+        yield ""
