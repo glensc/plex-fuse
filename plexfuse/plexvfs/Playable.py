@@ -18,6 +18,14 @@ class Playable:
         return self.title
 
     @property
+    def timestamps(self):
+        return {
+            "st_ctime": self.ctime,
+            "st_atime": self.atime,
+            "st_mtime": self.mtime,
+        }
+
+    @property
     def ctime(self):
         return self.item.addedAt.timestamp()
 
