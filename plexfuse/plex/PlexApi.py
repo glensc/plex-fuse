@@ -105,26 +105,29 @@ class PlexApi:
         return [EpisodeEntry(season) for season in show.episodes() if season.seasonNumber == season_number]
 
     def episode_files(self, library: str, show_title: str, season_name: str, episode_title: str):
-        show: Show = self.library_item(library, show_title)
-        if not show:
+        episode = self.show_episode(library, show_title, season_name, episode_title)
+        if not episode:
             return None
-
-        episodes = self.season_episodes(library, show_title, season_name)
-        episode = [episode for episode in episodes if episode.title == episode_title][0]
         parts = self.media_part_names(episode.item)
         if parts is None:
             return None
         return list(parts)
 
     def episode_part(self, library: str, show_title: str, season_name: str, episode_title: str, part_name: str):
+        episode = self.show_episode(library, show_title, season_name, episode_title)
+        if not episode:
+            return None
+        part = self.media_parts_by_name(episode.item, part_name)
+        return part
+
+    def show_episode(self, library: str, show_title: str, season_name: str, episode_title: str):
         show: Show = self.library_item(library, show_title)
         if not show:
             return None
 
         episodes = self.season_episodes(library, show_title, season_name)
         episode = [episode for episode in episodes if episode.title == episode_title][0]
-        part = self.media_parts_by_name(episode.item, part_name)
-        return part
+        return episode
 
     def media_part_names(self, item: Movie | Episode):
         if item is None:
