@@ -34,7 +34,7 @@ class Playable:
         try:
             return self.item.lastViewedAt.timestamp()
         except AttributeError:
-            return 0
+            return self.mtime
 
     @property
     def mtime(self):
