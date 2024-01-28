@@ -8,8 +8,8 @@ if TYPE_CHECKING:
 
 class SectionEntry:
     def __init__(self, section: SectionTypes):
-        self.title = section.title
-        self.type = section.type
+        self.title: str = section.title
+        self.type: str = section.type
 
     @property
     def name(self):
