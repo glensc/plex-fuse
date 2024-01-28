@@ -29,8 +29,7 @@ class Playable:
         if year:
             title += f" ({year})"
 
-        guids = self.item.guids if self.item.guid.startswith("plex://") else []
-        for guid in guids:
+        for guid in self.guids:
             title += f" {{{guid.id.replace('://', '-')}}}"
 
         return normalize(title)
