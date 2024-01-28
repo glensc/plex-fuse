@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 class SectionEntry:
     def __init__(self, section: SectionTypes):
         self.title = section.title
+        self.type = section.type
 
     @property
     def name(self):
