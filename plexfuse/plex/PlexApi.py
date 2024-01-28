@@ -100,16 +100,18 @@ class PlexApi:
                 if season.parentRatingKey == show.item.ratingKey]
 
     def season_episodes(self, library: str, show_title: str, season_name: str):
-        m = self.library_item(library, show_title)
-        if not m:
-            return None
-        show: Show = m.item
-
         try:
-            season_number = [season.seasonNumber for season in show.seasons() if season.title == season_name][0]
+            rating_key = [m.item.ratingKey
+                          for m in self.show_seasons(library, show_title)
+                          if m.title == season_name][0]
         except IndexError:
             return None
-        return [EpisodeEntry(season) for season in show.episodes() if season.seasonNumber == season_number]
+
+        try:
+            episodes = [m for m in self.all_episodes(library) if m.parentRatingKey == rating_key]
+        except IndexError:
+            return None
+        return [EpisodeEntry(episode) for episode in episodes]
 
     def episode_files(self, library: str, show_title: str, season_name: str, episode_title: str):
         episode = self.show_episode(library, show_title, season_name, episode_title)
