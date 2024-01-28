@@ -6,5 +6,8 @@ class PlexMatchEntry:
         self.content = content
         self.size = len(content)
 
+    def read(self, offset: int, size: int):
+        return self.content[offset:size]
+
     def __len__(self):
         return self.size
