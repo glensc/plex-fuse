@@ -60,7 +60,7 @@ class PlexFS(fuse.Fuse):
             return
 
         for r in it:
-            yield fuse.Direntry(str(r))
+            yield fuse.Direntry(r)
 
     def read(self, path, size, offset):
         with self.iolock:
