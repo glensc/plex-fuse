@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from plexfuse.plexvfs.normalize import normalize
+from plexfuse.normalize import normalize
 
 if TYPE_CHECKING:
     from plexapi.video import Season

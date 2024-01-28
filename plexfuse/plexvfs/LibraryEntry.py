@@ -4,7 +4,7 @@ from collections import defaultdict
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from plexfuse.plexvfs.normalize import normalize
+from plexfuse.normalize import normalize
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
