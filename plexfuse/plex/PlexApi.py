@@ -7,16 +7,12 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
-from plexfuse.plexvfs.EpisodeEntry import EpisodeEntry
-from plexfuse.plexvfs.MovieEntry import MovieEntry
-from plexfuse.plexvfs.SeasonEntry import SeasonEntry
+from plexfuse.plexvfs.LibraryEntry import LibraryEntry
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
     from plexapi.video import Episode, Movie, Show
-
-    from plexfuse.plex.types import SectionTypes
 
 
 class PlexApi:
@@ -36,68 +32,62 @@ class PlexApi:
     def token(self):
         return self.server._token
 
-    @property
+    @cached_property
     def library(self):
-        return self.server.library
+        return LibraryEntry(self.server.library)
 
     @cached_property
-    def sections(self) -> list[SectionTypes]:
-        return self.library.sections()
+    def sections(self) -> list[SectionEntry]:
+        return self.library.sections
 
     @property
     def section_types(self) -> set[str]:
-        return {s.type for s in self.sections}
+        return self.library.section_types
 
-    def sections_by_type(self, type: str) -> set[SectionEntry]:
-        return {SectionEntry(s) for s in self.sections if s.type == type}
-
-    def section_by_title(self, title: str) -> SectionTypes | None:
-        it = (s for s in self.sections if s.title == title)
-
+    def sections_by_type(self, type: str) -> list[SectionEntry] | None:
         try:
-            return next(it)
-        except StopIteration:
+            return self.library.sections_by_type[type]
+        except KeyError:
             return None
 
-    @cache
+    def section_by_title(self, title: str) -> SectionEntry | None:
+        try:
+            return self.library.section_by_title[title]
+        except KeyError:
+            return None
+
     def library_items(self, library: str):
-        return list(self._library_items(library))
-
-    def _library_items(self, library: str):
-        section = self.section_by_title(library)
-        if section is None:
+        try:
+            return self.library.section_by_title[library].items
+        except KeyError:
             return None
-        for m in section.search():
-            yield MovieEntry(m)
 
     def library_item(self, library: str, title: str):
-        it = (m for m in self.library_items(library) if m.title == title)
-
         try:
-            return next(it)
-        except StopIteration:
+            return self.library.section_by_title[library].items_by_title[title]
+        except KeyError:
             return None
 
     @cache
     def all_seasons(self, library):
-        section = self.section_by_title(library)
-        if section is None:
+        try:
+            return self.library.section_by_title[library].seasons
+        except KeyError:
             return None
-        return section.search(libtype="season")
 
     @cache
     def all_episodes(self, library):
-        section = self.section_by_title(library)
-        if section is None:
+        try:
+            return self.library.section_by_title[library].episodes
+        except KeyError:
             return None
-        return section.search(libtype="episode")
 
     def show_seasons(self, library: str, title: str):
         show: Show = self.library_item(library, title)
         if not show:
             return None
-        return [SeasonEntry(season) for season in self.all_seasons(library)
-                if season.parentRatingKey == show.item.ratingKey]
+        return [season for season in self.all_seasons(library)
+                if season.item.parentRatingKey == show.item.ratingKey]
 
     def season_episodes(self, library: str, show_title: str, season_name: str):
         try:
@@ -107,11 +97,7 @@ class PlexApi:
         except IndexError:
             return None
 
-        try:
-            episodes = [m for m in self.all_episodes(library) if m.parentRatingKey == rating_key]
-        except IndexError:
-            return None
-        return [EpisodeEntry(episode) for episode in episodes]
+        return [m for m in self.all_episodes(library) if m.item.parentRatingKey == rating_key]
 
     def episode_files(self, library: str, show_title: str, season_name: str, episode_title: str):
         episode = self.show_episode(library, show_title, season_name, episode_title)
@@ -167,7 +153,7 @@ class PlexApi:
         return self.server.url(key, includeToken=include_token)
 
     def fetch_item(self, key: str):
-        return self.library.fetchItem(key)
+        return self.library.library.fetchItem(key)
 
     def cache_path(self, path: str):
         """Return cache path of item consisting machine uuid and a path"""
