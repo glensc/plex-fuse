@@ -1,7 +1,13 @@
-class MovieEntry:
-    def __init__(self, item, title: str):
-        self.item = item
-        self.title = title
+from __future__ import annotations
 
-    def __str__(self):
-        return self.title
+from typing import TYPE_CHECKING
+
+from plexfuse.plexvfs.Playable import Playable
+
+if TYPE_CHECKING:
+    from plexapi.video import Movie
+
+
+class MovieEntry(Playable):
+    def __init__(self, item: Movie):
+        super().__init__(item)

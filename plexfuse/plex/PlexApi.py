@@ -64,7 +64,7 @@ class PlexApi:
 
     def library_items_titles(self, library: str):
         for title, m in self.library_items(library):
-            yield MovieEntry(m, title)
+            yield MovieEntry(m)
 
     def _library_items(self, library: str):
         section = self.section_by_title(library)
