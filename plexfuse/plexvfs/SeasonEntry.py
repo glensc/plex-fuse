@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 class SeasonEntry:
     def __init__(self, item: Season):
+        self.item = item
         self.title = item.title
 
     def __str__(self):
