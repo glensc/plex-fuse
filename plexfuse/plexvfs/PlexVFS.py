@@ -55,6 +55,11 @@ class PlexVFS(UserDict):
             if names is None:
                 raise KeyError(pe)
             return DirEntry(names)
+        elif pc == 6 and pe[0] == "show":
+            part = self.plex.episode_part(*pe[1:])
+            if part is None:
+                raise KeyError(pe)
+            return FileEntry(part)
         elif pc == 4 and pe[0] == "movie" \
                 and (m := self.plex.library_item(pe[1], pe[2])) \
                 and pe[3] in self.plex.media_part_names(m) \
