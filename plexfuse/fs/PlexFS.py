@@ -70,7 +70,7 @@ class PlexFS(fuse.Fuse):
 
             # Handle .plexmatch differently
             if isinstance(entry, PlexMatchEntry):
-                return entry.content[offset:size]
+                return entry.read(offset, size)
 
             return self.reader.read(entry.key, size=size, offset=offset, max_size=entry.size)
 
