@@ -34,7 +34,10 @@ class PlexVFS(UserDict):
         if pc == 1 and pe[0] in self["/"]:
             return DirEntry(list(self.plex.sections_by_type(pe[0])))
         elif pc == 2:
-            return DirEntry(self.plex.library_items(pe[1]))
+            entries = self.plex.library_items(pe[1])
+            if entries is None:
+                raise KeyError(pe)
+            return DirEntry(entries)
         elif pc == 3 and pe[0] == "movie":
             movie = self.plex.library_item(*pe[1:])
             if movie is None:
