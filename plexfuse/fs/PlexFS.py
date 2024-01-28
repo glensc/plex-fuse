@@ -11,6 +11,7 @@ from plexfuse.plex.ChunkedFile import ChunkedFile
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.plex.RefCountedDict import RefCountedDict
 from plexfuse.plexvfs.FileEntry import FileEntry
+from plexfuse.plexvfs.normalize import normalize
 from plexfuse.plexvfs.PlexVFS import PlexVFS
 
 
@@ -32,6 +33,7 @@ class PlexFS(fuse.Fuse):
 
     @cache
     def getattr(self, path: str):
+        path = normalize(path, is_path=True)
         try:
             item = self.vfs[path]
         except KeyError as e:

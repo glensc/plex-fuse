@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from plexfuse.plexvfs.normalize import normalize
+
 if TYPE_CHECKING:
     from plexapi.video import Season
 
@@ -9,7 +11,7 @@ if TYPE_CHECKING:
 class SeasonEntry:
     def __init__(self, item: Season):
         self.item = item
-        self.title = item.title
+        self.title = normalize(item.title)
 
     def __str__(self):
         return self.title
