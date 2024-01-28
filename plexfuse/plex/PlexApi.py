@@ -109,6 +109,13 @@ class PlexApi:
             return None
         return list(parts)
 
+    def movie_part(self, library: str, title: str, part_name: str):
+        movie = self.library_item(library, title)
+        if movie is None:
+            return None
+
+        return self.media_parts_by_name(movie.item, part_name)
+
     def episode_part(self, library: str, show_title: str, season_name: str, episode_title: str, part_name: str):
         episode = self.show_episode(library, show_title, season_name, episode_title)
         if not episode:

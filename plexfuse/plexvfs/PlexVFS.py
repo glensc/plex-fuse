@@ -69,10 +69,10 @@ class PlexVFS(UserDict):
             if content is None:
                 raise KeyError(pe)
             return PlexMatchEntry(content)
-        elif pc == 4 and pe[0] == "movie" \
-                and (m := self.plex.library_item(pe[1], pe[2])) \
-                and pe[3] in self.plex.media_part_names(m.item) \
-                and (part := self.plex.media_parts_by_name(m.item, pe[3])):
+        elif pc == 4 and pe[0] == "movie":
+            part = self.plex.movie_part(*pe[1:])
+            if part is None:
+                raise KeyError(pe)
             return FileEntry(part)
 
         return None
