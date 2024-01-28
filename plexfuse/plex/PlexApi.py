@@ -101,7 +101,10 @@ class PlexApi:
         if not show:
             return None
 
-        season_number = [season.seasonNumber for season in show.seasons() if season.title == season_name][0]
+        try:
+            season_number = [season.seasonNumber for season in show.seasons() if season.title == season_name][0]
+        except IndexError:
+            return None
         return [EpisodeEntry(season) for season in show.episodes() if season.seasonNumber == season_number]
 
     def episode_files(self, library: str, show_title: str, season_name: str, episode_title: str):
