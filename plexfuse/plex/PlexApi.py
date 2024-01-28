@@ -9,6 +9,7 @@ from plexapi.server import PlexServer
 
 from plexfuse.plexvfs.EpisodeEntry import EpisodeEntry
 from plexfuse.plexvfs.MovieEntry import MovieEntry
+from plexfuse.plexvfs.SeasonEntry import SeasonEntry
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
@@ -95,7 +96,7 @@ class PlexApi:
         show: Show = self.library_item(library, title)
         if not show:
             return None
-        return [season.title for season in self.all_seasons(library)
+        return [SeasonEntry(season) for season in self.all_seasons(library)
                 if season.parentRatingKey == show.item.ratingKey]
 
     def season_episodes(self, library: str, show_title: str, season_name: str):
