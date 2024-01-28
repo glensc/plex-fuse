@@ -23,7 +23,7 @@ Currently implemented:
 - [x] Use chunked read for file cache
 - [x] Listing of Show seasons
 - [x] Listing of Season episodes
-- [ ] Listing of Episode files
+- [x] Listing of Episode files
 - [ ] Handling of "artist" library type
 
 ## Usage
