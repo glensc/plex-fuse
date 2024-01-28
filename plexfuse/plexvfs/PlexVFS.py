@@ -36,27 +36,27 @@ class PlexVFS(UserDict):
         elif pc == 2:
             return DirEntry(list(self.plex.library_items_titles(pe[1])))
         elif pc == 3 and pe[0] == "movie":
-            movie = self.plex.library_item(pe[1], pe[2])
+            movie = self.plex.library_item(*pe[1:])
             if movie is None:
-                print(f"Movie not found: {pe[1]}, {pe[2]}")
+                print(f"Movie not found: {pe[1:]}")
                 return None
             return DirEntry(list(self.plex.media_part_names(movie)))
         elif pc == 3 and pe[0] == "show":
-            seasons = self.plex.show_seasons(pe[1], pe[2])
+            seasons = self.plex.show_seasons(*pe[1:])
             if seasons is None:
-                print(f"Show not found: {pe[1]}, {pe[2]}")
+                print(f"Show not found: {pe[1:]}")
                 return None
             return DirEntry(seasons)
         elif pc == 4 and pe[0] == "show":
-            episodes = self.plex.season_episodes(pe[1], pe[2], pe[3])
+            episodes = self.plex.season_episodes(*pe[1:])
             if episodes is None:
-                print(f"Season not found: {pe[1]}, {pe[2]}, {pe[3]}")
+                print(f"Season not found: {pe[1:]}")
                 return None
             return DirEntry(episodes)
         elif pc == 5 and pe[0] == "show":
-            names = self.plex.episode_files(pe[1], pe[2], pe[3], pe[4])
+            names = self.plex.episode_files(*pe[1:])
             if names is None:
-                print(f"Episode not found: {pe[1]}, {pe[2]}, {pe[3]}, {pe[4]}")
+                print(f"Episode not found: {pe[1:]}")
                 return None
             return DirEntry(names)
         elif pc == 4 and pe[0] == "movie" \
