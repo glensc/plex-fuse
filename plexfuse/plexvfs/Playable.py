@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from plexfuse.plexvfs.normalize import normalize
 
 if TYPE_CHECKING:
+    from plexapi.media import Guid
     from plexapi.video import Episode, Movie
 
 
@@ -16,6 +17,10 @@ class Playable:
     def __str__(self):
         return self.title
 
+    @property
+    def guids(self) -> list[Guid]:
+        return self.item.guids if self.item.guid.startswith("plex://") else []
+
     @cached_property
     def title(self):
         title = f"{self.item.seasonEpisode} " if self.item.TYPE == "episode" else ""
@@ -24,8 +29,7 @@ class Playable:
         if year:
             title += f" ({year})"
 
-        guids = self.item.guids if self.item.guid.startswith("plex://") else []
-        for guid in guids:
+        for guid in self.guids:
             title += f" {{{guid.id.replace('://', '-')}}}"
 
         return normalize(title)

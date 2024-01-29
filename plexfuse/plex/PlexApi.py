@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 from plexapi.server import PlexServer
 
 from plexfuse.plexvfs.LibraryEntry import LibraryEntry
+from plexfuse.plexvfs.PlexMatch import PlexMatch
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
@@ -126,10 +127,23 @@ class PlexApi:
         except IndexError:
             return None
 
+    @cached_property
+    def plexmatch(self):
+        return PlexMatch()
+
+    def plexmatch_content(self, library: str, title: str):
+        playable = self.library_item(library, title)
+        if not playable:
+            return None
+
+        return self.plexmatch.content(playable)
+
     def media_part_names(self, item: Movie | Episode):
         if item is None:
             return None
         yield from (fn for fn, part in self.media_parts(item))
+        if item.type == "movie":
+            yield ".plexmatch"
 
     def media_parts_by_name(self, item: Movie | Episode, filename: str) -> MediaPart | None:
         it = (part for fn, part in self.media_parts(item)
