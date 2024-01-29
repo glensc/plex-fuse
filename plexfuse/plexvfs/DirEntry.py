@@ -1,4 +1,4 @@
-from plexfuse.plexvfs.normalize import normalize
+from plexfuse.normalize import normalize
 
 
 class DirEntry:

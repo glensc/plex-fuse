@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from plexfuse.plexvfs.normalize import normalize
+from plexfuse.normalize import normalize
 
 if TYPE_CHECKING:
     from plexapi.media import Guid

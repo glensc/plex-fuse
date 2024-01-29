@@ -3,9 +3,9 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from plexfuse.normalize import normalize
 from plexfuse.plexvfs.EpisodeEntry import EpisodeEntry
 from plexfuse.plexvfs.MovieEntry import MovieEntry
-from plexfuse.plexvfs.normalize import normalize
 from plexfuse.plexvfs.SeasonEntry import SeasonEntry
 
 if TYPE_CHECKING:
