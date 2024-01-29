@@ -43,7 +43,8 @@ class PlexFS(fuse.Fuse):
             return -errno.ENOENT
 
         if isinstance(item, (FileEntry, PlexMatchEntry)):
-            return PlexFile(st_size=item.size)
+            kwargs = item.timestamps() if isinstance(item, FileEntry) else {}
+            return PlexFile(st_size=item.size, **kwargs)
 
         return PlexDirectory(st_nlink=2 + len(item))
 
