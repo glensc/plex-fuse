@@ -49,6 +49,11 @@ class PlexVFS(UserDict):
             if seasons is None:
                 raise KeyError(pe)
             return DirEntry(seasons)
+        elif pc == 4 and pe[0] in ["movie", "show"] and pe[3].endswith(".plexmatch"):
+            content = self.plex.plexmatch_content(*pe[1:-1])
+            if content is None:
+                raise KeyError(pe)
+            return PlexMatchEntry(content)
         elif pc == 4 and pe[0] == "show":
             episodes = self.plex.season_episodes(*pe[1:])
             if episodes is None:
@@ -64,11 +69,6 @@ class PlexVFS(UserDict):
             if part is None:
                 raise KeyError(pe)
             return FileEntry(part)
-        elif pc == 4 and pe[0] == "movie" and pe[3].endswith(".plexmatch"):
-            content = self.plex.plexmatch_content(*pe[1:-1])
-            if content is None:
-                raise KeyError(pe)
-            return PlexMatchEntry(content)
         elif pc == 4 and pe[0] == "movie":
             part = self.plex.movie_part(*pe[1:])
             if part is None:
