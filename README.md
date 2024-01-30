@@ -29,6 +29,13 @@ Currently implemented:
 - [x] Support .plexmatch for Movies
 - [x] Support timestamps for Movies
 - [x] Support .plexmatch for Show directories
+- [ ] Add timestamps to directories
+- [ ] Add subtitle files
+- [ ] Publish package to pypi
+- [ ] Add docker volume driver
+- [ ] Add cache management (max size?)
+- [ ] Add cache purge option (special file?)
+- [ ] Detect need to refresh cache (add event listener)
 - [ ] Handling of "artist" library type
 
 ## Usage
