@@ -28,6 +28,7 @@ Currently implemented:
 - [x] Unicode normalize titles
 - [x] Support .plexmatch for Movies
 - [x] Support timestamps for Movies
+- [x] Support .plexmatch for Show directories
 - [ ] Handling of "artist" library type
 
 ## Usage
