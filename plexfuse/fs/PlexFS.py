@@ -13,6 +13,7 @@ from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.plex.RefCountedDict import RefCountedDict
 from plexfuse.plexvfs.DirEntry import DirEntry
 from plexfuse.plexvfs.FileEntry import FileEntry
+from plexfuse.plexvfs.PathEntry import PathEntry
 from plexfuse.plexvfs.PlexMatchEntry import PlexMatchEntry
 from plexfuse.plexvfs.PlexVFS import PlexVFS
 
@@ -42,7 +43,7 @@ class PlexFS(fuse.Fuse):
             print(f"ERROR: getattr: Unsupported path: {e}")
             return -errno.ENOENT
 
-        if isinstance(item, (FileEntry, PlexMatchEntry)):
+        if isinstance(item, (FileEntry, PlexMatchEntry, PathEntry)):
             kwargs = item.timestamps() if isinstance(item, FileEntry) else {}
             return PlexFile(st_size=item.size, **kwargs)
 
@@ -71,6 +72,9 @@ class PlexFS(fuse.Fuse):
 
             # Handle .plexmatch differently
             if isinstance(entry, PlexMatchEntry):
+                return entry.read(offset, size)
+            # Subtitles via PathEntry cache
+            if isinstance(entry, PathEntry):
                 return entry.read(offset, size)
 
             return self.reader.read(entry.key, size=size, offset=offset, max_size=entry.size)
