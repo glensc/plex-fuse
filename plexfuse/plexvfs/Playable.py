@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from functools import cached_property
+from pathlib import PureWindowsPath
 from typing import TYPE_CHECKING
 
 from plexfuse.normalize import normalize
 
 if TYPE_CHECKING:
-    from plexapi.media import Guid
+    from plexapi.media import Guid, MediaPart
     from plexapi.video import Episode, Movie
 
 
@@ -56,3 +57,15 @@ class Playable:
             title += f" {{{guid.id.replace('://', '-')}}}"
 
         return normalize(title)
+
+    @cached_property
+    def media_parts(self):
+        def inner():
+            part: MediaPart
+            for part in self.item.iterParts():
+                # Remove directory part (Windows server on Unix)
+                # We need to handle Windows and Unix differences,
+                # hence the PureWindowsPath class
+                yield PureWindowsPath(part.file).name, part
+
+        return dict(inner())
