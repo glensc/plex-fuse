@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import cached_property
-from pathlib import PureWindowsPath
+from pathlib import Path, PureWindowsPath
 from typing import TYPE_CHECKING
 
 from plexfuse.normalize import normalize
@@ -60,10 +60,16 @@ class Playable:
 
     @cached_property
     def subtitles(self):
+        # Use basename of movie file if there's only one part
+        basename = Path(next(iter(self.media_parts))).stem if len(self.media_parts) == 1 else None
+
         def inner():
             s: SubtitleStream
             for s in self.item.subtitleStreams():
-                title = f"{s.language} ({s.languageCode}).{s.codec}"
+                if basename:
+                    title = f"{basename}.{s.languageCode}.{s.codec}"
+                else:
+                    title = f"{s.language} ({s.languageCode}).{s.codec}"
                 yield title, s
 
         return dict(inner())
