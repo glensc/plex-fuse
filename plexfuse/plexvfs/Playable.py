@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from plexfuse.normalize import normalize
 
 if TYPE_CHECKING:
-    from plexapi.media import Guid, MediaPart
+    from plexapi.media import Guid, MediaPart, SubtitleStream
     from plexapi.video import Episode, Movie
 
 
@@ -57,6 +57,16 @@ class Playable:
             title += f" {{{guid.id.replace('://', '-')}}}"
 
         return normalize(title)
+
+    @cached_property
+    def subtitles(self):
+        def inner():
+            s: SubtitleStream
+            for s in self.item.subtitleStreams():
+                title = f"{s.language} ({s.languageCode}).{s.codec}"
+                yield title, s
+
+        return dict(inner())
 
     @cached_property
     def media_parts(self):
