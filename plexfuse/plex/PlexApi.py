@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from functools import cache, cached_property
 from os import makedirs
-from pathlib import Path, PureWindowsPath
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
@@ -14,7 +14,7 @@ from plexfuse.plexvfs.PlexMatch import PlexMatch
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
-    from plexapi.video import Movie, Show
+    from plexapi.video import Show
 
 
 class PlexApi:
@@ -170,15 +170,6 @@ class PlexApi:
             return media.media_parts[filename]
         except KeyError:
             return None
-
-    @staticmethod
-    def media_parts(item: Movie):
-        for media in item.media:
-            for part in media.parts:
-                # Remove directory part (Windows server on Unix)
-                # We need to handle Windows and Unix differences,
-                # hence the PureWindowsPath class
-                yield PureWindowsPath(part.file).name, part
 
     def url(self, key: str, include_token=False):
         return self.server.url(key, includeToken=include_token)
