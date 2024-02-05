@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from plexfuse.plexvfs.DirEntry import DirEntry
 from plexfuse.plexvfs.FileEntry import FileEntry
+from plexfuse.plexvfs.PathEntry import PathEntry
 from plexfuse.plexvfs.PlexMatchEntry import PlexMatchEntry
 
 if TYPE_CHECKING:
@@ -54,6 +55,11 @@ class PlexVFS(UserDict):
             if content is None:
                 raise KeyError(pe)
             return PlexMatchEntry(content)
+        elif pc == 4 and pe[0] in ["movie", "show"] and pe[3].endswith((".srt", ".vtt")):
+            path = self.plex.subtitle_content(*pe[1:])
+            if path is None:
+                raise KeyError(pe)
+            return PathEntry(path)
         elif pc == 4 and pe[0] == "show":
             episodes = self.plex.season_episodes(*pe[1:])
             if episodes is None:
