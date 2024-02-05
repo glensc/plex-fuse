@@ -40,10 +40,10 @@ class PlexVFS(UserDict):
                 raise KeyError(pe)
             return DirEntry(entries)
         elif pc == 3 and pe[0] == "movie":
-            movie = self.plex.library_item(*pe[1:])
-            if movie is None:
+            mf = self.plex.movie_files(*pe[1:])
+            if mf is None:
                 raise KeyError(pe)
-            return DirEntry(list(self.plex.media_part_names(movie.item)))
+            return DirEntry(mf)
         elif pc == 3 and pe[0] == "show":
             seasons = self.plex.show_seasons(*pe[1:])
             if seasons is None:

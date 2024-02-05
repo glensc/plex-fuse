@@ -103,6 +103,15 @@ class PlexApi:
 
         return [m for m in self.all_episodes(library) if m.item.parentRatingKey == rating_key]
 
+    def movie_files(self, library: str, title: str):
+        movie = self.library_item(library, title)
+        if movie is None:
+            return None
+        parts = self.media_part_names(movie.item)
+        if parts is None:
+            return None
+        return list(parts)
+
     def episode_files(self, library: str, show_title: str, season_name: str, episode_title: str):
         episode = self.show_episode(library, show_title, season_name, episode_title)
         if not episode:
