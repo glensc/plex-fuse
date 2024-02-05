@@ -9,6 +9,7 @@ from plexapi.server import PlexServer
 
 from plexfuse.plexvfs.FileEntry import FileEntry
 from plexfuse.plexvfs.LibraryEntry import LibraryEntry
+from plexfuse.plexvfs.MovieEntry import MovieEntry
 from plexfuse.plexvfs.PlexMatch import PlexMatch
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
@@ -107,19 +108,13 @@ class PlexApi:
         movie = self.library_item(library, title)
         if movie is None:
             return None
-        parts = self.media_part_names(movie.item)
-        if parts is None:
-            return None
-        return list(parts)
+        return self.media_part_names(movie)
 
     def episode_files(self, library: str, show_title: str, season_name: str, episode_title: str):
         episode = self.show_episode(library, show_title, season_name, episode_title)
         if not episode:
             return None
-        parts = self.media_part_names(episode.item)
-        if parts is None:
-            return None
-        return list(parts)
+        return self.media_part_names(episode)
 
     def movie_part(self, library: str, title: str, part_name: str):
         movie = self.library_item(library, title)
@@ -161,9 +156,13 @@ class PlexApi:
 
         return self.plexmatch.content(playable)
 
-    def media_part_names(self, item: Movie | Episode):
-        if item is None:
+    def media_part_names(self, media: MovieEntry):
+        parts = self._media_part_names(media.item)
+        if parts is None:
             return None
+        return list(parts)
+
+    def _media_part_names(self, item: Movie | Episode):
         yield from (fn for fn, part in self.media_parts(item))
         if item.type == "movie":
             yield ".plexmatch"
