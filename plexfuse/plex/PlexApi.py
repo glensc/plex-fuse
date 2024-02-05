@@ -157,14 +157,12 @@ class PlexApi:
         return self.plexmatch.content(playable)
 
     def media_part_names(self, media: MovieEntry):
-        parts = self._media_part_names(media.item)
-        if parts is None:
-            return None
-        return list(parts)
+        return list(self._media_part_names(media))
 
-    def _media_part_names(self, item: Movie | Episode):
-        yield from (fn for fn, part in self.media_parts(item))
-        if item.type == "movie":
+    @staticmethod
+    def _media_part_names(media: MovieEntry):
+        yield from media.media_parts.keys()
+        if media.item.type == "movie":
             yield ".plexmatch"
 
     def media_parts_by_name(self, item: Movie | Episode, filename: str) -> MediaPart | None:
