@@ -14,8 +14,7 @@ from plexfuse.plexvfs.PlexMatch import PlexMatch
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
-    from plexapi.media import MediaPart
-    from plexapi.video import Episode, Movie, Show
+    from plexapi.video import Movie, Show
 
 
 class PlexApi:
@@ -121,7 +120,7 @@ class PlexApi:
         if movie is None:
             return None
 
-        part = self.media_parts_by_name(movie.item, part_name)
+        part = self.media_parts_by_name(movie, part_name)
         if part is None:
             return None
 
@@ -131,7 +130,7 @@ class PlexApi:
         episode = self.show_episode(library, show_title, season_name, episode_title)
         if not episode:
             return None
-        part = self.media_parts_by_name(episode.item, part_name)
+        part = self.media_parts_by_name(episode, part_name)
         return part
 
     def show_episode(self, library: str, show_title: str, season_name: str, episode_title: str):
@@ -165,13 +164,11 @@ class PlexApi:
         if media.item.type == "movie":
             yield ".plexmatch"
 
-    def media_parts_by_name(self, item: Movie | Episode, filename: str) -> MediaPart | None:
-        it = (part for fn, part in self.media_parts(item)
-              if PureWindowsPath(part.file).name == filename)
-
+    @staticmethod
+    def media_parts_by_name(media: MovieEntry, filename: str):
         try:
-            return next(it)
-        except StopIteration:
+            return media.media_parts[filename]
+        except KeyError:
             return None
 
     @staticmethod
