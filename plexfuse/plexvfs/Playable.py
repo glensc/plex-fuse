@@ -66,6 +66,9 @@ class Playable:
         def inner():
             s: SubtitleStream
             for s in self.item.subtitleStreams():
+                if s.key is None:
+                    # Not downloadable. Embedded in video
+                    continue
                 if basename:
                     title = f"{basename}.{s.languageCode}.{s.codec}"
                 else:
