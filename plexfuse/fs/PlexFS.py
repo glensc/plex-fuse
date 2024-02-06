@@ -56,7 +56,7 @@ class PlexFS(fuse.Fuse):
         try:
             it = self.vfs[path]
         except KeyError as e:
-            print(f"readdir({path}): {e}")
+            print(f"ERROR: readdir({path}): {e}")
             return
 
         for r in it:
@@ -73,7 +73,7 @@ class PlexFS(fuse.Fuse):
             try:
                 del self.file_map[path]
             except KeyError as e:
-                print(f"release({path}): {e}")
+                print(f"ERROR: release({path}): {e}")
                 return -errno.EINVAL
 
             return 0
@@ -83,7 +83,7 @@ class PlexFS(fuse.Fuse):
             try:
                 entry = self.vfs[path]
             except KeyError as e:
-                print(f"open vfs({path}): {e}")
+                print(f"ERROR: open({path}): {e}")
                 return -errno.ENOENT
 
             if isinstance(entry, DirEntry):
