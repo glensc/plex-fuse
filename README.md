@@ -29,6 +29,7 @@ Currently implemented:
 - [x] Support .plexmatch for Movies
 - [x] Support timestamps for Movies
 - [x] Support .plexmatch for Show directories
+- [x] Add movie timestamps to .plexmatch files
 - [ ] Add timestamps to directories
 - [x] Add subtitle files for Movies, Episodes
 - [ ] Publish package to pypi
