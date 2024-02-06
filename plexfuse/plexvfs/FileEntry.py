@@ -5,11 +5,12 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
 
+    from plexfuse.plex.ChunkedFile import ChunkedFile
     from plexfuse.plexvfs.Playable import Playable
 
 
 class FileEntry:
-    def __init__(self, part: MediaPart, playable: Playable = None, reader=None):
+    def __init__(self, part: MediaPart, playable: Playable, reader: ChunkedFile):
         self.size = part.size
         self.key = part.key
         self.playable = playable
