@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
-from plexfuse.plexvfs.FileEntry import FileEntry
 from plexfuse.plexvfs.LibraryEntry import LibraryEntry
 from plexfuse.plexvfs.MovieEntry import MovieEntry
 from plexfuse.plexvfs.PlexMatch import PlexMatch
@@ -128,14 +127,14 @@ class PlexApi:
         if part is None:
             return None
 
-        return FileEntry(part, playable=movie)
+        return part, movie
 
     def episode_part(self, library: str, show_title: str, season_name: str, episode_title: str, part_name: str):
         episode = self.show_episode(library, show_title, season_name, episode_title)
         if not episode:
             return None
         part = self.media_parts_by_name(episode, part_name)
-        return part
+        return part, episode
 
     def show_episode(self, library: str, show_title: str, season_name: str, episode_title: str):
         show: Show = self.library_item(library, show_title)
