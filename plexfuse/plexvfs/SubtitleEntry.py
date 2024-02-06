@@ -18,6 +18,10 @@ class SubtitleEntry(AttrEntry):
             fp.seek(offset)
             return fp.read(size)
 
+    @property
+    def attr(self):
+        return self.playable.timestamps
+
     @cached_property
     def path(self):
         try:
