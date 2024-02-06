@@ -115,7 +115,11 @@ class PlexApi:
         episode = self.show_episode(library, show_title, season_name, episode_title)
         if not episode:
             return None
-        return self.media_part_names(episode)
+        files = self.media_part_names(episode)
+        subs = episode.subtitles
+        if subs:
+            files.extend(subs.keys())
+        return files
 
     def movie_part(self, library: str, title: str, part_name: str):
         movie = self.library_item(library, title)
