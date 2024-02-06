@@ -8,7 +8,6 @@ import fuse
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
 from plexfuse.normalize import normalize
-from plexfuse.plex.ChunkedFile import ChunkedFile
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.plex.RefCountedDict import RefCountedDict
 from plexfuse.plexvfs.DirEntry import DirEntry
@@ -25,7 +24,6 @@ class PlexFS(fuse.Fuse):
         self.vfs = PlexVFS(plex)
         self.cache_path = None
         self.file_map = RefCountedDict()
-        self.reader = ChunkedFile(plex)
         self.iolock = Lock()
 
     def fsinit(self):
@@ -70,14 +68,7 @@ class PlexFS(fuse.Fuse):
         with self.iolock:
             entry = self.file_map[path]
 
-            # Handle .plexmatch differently
-            if isinstance(entry, PlexMatchEntry):
-                return entry.read(offset, size)
-            # Subtitles via PathEntry cache
-            if isinstance(entry, PathEntry):
-                return entry.read(offset, size)
-
-            return self.reader.read(entry.key, size=size, offset=offset, max_size=entry.size)
+            return entry.read(offset, size)
 
     def release(self, path, flags):
         with self.iolock:
