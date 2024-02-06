@@ -41,6 +41,8 @@ class Playable:
 
     @property
     def mtime(self):
+        if self.item.updatedAt is None:
+            return self.ctime
         return self.item.updatedAt.timestamp()
 
     @property
