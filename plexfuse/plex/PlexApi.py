@@ -9,7 +9,6 @@ from plexapi.server import PlexServer
 
 from plexfuse.plexvfs.LibraryEntry import LibraryEntry
 from plexfuse.plexvfs.MovieEntry import MovieEntry
-from plexfuse.plexvfs.PlexMatch import PlexMatch
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
@@ -147,17 +146,6 @@ class PlexApi:
         except IndexError:
             return None
 
-    @cached_property
-    def plexmatch(self):
-        return PlexMatch()
-
-    def plexmatch_content(self, library: str, title: str):
-        playable = self.library_item(library, title)
-        if not playable:
-            return None
-
-        return self.plexmatch.content(playable)
-
     def subtitle_content(self, library: str, title: str, filename: str):
         playable = self.library_item(library, title)
         if not playable:
@@ -233,7 +221,7 @@ class PlexApi:
 
         content = self.request_file(key, size, offset)
         makedirs(savepath.parent, exist_ok=True)
-        with open(savepath, "wb") as handle:
+        with savepath.open("wb") as handle:
             for chunk in content:
                 handle.write(chunk)
 

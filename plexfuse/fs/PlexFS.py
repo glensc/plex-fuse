@@ -11,9 +11,6 @@ from plexfuse.normalize import normalize
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.plex.RefCountedDict import RefCountedDict
 from plexfuse.plexvfs.DirEntry import DirEntry
-from plexfuse.plexvfs.FileEntry import FileEntry
-from plexfuse.plexvfs.PathEntry import PathEntry
-from plexfuse.plexvfs.PlexMatchEntry import PlexMatchEntry
 from plexfuse.plexvfs.PlexVFS import PlexVFS
 
 
@@ -41,11 +38,10 @@ class PlexFS(fuse.Fuse):
             print(f"ERROR: getattr: Unsupported path: {e}")
             return -errno.ENOENT
 
-        if isinstance(item, (FileEntry, PlexMatchEntry, PathEntry)):
-            kwargs = item.timestamps() if isinstance(item, FileEntry) else {}
-            return PlexFile(st_size=item.size, **kwargs)
+        if isinstance(item, DirEntry):
+            return PlexDirectory(st_nlink=2 + len(item))
 
-        return PlexDirectory(st_nlink=2 + len(item))
+        return PlexFile(st_size=item.size, **item.attr)
 
     @cache
     def readdir(self, path: str, offset: int):
@@ -58,7 +54,7 @@ class PlexFS(fuse.Fuse):
         try:
             it = self.vfs[path]
         except KeyError as e:
-            print(f"readdir({path}): {e}")
+            print(f"ERROR: readdir({path}): {e}")
             return
 
         for r in it:
@@ -75,7 +71,7 @@ class PlexFS(fuse.Fuse):
             try:
                 del self.file_map[path]
             except KeyError as e:
-                print(f"release({path}): {e}")
+                print(f"ERROR: release({path}): {e}")
                 return -errno.EINVAL
 
             return 0
@@ -83,14 +79,14 @@ class PlexFS(fuse.Fuse):
     def open(self, path, flags):
         with self.iolock:
             try:
-                part = self.vfs[path]
+                entry = self.vfs[path]
             except KeyError as e:
-                print(f"open vfs({path}): {e}")
+                print(f"ERROR: open({path}): {e}")
                 return -errno.ENOENT
 
-            if isinstance(part, DirEntry):
+            if isinstance(entry, DirEntry):
                 return -errno.EISDIR
 
-            self.file_map[path] = part
+            self.file_map[path] = entry
 
             return 0
