@@ -75,12 +75,18 @@ class PlexVFS(UserDict):
                 raise KeyError(pe)
             return DirEntry(names)
         elif pc == 6 and pe[0] == "show":
-            part, playable = self.plex.episode_part(*pe[1:])
+            packed = self.plex.episode_part(*pe[1:])
+            if packed is None:
+                raise KeyError(pe)
+            part, playable = packed
             if part is None or playable is None:
                 raise KeyError(pe)
             return FileEntry(part, playable=playable, reader=self.reader)
         elif pc == 4 and pe[0] == "movie":
-            part, playable = self.plex.movie_part(*pe[1:])
+            packed = self.plex.movie_part(*pe[1:])
+            if packed is None:
+                raise KeyError(pe)
+            part, playable = packed
             if part is None or playable is None:
                 raise KeyError(pe)
             return FileEntry(part, playable=playable, reader=self.reader)
