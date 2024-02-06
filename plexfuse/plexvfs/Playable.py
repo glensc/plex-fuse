@@ -34,13 +34,14 @@ class Playable:
 
     @property
     def atime(self):
-        try:
-            return self.item.lastViewedAt.timestamp()
-        except AttributeError:
+        if self.item.lastViewedAt is None:
             return self.mtime
+        return self.item.lastViewedAt.timestamp()
 
     @property
     def mtime(self):
+        if self.item.updatedAt is None:
+            return self.ctime
         return self.item.updatedAt.timestamp()
 
     @property
