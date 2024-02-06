@@ -24,7 +24,7 @@ class SectionEntry:
 
     @cached_property
     def items_by_title(self):
-        return dict({(normalize(m.title), m) for m in self.items})
+        return dict({(m.title, m) for m in self.items})
 
     @cached_property
     def seasons(self):
