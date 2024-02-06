@@ -14,6 +14,10 @@ class PlexMatchEntry(AttrEntry):
     def read(self, offset: int, size: int):
         return self.content[offset:offset + size].encode()
 
+    @property
+    def attr(self):
+        return self.playable.timestamps
+
     @cached_property
     def content(self):
         plexmatch = PlexMatch()
