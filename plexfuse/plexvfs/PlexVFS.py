@@ -55,10 +55,10 @@ class PlexVFS(UserDict):
                 raise KeyError(pe)
             return DirEntry(seasons)
         elif pc == 4 and pe[0] in ["movie", "show"] and pe[3].endswith(".plexmatch"):
-            content = self.plex.plexmatch_content(*pe[1:-1])
-            if content is None:
+            playable = self.plex.library_item(*pe[1:-1])
+            if playable is None:
                 raise KeyError(pe)
-            return PlexMatchEntry(content)
+            return PlexMatchEntry(playable)
         elif pc == 4 and pe[0] in ["movie", "show"] and pe[3].endswith(self.SUBTITLE_EXT):
             path = self.plex.subtitle_content(*pe[1:])
             if path is None:
