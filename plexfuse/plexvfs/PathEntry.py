@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from plexfuse.plexvfs.AttrEntry import AttrEntry
 
-class PathEntry:
+
+class PathEntry(AttrEntry):
     def __init__(self, path: Path):
         self.path = path
         self.size = path.stat().st_size

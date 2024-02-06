@@ -11,7 +11,6 @@ from plexfuse.normalize import normalize
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.plex.RefCountedDict import RefCountedDict
 from plexfuse.plexvfs.DirEntry import DirEntry
-from plexfuse.plexvfs.FileEntry import FileEntry
 from plexfuse.plexvfs.PlexVFS import PlexVFS
 
 
@@ -42,8 +41,7 @@ class PlexFS(fuse.Fuse):
         if isinstance(item, DirEntry):
             return PlexDirectory(st_nlink=2 + len(item))
 
-        kwargs = item.timestamps() if isinstance(item, FileEntry) else {}
-        return PlexFile(st_size=item.size, **kwargs)
+        return PlexFile(st_size=item.size, **item.attr)
 
     @cache
     def readdir(self, path: str, offset: int):

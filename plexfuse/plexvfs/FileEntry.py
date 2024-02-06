@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from plexfuse.plexvfs.AttrEntry import AttrEntry
+
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
 
@@ -9,14 +11,15 @@ if TYPE_CHECKING:
     from plexfuse.plexvfs.Playable import Playable
 
 
-class FileEntry:
+class FileEntry(AttrEntry):
     def __init__(self, part: MediaPart, playable: Playable, reader: ChunkedFile):
         self.size = part.size
         self.key = part.key
         self.playable = playable
         self.reader = reader
 
-    def timestamps(self):
+    @property
+    def attr(self):
         try:
             return self.playable.timestamps
         except AttributeError:

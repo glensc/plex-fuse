@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from functools import cached_property
 
+from plexfuse.plexvfs.AttrEntry import AttrEntry
 from plexfuse.plexvfs.Playable import Playable
 from plexfuse.plexvfs.PlexMatch import PlexMatch
 
 
-class PlexMatchEntry:
+class PlexMatchEntry(AttrEntry):
     def __init__(self, playable: Playable):
         self.playable = playable
 
