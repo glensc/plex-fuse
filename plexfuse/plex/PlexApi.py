@@ -233,7 +233,7 @@ class PlexApi:
 
         content = self.request_file(key, size, offset)
         makedirs(savepath.parent, exist_ok=True)
-        with open(savepath, "wb") as handle:
+        with savepath.open("wb") as handle:
             for chunk in content:
                 handle.write(chunk)
 
