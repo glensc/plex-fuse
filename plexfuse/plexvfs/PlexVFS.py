@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections import UserDict
 from typing import TYPE_CHECKING
 
+from plexfuse.plex.ChunkedFile import ChunkedFile
 from plexfuse.plexvfs.DirEntry import DirEntry
 from plexfuse.plexvfs.FileEntry import FileEntry
 from plexfuse.plexvfs.PathEntry import PathEntry
@@ -18,6 +19,7 @@ class PlexVFS(UserDict):
     def __init__(self, plex: PlexApi):
         super().__init__()
         self.plex = plex
+        self.reader = ChunkedFile(plex)
 
     def __missing__(self, path: str):
         entry = self.resolve(path)
