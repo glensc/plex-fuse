@@ -30,7 +30,7 @@ Currently implemented:
 - [x] Support timestamps for Movies
 - [x] Support .plexmatch for Show directories
 - [ ] Add timestamps to directories
-- [ ] Add subtitle files
+- [x] Add subtitle files for Movies, Episodes
 - [ ] Publish package to pypi
 - [ ] Add docker volume driver
 - [ ] Add cache management (max size?)
