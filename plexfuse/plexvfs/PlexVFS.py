@@ -13,6 +13,8 @@ if TYPE_CHECKING:
 
 
 class PlexVFS(UserDict):
+    SUBTITLE_EXT = (".srt", ".vtt")
+
     def __init__(self, plex: PlexApi):
         super().__init__()
         self.plex = plex
@@ -55,7 +57,7 @@ class PlexVFS(UserDict):
             if content is None:
                 raise KeyError(pe)
             return PlexMatchEntry(content)
-        elif pc == 4 and pe[0] in ["movie", "show"] and pe[3].endswith((".srt", ".vtt")):
+        elif pc == 4 and pe[0] in ["movie", "show"] and pe[3].endswith(self.SUBTITLE_EXT):
             path = self.plex.subtitle_content(*pe[1:])
             if path is None:
                 raise KeyError(pe)
