@@ -146,23 +146,6 @@ class PlexApi:
         except IndexError:
             return None
 
-    def subtitle_content(self, library: str, title: str, filename: str):
-        playable = self.library_item(library, title)
-        if not playable:
-            return None
-
-        try:
-            stream = playable.subtitles[filename]
-        except KeyError:
-            return None
-
-        cache_path = self.cache_path(stream.key)
-        if not cache_path.exists():
-            print(f"Downloading: {cache_path}")
-            self.download_part(stream.key, cache_path)
-
-        return cache_path
-
     def media_part_names(self, media: MovieEntry):
         return list(self._media_part_names(media))
 
