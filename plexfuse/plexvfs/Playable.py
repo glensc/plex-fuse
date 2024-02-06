@@ -73,6 +73,7 @@ class Playable:
                     continue
                 if s.codec not in self.SUBTITLE_EXT:
                     print(f"Unsupported subtitle codec: {s.codec}: {self.item}")
+                    # Not sure how to serve VOBSUB .idx files alone, where are .sub files?
                     continue
                 if basename:
                     title = f"{basename}.{s.languageCode}.{s.codec}"
