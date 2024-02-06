@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING
 from plexfuse.plex.ChunkedFile import ChunkedFile
 from plexfuse.plexvfs.DirEntry import DirEntry
 from plexfuse.plexvfs.FileEntry import FileEntry
-from plexfuse.plexvfs.PathEntry import PathEntry
 from plexfuse.plexvfs.PlexMatchEntry import PlexMatchEntry
+from plexfuse.plexvfs.SubtitleEntry import SubtitleEntry
 
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi
@@ -60,10 +60,10 @@ class PlexVFS(UserDict):
                 raise KeyError(pe)
             return PlexMatchEntry(playable)
         elif pc == 4 and pe[0] in ["movie", "show"] and pe[3].endswith(self.SUBTITLE_EXT):
-            path = self.plex.subtitle_content(*pe[1:])
-            if path is None:
+            playable = self.plex.library_item(*pe[1:-1])
+            if playable is None:
                 raise KeyError(pe)
-            return PathEntry(path)
+            return SubtitleEntry(playable, name=pe[-1], plex=self.plex)
         elif pc == 4 and pe[0] == "show":
             episodes = self.plex.season_episodes(*pe[1:])
             if episodes is None:
