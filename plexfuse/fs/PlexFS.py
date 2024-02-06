@@ -81,14 +81,14 @@ class PlexFS(fuse.Fuse):
     def open(self, path, flags):
         with self.iolock:
             try:
-                part = self.vfs[path]
+                entry = self.vfs[path]
             except KeyError as e:
                 print(f"open vfs({path}): {e}")
                 return -errno.ENOENT
 
-            if isinstance(part, DirEntry):
+            if isinstance(entry, DirEntry):
                 return -errno.EISDIR
 
-            self.file_map[path] = part
+            self.file_map[path] = entry
 
             return 0
