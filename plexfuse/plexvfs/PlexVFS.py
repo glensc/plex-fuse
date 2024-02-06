@@ -59,8 +59,8 @@ class PlexVFS(UserDict):
             if playable is None:
                 raise KeyError(pe)
             return PlexMatchEntry(playable)
-        elif pc == 4 and pe[0] in ["movie", "show"] and pe[3].endswith(self.SUBTITLE_EXT):
-            playable = self.plex.library_item(*pe[1:-1])
+        elif pc == 4 and pe[0] == "movie" and pe[-1].endswith(self.SUBTITLE_EXT):
+            playable = self.plex.library_item(*pe[1:3])
             if playable is None:
                 raise KeyError(pe)
             return SubtitleEntry(playable, name=pe[-1], plex=self.plex)
