@@ -12,6 +12,8 @@ if TYPE_CHECKING:
 
 
 class Playable:
+    SUBTITLE_EXT = ("srt", "vtt")
+
     def __init__(self, item: Episode | Movie):
         self.item = item
 
@@ -68,6 +70,9 @@ class Playable:
             for s in self.item.subtitleStreams():
                 if s.key is None:
                     # Not downloadable. Embedded in video
+                    continue
+                if s.codec not in self.SUBTITLE_EXT:
+                    print(f"Unsupported subtitle codec: {s.codec}: {self.item}")
                     continue
                 if basename:
                     title = f"{basename}.{s.languageCode}.{s.codec}"
