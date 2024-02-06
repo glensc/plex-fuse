@@ -12,8 +12,6 @@ from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.plex.RefCountedDict import RefCountedDict
 from plexfuse.plexvfs.DirEntry import DirEntry
 from plexfuse.plexvfs.FileEntry import FileEntry
-from plexfuse.plexvfs.PathEntry import PathEntry
-from plexfuse.plexvfs.PlexMatchEntry import PlexMatchEntry
 from plexfuse.plexvfs.PlexVFS import PlexVFS
 
 
@@ -41,11 +39,11 @@ class PlexFS(fuse.Fuse):
             print(f"ERROR: getattr: Unsupported path: {e}")
             return -errno.ENOENT
 
-        if isinstance(item, (FileEntry, PlexMatchEntry, PathEntry)):
-            kwargs = item.timestamps() if isinstance(item, FileEntry) else {}
-            return PlexFile(st_size=item.size, **kwargs)
+        if isinstance(item, DirEntry):
+            return PlexDirectory(st_nlink=2 + len(item))
 
-        return PlexDirectory(st_nlink=2 + len(item))
+        kwargs = item.timestamps() if isinstance(item, FileEntry) else {}
+        return PlexFile(st_size=item.size, **kwargs)
 
     @cache
     def readdir(self, path: str, offset: int):
