@@ -9,7 +9,6 @@ from plexapi.server import PlexServer
 
 from plexfuse.plexvfs.LibraryEntry import LibraryEntry
 from plexfuse.plexvfs.MovieEntry import MovieEntry
-from plexfuse.plexvfs.PlexMatch import PlexMatch
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
@@ -146,17 +145,6 @@ class PlexApi:
             return [episode for episode in episodes if episode.title == episode_title][0]
         except IndexError:
             return None
-
-    @cached_property
-    def plexmatch(self):
-        return PlexMatch()
-
-    def plexmatch_content(self, library: str, title: str):
-        playable = self.library_item(library, title)
-        if not playable:
-            return None
-
-        return self.plexmatch.content(playable)
 
     def subtitle_content(self, library: str, title: str, filename: str):
         playable = self.library_item(library, title)
