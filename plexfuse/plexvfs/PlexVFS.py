@@ -78,11 +78,11 @@ class PlexVFS(UserDict):
             part, playable = self.plex.episode_part(*pe[1:])
             if part is None or playable is None:
                 raise KeyError(pe)
-            return FileEntry(part, playable=playable)
+            return FileEntry(part, playable=playable, reader=self.reader)
         elif pc == 4 and pe[0] == "movie":
             part, playable = self.plex.movie_part(*pe[1:])
             if part is None or playable is None:
                 raise KeyError(pe)
-            return FileEntry(part, playable=playable)
+            return FileEntry(part, playable=playable, reader=self.reader)
 
         return None
