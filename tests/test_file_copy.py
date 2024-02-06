@@ -1,6 +1,7 @@
 import logging
 
 from plexfuse.plex.PlexApi import PlexApi
+from plexfuse.plexvfs.MovieEntry import MovieEntry
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +12,8 @@ def test_file():
     filename = "1.webm"
 
     item = plex.fetch_item(path)
-    part = plex.media_parts_by_name(item, filename)
+    media = MovieEntry(item)
+    part = plex.media_parts_by_name(media, filename)
     if part:
         savepath = plex.cache_path(part.key)
         logger.error(savepath)

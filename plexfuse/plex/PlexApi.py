@@ -2,19 +2,19 @@ from __future__ import annotations
 
 from functools import cache, cached_property
 from os import makedirs
-from pathlib import Path, PureWindowsPath
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
 from plexfuse.plexvfs.FileEntry import FileEntry
 from plexfuse.plexvfs.LibraryEntry import LibraryEntry
+from plexfuse.plexvfs.MovieEntry import MovieEntry
 from plexfuse.plexvfs.PlexMatch import PlexMatch
 from plexfuse.plexvfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
-    from plexapi.media import MediaPart
-    from plexapi.video import Episode, Movie, Show
+    from plexapi.video import Show
 
 
 class PlexApi:
@@ -103,21 +103,28 @@ class PlexApi:
 
         return [m for m in self.all_episodes(library) if m.item.parentRatingKey == rating_key]
 
+    def movie_files(self, library: str, title: str):
+        movie = self.library_item(library, title)
+        if movie is None:
+            return None
+        files = self.media_part_names(movie)
+        subs = movie.subtitles
+        if subs:
+            files.extend(subs.keys())
+        return files
+
     def episode_files(self, library: str, show_title: str, season_name: str, episode_title: str):
         episode = self.show_episode(library, show_title, season_name, episode_title)
         if not episode:
             return None
-        parts = self.media_part_names(episode.item)
-        if parts is None:
-            return None
-        return list(parts)
+        return self.media_part_names(episode)
 
     def movie_part(self, library: str, title: str, part_name: str):
         movie = self.library_item(library, title)
         if movie is None:
             return None
 
-        part = self.media_parts_by_name(movie.item, part_name)
+        part = self.media_parts_by_name(movie, part_name)
         if part is None:
             return None
 
@@ -127,7 +134,7 @@ class PlexApi:
         episode = self.show_episode(library, show_title, season_name, episode_title)
         if not episode:
             return None
-        part = self.media_parts_by_name(episode.item, part_name)
+        part = self.media_parts_by_name(episode, part_name)
         return part
 
     def show_episode(self, library: str, show_title: str, season_name: str, episode_title: str):
@@ -152,30 +159,38 @@ class PlexApi:
 
         return self.plexmatch.content(playable)
 
-    def media_part_names(self, item: Movie | Episode):
-        if item is None:
+    def subtitle_content(self, library: str, title: str, filename: str):
+        playable = self.library_item(library, title)
+        if not playable:
             return None
-        yield from (fn for fn, part in self.media_parts(item))
-        if item.type == "movie":
-            yield ".plexmatch"
-
-    def media_parts_by_name(self, item: Movie | Episode, filename: str) -> MediaPart | None:
-        it = (part for fn, part in self.media_parts(item)
-              if PureWindowsPath(part.file).name == filename)
 
         try:
-            return next(it)
-        except StopIteration:
+            stream = playable.subtitles[filename]
+        except KeyError:
             return None
 
+        cache_path = self.cache_path(stream.key)
+        if not cache_path.exists():
+            print(f"Downloading: {cache_path}")
+            self.download_part(stream.key, cache_path)
+
+        return cache_path
+
+    def media_part_names(self, media: MovieEntry):
+        return list(self._media_part_names(media))
+
     @staticmethod
-    def media_parts(item: Movie):
-        for media in item.media:
-            for part in media.parts:
-                # Remove directory part (Windows server on Unix)
-                # We need to handle Windows and Unix differences,
-                # hence the PureWindowsPath class
-                yield PureWindowsPath(part.file).name, part
+    def _media_part_names(media: MovieEntry):
+        yield from media.media_parts.keys()
+        if media.item.type == "movie":
+            yield ".plexmatch"
+
+    @staticmethod
+    def media_parts_by_name(media: MovieEntry, filename: str):
+        try:
+            return media.media_parts[filename]
+        except KeyError:
+            return None
 
     def url(self, key: str, include_token=False):
         return self.server.url(key, includeToken=include_token)
