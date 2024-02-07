@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from datetime import timedelta
 from functools import cached_property
 from typing import TYPE_CHECKING
@@ -34,6 +35,22 @@ class HttpCache:
     @cached_property
     def session(self):
         from requests_cache import CachedSession
+
+        # Set log levels
+        loggers = [
+            "requests_cache.session",
+            "requests_cache.policy.actions",
+            "requests_cache.policy.expiration",
+            "requests_cache.backends",
+            "requests_cache.backends.base",
+            "requests_cache.backends.sqlite",
+        ]
+        stderr_handler = logging.StreamHandler()
+
+        for name in loggers:
+            logger = logging.getLogger(name)
+            logger.setLevel(logging.DEBUG)
+            logger.addHandler(stderr_handler)
 
         return CachedSession(
             cache_name=str(self.cache_path),
