@@ -59,7 +59,7 @@ class PlexVFS(UserDict):
             if playable is None:
                 raise KeyError(pe)
             return PlexMatchEntry(playable)
-        elif ((pc == 4 and pe[0] == "movie") or (pc == 9 and pe[0] == "show")) and pe[-1].endswith(self.SUBTITLE_EXT):
+        elif ((pc == 4 and pe[0] == "movie") or (pc == 6 and pe[0] == "show")) and pe[-1].endswith(self.SUBTITLE_EXT):
             if pe[0] == "movie":
                 playable = self.plex.library_item(*pe[1:-1])
             elif pe[0] == "show":
