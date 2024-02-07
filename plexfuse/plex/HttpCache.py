@@ -54,6 +54,9 @@ class HttpCache:
 
         return CachedSession(
             cache_name=str(self.cache_path),
-            cache_control=True,
+            # Plex sends "Cache-Control: no-cache" headers
+            cache_control=False,
             urls_expire_after=self.urls_expire_after,
+            # Plex doesn't Send Vary: X-Plex-Container-Start
+            match_headers=['X-Plex-Container-Start'],
         )
