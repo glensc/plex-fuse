@@ -1,6 +1,6 @@
 [project]
 name = "plex-fuse"
-version = "0.3.1"
+dynamic = ["version"]
 
 description = "Plex FUSE Filesystem - Mount Remote Plex Media Server contents as local filesystem"
 license = { file = "LICENSE" }
@@ -41,6 +41,9 @@ Documentation = "https://github.com/glensc/plex-fuse#plex-fuse-filesystem"
 Repository = "https://github.com/glensc/plex-fuse"
 Issues = "https://github.com/glensc/plex-fuse/issues"
 Changelog = "https://github.com/glensc/plex-fuse/releases"
+
+[tool.setuptools.dynamic]
+version = {attr = "plexfuse.__version__.__version__"}
 
 [project.scripts]
 plex-fuse = "plexfuse.fs.main:main"
