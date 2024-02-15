@@ -9,6 +9,7 @@
 
 import fuse
 
+from plexfuse.__version__ import __version__
 from plexfuse.fs.PlexFS import PlexFS
 from plexfuse.plex.PlexApi import PlexApi
 
@@ -17,7 +18,7 @@ fuse.fuse_python_api = (0, 2)
 
 def main():
     usage = "PlexFS: A filesystem for mounting a Plex Media Server media\n\n"
-    server = PlexFS(version="%prog " + fuse.__version__,
+    server = PlexFS(version=f"%prog: {__version__}\npython-fuse: {fuse.__version__}",
                     usage=usage + fuse.Fuse.fusage, dash_s_do="setsingle")
     server.parser.add_option(mountopt="cache_path", metavar="PATH",
                              default=PlexApi.CACHE_PATH,
