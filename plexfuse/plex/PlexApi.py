@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
+from plexfuse.plex.HttpCache import HttpCache
 from plexfuse.plexvfs.LibraryEntry import LibraryEntry
 from plexfuse.plexvfs.MovieEntry import MovieEntry
 from plexfuse.plexvfs.SectionEntry import SectionEntry
@@ -19,10 +20,16 @@ class PlexApi:
     CACHE_PATH = Path("cache")
     CACHE_VERSION = str(2)
     CHUNK_SIZE = 1024 * 1024 * 16
+    HTTP_CACHE = False
 
     @cached_property
     def server(self):
-        return PlexServer()
+        session = None
+        if self.HTTP_CACHE:
+            http_cache = HttpCache(self.CACHE_PATH / "http_cache")
+            session = http_cache.session
+
+        return PlexServer(session=session)
 
     @property
     def session(self):

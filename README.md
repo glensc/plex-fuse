@@ -33,6 +33,7 @@ Currently implemented:
 - [ ] Add timestamps to directories
 - [x] Add subtitle files for Movies
 - [x] Add subtitle files for Episodes
+- [x] Cache PlexAPI requests using requests-cache (`-o http_cache`)
 - [ ] Publish package to pypi
 - [ ] Add docker volume driver
 - [ ] Add cache management (max size?)
@@ -48,7 +49,7 @@ Currently implemented:
 1. Clone this project: `git clone https://github.com/glensc/plex-fuse`
 1. Change to `plex-fuse` directory
 1. Install project dependencies `pipenv install`
-1. Create [config.ini](#plex-config) for `python-plex`
+1. Create [config.ini](#plex-config) for `python-plexapi`
 1. Mount the configured PMS somewhere, i.e `plex-server`: `mkdir plex-server; pipenv run python -m plexfuse plex-server -f`
 1. Access the `plex-server` directory from another terminal
 1. `umount` or `fusermount -u` the directory to remove the `plex-server` mount
