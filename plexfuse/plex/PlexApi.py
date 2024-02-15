@@ -20,12 +20,16 @@ class PlexApi:
     CACHE_PATH = Path("cache")
     CACHE_VERSION = str(2)
     CHUNK_SIZE = 1024 * 1024 * 16
+    HTTP_CACHE = False
 
     @cached_property
     def server(self):
-        http_cache = HttpCache(self.CACHE_PATH / "http_cache")
+        session = None
+        if self.HTTP_CACHE:
+            http_cache = HttpCache(self.CACHE_PATH / "http_cache")
+            session = http_cache.session
 
-        return PlexServer(session=http_cache.session)
+        return PlexServer(session=session)
 
     @property
     def session(self):
