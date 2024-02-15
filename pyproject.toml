@@ -1,0 +1,49 @@
+[project]
+name = "plex-fuse"
+version = "0.3.0"
+
+description = "Plex FUSE Filesystem - Mount Remote Plex Media Server contents as local filesystem"
+license = { file = "LICENSE" }
+readme = "README.md"
+keywords = ["fuse", "filesystem", "fs", "plex", "fuse-filesystem", "user-space"]
+authors = [
+    { name = "Elan Ruusamäe", email = "glen@pld-linux.org" },
+]
+
+requires-python = ">= 3.11"
+dependencies = [
+    "fuse-python",
+    "plexapi>=4.15",
+    "requests-cache>=1.1",
+]
+
+classifiers = [
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    "Development Status :: 3 - Alpha",
+    # Indicate who your project is intended for
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: System :: Filesystems",
+    "Topic :: Multimedia :: Video :: Display",
+    # Pick your license as you wish (see also "license" above)
+    "License :: OSI Approved :: BSD License",
+    # Specify the Python versions you support here.
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.urls]
+Homepage = "https://github.com/glensc/plex-fuse"
+Documentation = "https://github.com/glensc/plex-fuse#plex-fuse-filesystem"
+Repository = "https://github.com/glensc/plex-fuse"
+Issues = "https://github.com/glensc/plex-fuse/issues"
+Changelog = "https://github.com/glensc/plex-fuse/releases"
+
+[project.scripts]
+plex-fuse = "plexfuse.fs.main:main"
+
+[tool.setuptools.packages.find]
+where = ["plexfuse"]
