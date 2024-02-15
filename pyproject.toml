@@ -45,5 +45,5 @@ Changelog = "https://github.com/glensc/plex-fuse/releases"
 [project.scripts]
 plex-fuse = "plexfuse.fs.main:main"
 
-[tool.setuptools.packages.find]
-where = ["plexfuse"]
+[tool.setuptools]
+packages = ["plexfuse"]
