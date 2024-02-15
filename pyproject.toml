@@ -1,6 +1,6 @@
 [project]
 name = "plex-fuse"
-version = "0.3.0"
+version = "0.3.1"
 
 description = "Plex FUSE Filesystem - Mount Remote Plex Media Server contents as local filesystem"
 license = { file = "LICENSE" }
