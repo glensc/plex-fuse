@@ -20,6 +20,7 @@ class PlexFS(fuse.Fuse):
         plex = PlexApi()
         self.vfs = PlexVFS(plex)
         self.cache_path = None
+        self.http_cache = None
         self.file_map = RefCountedDict()
         self.iolock = Lock()
 
@@ -28,6 +29,7 @@ class PlexFS(fuse.Fuse):
         # https://github.com/libfuse/python-fuse/issues/61#issuecomment-1902472620
         cache_path = self.cache_path if self.cache_path else PlexApi.CACHE_PATH
         PlexApi.CACHE_PATH = Path(cache_path).absolute()
+        PlexApi.HTTP_CACHE = self.http_cache
 
     @cache
     def getattr(self, path: str):
