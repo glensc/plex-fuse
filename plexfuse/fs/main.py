@@ -22,6 +22,9 @@ def main():
     server.parser.add_option(mountopt="cache_path", metavar="PATH",
                              default=PlexApi.CACHE_PATH,
                              help="cache downloads under PATH [default: %default]")
+    server.parser.add_option(mountopt="http_cache",
+                             default=False, action="store_true",
+                             help="cache http requests using requests-cache")
     server.parse(values=server, errex=1)
     server.main()
 
