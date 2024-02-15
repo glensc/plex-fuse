@@ -33,6 +33,7 @@ Currently implemented:
 - [ ] Add timestamps to directories
 - [x] Add subtitle files for Movies
 - [x] Add subtitle files for Episodes
+- [x] Cache PlexAPI requests using requests-cache (`-o http_cache`)
 - [ ] Publish package to pypi
 - [ ] Add docker volume driver
 - [ ] Add cache management (max size?)
