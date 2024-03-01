@@ -16,7 +16,8 @@ class ControlEntry(AttrEntry):
 
     @cached_property
     def size(self):
-        return 0
+        # On macOS can't read from 0 byte file
+        return 64 * 1024
 
     def __len__(self):
         return self.size
