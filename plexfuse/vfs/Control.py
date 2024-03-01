@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 from plexfuse.cache.CacheControl import CacheControl
 from plexfuse.cache.UserDictCacheControl import UserDictCacheControl
-from plexfuse.vfs.ControlEntry import ControlEntry
-from plexfuse.vfs.DirEntry import DirEntry
+from plexfuse.vfs.entry.ControlEntry import ControlEntry
+from plexfuse.vfs.entry.DirEntry import DirEntry
 
 if TYPE_CHECKING:
     from plexfuse.fs.PlexFS import PlexFS

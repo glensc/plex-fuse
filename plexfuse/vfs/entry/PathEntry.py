@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from plexfuse.vfs.AttrEntry import AttrEntry
+from plexfuse.vfs.entry.AttrEntry import AttrEntry
 
 
 class PathEntry(AttrEntry):

@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import cached_property
 
 from plexfuse.plex.PlexApi import PlexApi
-from plexfuse.vfs.AttrEntry import AttrEntry
+from plexfuse.vfs.entry.AttrEntry import AttrEntry
 from plexfuse.vfs.Playable import Playable
 
 

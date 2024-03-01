@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from plexfuse.vfs.AttrEntry import AttrEntry
+from plexfuse.vfs.entry.AttrEntry import AttrEntry
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart

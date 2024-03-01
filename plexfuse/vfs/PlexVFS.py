@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING
 
 from plexfuse.plex.ChunkedFile import ChunkedFile
 from plexfuse.vfs.Control import Control
-from plexfuse.vfs.DirEntry import DirEntry
-from plexfuse.vfs.FileEntry import FileEntry
-from plexfuse.vfs.PlexMatchEntry import PlexMatchEntry
-from plexfuse.vfs.SubtitleEntry import SubtitleEntry
+from plexfuse.vfs.entry.DirEntry import DirEntry
+from plexfuse.vfs.entry.FileEntry import FileEntry
+from plexfuse.vfs.entry.SubtitleEntry import SubtitleEntry
+from plexfuse.vfs.entry.PlexMatchEntry import PlexMatchEntry
 
 if TYPE_CHECKING:
     from plexfuse.fs.PlexFS import PlexFS
