@@ -36,3 +36,6 @@ class SectionEntry:
 
     def __str__(self):
         return self.title
+
+    def __repr__(self):
+        return str(self)
