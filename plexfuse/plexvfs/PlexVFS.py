@@ -34,7 +34,9 @@ class PlexVFS(UserDict):
 
     def resolve(self, path: str):
         if path == "/":
-            return DirEntry(self.plex.section_types)
+            ents = self.plex.section_types
+            ents.extend(self.control.root)
+            return DirEntry(ents)
 
         pe = path.split("/")[1:]
         pc = len(pe)
