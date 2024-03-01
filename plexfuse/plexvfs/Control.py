@@ -6,12 +6,14 @@ from plexfuse.plexvfs.ControlEntry import ControlEntry
 from plexfuse.plexvfs.DirEntry import DirEntry
 
 if TYPE_CHECKING:
+    from plexfuse.fs.PlexFS import PlexFS
     from plexfuse.plex.PlexApi import PlexApi
 
 
 class Control:
-    def __init__(self, plex: PlexApi):
+    def __init__(self, plex: PlexApi, plexfs: PlexFS):
         self.plex = plex
+        self.plexfs = plexfs
 
     @property
     def root(self):
