@@ -44,8 +44,8 @@ class PlexApi:
         return LibraryEntry(self.server.library)
 
     @property
-    def section_types(self) -> set[str]:
-        return self.library.section_types
+    def section_types(self) -> list[str]:
+        return list(self.library.section_types)
 
     def sections_by_type(self, type: str) -> list[SectionEntry] | None:
         try:
