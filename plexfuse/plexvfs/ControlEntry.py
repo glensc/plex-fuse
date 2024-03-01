@@ -11,7 +11,7 @@ class ControlEntry(AttrEntry):
         self.action = action
 
     def read(self, offset: int, size: int):
-        content = self.action()
+        content = "\n".join(self.action()).encode() + b"\n"
         return content[offset:offset + size]
 
     @cached_property
