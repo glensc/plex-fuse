@@ -1,8 +1,18 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from plexfuse.plexvfs.ControlEntry import ControlEntry
 from plexfuse.plexvfs.DirEntry import DirEntry
 
+if TYPE_CHECKING:
+    from plexfuse.plex.PlexApi import PlexApi
+
 
 class Control:
+    def __init__(self, plex: PlexApi):
+        self.plex = plex
+
     @property
     def root(self):
         return ["control"]

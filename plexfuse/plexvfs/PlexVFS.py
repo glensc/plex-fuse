@@ -21,7 +21,7 @@ class PlexVFS(UserDict):
         super().__init__()
         self.plex = plex
         self.reader = ChunkedFile(plex)
-        self.control = Control()
+        self.control = Control(plex)
 
     def __missing__(self, path: str):
         entry = self.resolve(path)
