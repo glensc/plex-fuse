@@ -6,15 +6,17 @@ from plexfuse.plexvfs.AttrEntry import AttrEntry
 
 
 class ControlEntry(AttrEntry):
-    def __init__(self, name: str):
+    def __init__(self, name: str, action):
         self.name = name
+        self.action = action
 
     def read(self, offset: int, size: int):
-        return b""
+        content = self.action()
+        return content[offset:offset + size]
 
     @cached_property
     def size(self):
-        return 0
+        return len(self.action())
 
     def __len__(self):
         return self.size
