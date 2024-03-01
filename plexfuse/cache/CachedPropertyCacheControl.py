@@ -21,7 +21,8 @@ class CachedPropertyCacheControl:
         yield f"{self.name} cache:"
         for k in self.members:
             v = self.data.get(k, None)
-            yield f"- {k}: {v}"
+            f = f"{len(v)} items" if isinstance(v, (list, dict)) else v
+            yield f"- {k}: {f}"
 
     def cache_clear(self):
         for k in self.members:
