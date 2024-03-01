@@ -27,7 +27,12 @@ class Control:
         return ""
 
     def status(self):
-        return ""
+        for k in dir(self.plexfs):
+            v = getattr(self.plexfs, k)
+            ci = getattr(v, "cache_info", None)
+            if ci is None:
+                continue
+            yield f"plexfs cache: {k}: {ci()}"
 
     def handle(self, pc: int, pe: list[str]):
         if pc == 1 and pe[0] in self.root:
