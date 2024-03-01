@@ -41,7 +41,9 @@ class PlexVFS(UserDict):
         pe = path.split("/")[1:]
         pc = len(pe)
 
-        if pc == 1 and pe[0] in self["/"]:
+        if pc == 1 and pe[0] in self.control.root:
+            return DirEntry(self.control.commands)
+        elif pc == 1 and pe[0] in self["/"]:
             return DirEntry(list(self.plex.sections_by_type(pe[0])))
         elif pc == 2:
             entries = self.plex.library_items(pe[1])
