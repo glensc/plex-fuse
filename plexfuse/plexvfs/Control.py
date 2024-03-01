@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from plexfuse.cache.CacheControl import CacheControl
 from plexfuse.plexvfs.ControlEntry import ControlEntry
 from plexfuse.plexvfs.DirEntry import DirEntry
 
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 class Control:
     def __init__(self, plex: PlexApi, plexfs: PlexFS):
         self.plex = plex
-        self.plexfs = plexfs
+        self.plexfs = CacheControl(plexfs)
 
     @property
     def root(self):
@@ -24,21 +25,10 @@ class Control:
         return ["reload", "status"]
 
     def reload(self):
-        for k in dir(self.plexfs):
-            v = getattr(self.plexfs, k)
-            fn = getattr(v, "cache_clear", None)
-            if fn is None:
-                continue
-            yield f"plexfs clear cache: {k}: {fn()}"
-        yield from self.status()
+        yield from self.plexfs.cache_clear()
 
     def status(self):
-        for k in dir(self.plexfs):
-            v = getattr(self.plexfs, k)
-            ci = getattr(v, "cache_info", None)
-            if ci is None:
-                continue
-            yield f"plexfs cache: {k}: {ci()}"
+        yield from self.plexfs.cache_info()
 
     def handle(self, pc: int, pe: list[str]):
         if pc == 1 and pe[0] in self.root:
