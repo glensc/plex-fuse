@@ -40,6 +40,7 @@ Currently implemented:
 - [ ] Add cache purge option (special file?)
 - [ ] Detect need to refresh cache (add event listener)
 - [ ] Handling of "artist" library type
+- [x] Add "status" and "reload" control channels
 
 ## Usage
 

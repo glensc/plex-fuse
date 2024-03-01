@@ -18,7 +18,7 @@ class PlexFS(fuse.Fuse):
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
         plex = PlexApi()
-        self.vfs = PlexVFS(plex)
+        self.vfs = PlexVFS(plex, self)
         self.cache_path = None
         self.http_cache = None
         self.file_map = RefCountedDict()

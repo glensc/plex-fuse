@@ -4,22 +4,25 @@ from collections import UserDict
 from typing import TYPE_CHECKING
 
 from plexfuse.plex.ChunkedFile import ChunkedFile
+from plexfuse.plexvfs.Control import Control
 from plexfuse.plexvfs.DirEntry import DirEntry
 from plexfuse.plexvfs.FileEntry import FileEntry
 from plexfuse.plexvfs.PlexMatchEntry import PlexMatchEntry
 from plexfuse.plexvfs.SubtitleEntry import SubtitleEntry
 
 if TYPE_CHECKING:
+    from plexfuse.fs.PlexFS import PlexFS
     from plexfuse.plex.PlexApi import PlexApi
 
 
 class PlexVFS(UserDict):
     SUBTITLE_EXT = (".srt", ".vtt")
 
-    def __init__(self, plex: PlexApi):
+    def __init__(self, plex: PlexApi, plexfs: PlexFS):
         super().__init__()
         self.plex = plex
         self.reader = ChunkedFile(plex)
+        self.control = Control(plex, plexfs)
 
     def __missing__(self, path: str):
         entry = self.resolve(path)
@@ -32,10 +35,19 @@ class PlexVFS(UserDict):
 
     def resolve(self, path: str):
         if path == "/":
-            return DirEntry(self.plex.section_types)
+            ents = self.plex.section_types
+            ents.extend(self.control.root)
+            return DirEntry(ents)
 
         pe = path.split("/")[1:]
         pc = len(pe)
+
+        try:
+            resolved = self.control.handle(pc, pe)
+            if resolved is not None:
+                return resolved
+        except KeyError:
+            pass
 
         if pc == 1 and pe[0] in self["/"]:
             return DirEntry(list(self.plex.sections_by_type(pe[0])))
