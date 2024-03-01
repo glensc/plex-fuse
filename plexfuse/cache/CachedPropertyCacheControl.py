@@ -28,6 +28,6 @@ class CachedPropertyCacheControl:
         for k in self.members:
             try:
                 del self.data[k]
-                yield f"Deleted {k}"
+                yield f"Deleted {self.name}: {k}"
             except KeyError:
                 pass
