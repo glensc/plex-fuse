@@ -3,18 +3,21 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from plexfuse.cache.CacheControl import CacheControl
+from plexfuse.cache.UserDictCacheControl import UserDictCacheControl
 from plexfuse.plexvfs.ControlEntry import ControlEntry
 from plexfuse.plexvfs.DirEntry import DirEntry
 
 if TYPE_CHECKING:
     from plexfuse.fs.PlexFS import PlexFS
     from plexfuse.plex.PlexApi import PlexApi
+    from plexfuse.plexvfs.PlexVFS import PlexVFS
 
 
 class Control:
-    def __init__(self, plex: PlexApi, plexfs: PlexFS):
-        self.plex = CacheControl(plex)
+    def __init__(self, plex: PlexApi, plexfs: PlexFS, plexvfs: PlexVFS):
         self.plexfs = CacheControl(plexfs)
+        self.plex = CacheControl(plex)
+        self.plexvfs = UserDictCacheControl(plexvfs)
 
     @property
     def root(self):
@@ -27,10 +30,12 @@ class Control:
     def reload(self):
         yield from self.plexfs.cache_clear()
         yield from self.plex.cache_clear()
+        yield from self.plexvfs.cache_clear()
 
     def status(self):
         yield from self.plexfs.cache_info()
         yield from self.plex.cache_info()
+        yield from self.plexvfs.cache_info()
 
     def handle(self, pc: int, pe: list[str]):
         if pc == 1 and pe[0] in self.root:
