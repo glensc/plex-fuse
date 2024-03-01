@@ -1,7 +1,7 @@
 import logging
 
 from plexfuse.plex.PlexApi import PlexApi
-from plexfuse.plexvfs.MovieEntry import MovieEntry
+from plexfuse.vfs.entry.MovieEntry import MovieEntry
 
 logger = logging.getLogger(__name__)
 

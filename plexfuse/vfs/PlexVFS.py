@@ -3,12 +3,12 @@ from __future__ import annotations
 from collections import UserDict
 from typing import TYPE_CHECKING
 
-from plexfuse.plex.ChunkedFile import ChunkedFile
-from plexfuse.plexvfs.Control import Control
-from plexfuse.plexvfs.DirEntry import DirEntry
-from plexfuse.plexvfs.FileEntry import FileEntry
-from plexfuse.plexvfs.PlexMatchEntry import PlexMatchEntry
-from plexfuse.plexvfs.SubtitleEntry import SubtitleEntry
+from plexfuse.vfs.ChunkedFile import ChunkedFile
+from plexfuse.vfs.Control import Control
+from plexfuse.vfs.entry.DirEntry import DirEntry
+from plexfuse.vfs.entry.FileEntry import FileEntry
+from plexfuse.vfs.entry.SubtitleEntry import SubtitleEntry
+from plexfuse.vfs.entry.PlexMatchEntry import PlexMatchEntry
 
 if TYPE_CHECKING:
     from plexfuse.fs.PlexFS import PlexFS

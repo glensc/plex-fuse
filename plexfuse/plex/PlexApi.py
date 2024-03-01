@@ -7,10 +7,10 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
-from plexfuse.plex.HttpCache import HttpCache
-from plexfuse.plexvfs.LibraryEntry import LibraryEntry
-from plexfuse.plexvfs.MovieEntry import MovieEntry
-from plexfuse.plexvfs.SectionEntry import SectionEntry
+from plexfuse.cache.HttpCache import HttpCache
+from plexfuse.vfs.entry.LibraryEntry import LibraryEntry
+from plexfuse.vfs.entry.MovieEntry import MovieEntry
+from plexfuse.vfs.entry.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
     from plexapi.video import Show

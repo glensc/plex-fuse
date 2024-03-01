@@ -4,9 +4,9 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plexfuse.normalize import normalize
-from plexfuse.plexvfs.EpisodeEntry import EpisodeEntry
-from plexfuse.plexvfs.MovieEntry import MovieEntry
-from plexfuse.plexvfs.SeasonEntry import SeasonEntry
+from plexfuse.vfs.entry.EpisodeEntry import EpisodeEntry
+from plexfuse.vfs.entry.MovieEntry import MovieEntry
+from plexfuse.vfs.entry.SeasonEntry import SeasonEntry
 
 if TYPE_CHECKING:
     from plexfuse.plex.types import SectionTypes

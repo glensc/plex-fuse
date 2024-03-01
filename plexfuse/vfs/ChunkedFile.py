@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from plexfuse.plex.FileCache import FileCache
+from plexfuse.cache.FileCache import FileCache
 
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi

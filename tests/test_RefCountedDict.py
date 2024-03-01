@@ -1,4 +1,4 @@
-from plexfuse.plex.RefCountedDict import RefCountedDict
+from plexfuse.fs.RefCountedDict import RefCountedDict
 
 
 def test_file():

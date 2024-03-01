@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from plexapi.media import Guid
 
-    from plexfuse.plexvfs.Playable import Playable
+    from plexfuse.vfs.Playable import Playable
 
 
 class PlexMatch:

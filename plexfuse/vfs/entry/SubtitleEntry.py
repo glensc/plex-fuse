@@ -3,8 +3,8 @@ from __future__ import annotations
 from functools import cached_property
 
 from plexfuse.plex.PlexApi import PlexApi
-from plexfuse.plexvfs.AttrEntry import AttrEntry
-from plexfuse.plexvfs.Playable import Playable
+from plexfuse.vfs.entry.AttrEntry import AttrEntry
+from plexfuse.vfs.Playable import Playable
 
 
 class SubtitleEntry(AttrEntry):
