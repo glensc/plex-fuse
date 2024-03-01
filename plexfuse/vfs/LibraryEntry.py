@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plexfuse.normalize import normalize
-from plexfuse.plexvfs.SectionEntry import SectionEntry
+from plexfuse.vfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
     from plexapi.library import Library

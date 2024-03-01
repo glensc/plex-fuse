@@ -8,9 +8,9 @@ from typing import TYPE_CHECKING
 from plexapi.server import PlexServer
 
 from plexfuse.plex.HttpCache import HttpCache
-from plexfuse.plexvfs.LibraryEntry import LibraryEntry
-from plexfuse.plexvfs.MovieEntry import MovieEntry
-from plexfuse.plexvfs.SectionEntry import SectionEntry
+from plexfuse.vfs.LibraryEntry import LibraryEntry
+from plexfuse.vfs.MovieEntry import MovieEntry
+from plexfuse.vfs.SectionEntry import SectionEntry
 
 if TYPE_CHECKING:
     from plexapi.video import Show

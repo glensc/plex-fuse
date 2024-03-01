@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING
 
 from plexfuse.cache.CacheControl import CacheControl
 from plexfuse.cache.UserDictCacheControl import UserDictCacheControl
-from plexfuse.plexvfs.ControlEntry import ControlEntry
-from plexfuse.plexvfs.DirEntry import DirEntry
+from plexfuse.vfs.ControlEntry import ControlEntry
+from plexfuse.vfs.DirEntry import DirEntry
 
 if TYPE_CHECKING:
     from plexfuse.fs.PlexFS import PlexFS
     from plexfuse.plex.PlexApi import PlexApi
-    from plexfuse.plexvfs.PlexVFS import PlexVFS
+    from plexfuse.vfs.PlexVFS import PlexVFS
 
 
 class Control:

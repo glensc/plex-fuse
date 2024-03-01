@@ -10,8 +10,8 @@ from plexfuse.fs.PlexFile import PlexFile
 from plexfuse.normalize import normalize
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.plex.RefCountedDict import RefCountedDict
-from plexfuse.plexvfs.DirEntry import DirEntry
-from plexfuse.plexvfs.PlexVFS import PlexVFS
+from plexfuse.vfs.DirEntry import DirEntry
+from plexfuse.vfs.PlexVFS import PlexVFS
 
 
 class PlexFS(fuse.Fuse):

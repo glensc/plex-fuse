@@ -4,11 +4,11 @@ from collections import UserDict
 from typing import TYPE_CHECKING
 
 from plexfuse.plex.ChunkedFile import ChunkedFile
-from plexfuse.plexvfs.Control import Control
-from plexfuse.plexvfs.DirEntry import DirEntry
-from plexfuse.plexvfs.FileEntry import FileEntry
-from plexfuse.plexvfs.PlexMatchEntry import PlexMatchEntry
-from plexfuse.plexvfs.SubtitleEntry import SubtitleEntry
+from plexfuse.vfs.Control import Control
+from plexfuse.vfs.DirEntry import DirEntry
+from plexfuse.vfs.FileEntry import FileEntry
+from plexfuse.vfs.PlexMatchEntry import PlexMatchEntry
+from plexfuse.vfs.SubtitleEntry import SubtitleEntry
 
 if TYPE_CHECKING:
     from plexfuse.fs.PlexFS import PlexFS

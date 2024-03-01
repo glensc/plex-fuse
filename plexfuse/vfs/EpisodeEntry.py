@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from plexfuse.plexvfs.Playable import Playable
+from plexfuse.vfs.Playable import Playable
 
 if TYPE_CHECKING:
     from plexapi.video import Episode

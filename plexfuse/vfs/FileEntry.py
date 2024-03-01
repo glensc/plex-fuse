@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from plexfuse.plexvfs.AttrEntry import AttrEntry
+from plexfuse.vfs.AttrEntry import AttrEntry
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
 
     from plexfuse.plex.ChunkedFile import ChunkedFile
-    from plexfuse.plexvfs.Playable import Playable
+    from plexfuse.vfs.Playable import Playable
 
 
 class FileEntry(AttrEntry):
