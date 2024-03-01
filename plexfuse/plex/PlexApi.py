@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
 
-from plexfuse.plex.HttpCache import HttpCache
+from plexfuse.cache.HttpCache import HttpCache
 from plexfuse.vfs.entry.LibraryEntry import LibraryEntry
 from plexfuse.vfs.entry.MovieEntry import MovieEntry
 from plexfuse.vfs.entry.SectionEntry import SectionEntry
