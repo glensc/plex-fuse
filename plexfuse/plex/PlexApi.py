@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from functools import cache, cached_property
+from functools import cached_property
 from os import makedirs
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -71,14 +71,12 @@ class PlexApi:
         except KeyError:
             return None
 
-    @cache
     def all_seasons(self, library):
         try:
             return self.library.section_by_title[library].seasons
         except KeyError:
             return None
 
-    @cache
     def all_episodes(self, library):
         try:
             return self.library.section_by_title[library].episodes
