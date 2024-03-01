@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import UserDict
 from typing import TYPE_CHECKING
 
-from plexfuse.plex.ChunkedFile import ChunkedFile
+from plexfuse.vfs.ChunkedFile import ChunkedFile
 from plexfuse.vfs.Control import Control
 from plexfuse.vfs.entry.DirEntry import DirEntry
 from plexfuse.vfs.entry.FileEntry import FileEntry

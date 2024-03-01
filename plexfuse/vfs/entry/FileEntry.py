@@ -7,7 +7,7 @@ from plexfuse.vfs.entry.AttrEntry import AttrEntry
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
 
-    from plexfuse.plex.ChunkedFile import ChunkedFile
+    from plexfuse.vfs.ChunkedFile import ChunkedFile
     from plexfuse.vfs.Playable import Playable
 
 

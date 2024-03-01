@@ -1,5 +1,5 @@
-from plexfuse.plex.ChunkedFile import ChunkedFile
 from plexfuse.plex.PlexApi import PlexApi
+from plexfuse.vfs.ChunkedFile import ChunkedFile
 
 
 def test_file():
