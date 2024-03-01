@@ -16,7 +16,7 @@ class ControlEntry(AttrEntry):
 
     @cached_property
     def size(self):
-        return len(self.action())
+        return 0
 
     def __len__(self):
         return self.size
