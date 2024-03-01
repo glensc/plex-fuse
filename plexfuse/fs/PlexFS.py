@@ -7,9 +7,9 @@ import fuse
 
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
+from plexfuse.fs.RefCountedDict import RefCountedDict
 from plexfuse.normalize import normalize
 from plexfuse.plex.PlexApi import PlexApi
-from plexfuse.plex.RefCountedDict import RefCountedDict
 from plexfuse.vfs.entry.DirEntry import DirEntry
 from plexfuse.vfs.PlexVFS import PlexVFS
 
