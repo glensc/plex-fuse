@@ -24,7 +24,13 @@ class Control:
         return ["reload", "status"]
 
     def reload(self):
-        return ""
+        for k in dir(self.plexfs):
+            v = getattr(self.plexfs, k)
+            fn = getattr(v, "cache_clear", None)
+            if fn is None:
+                continue
+            yield f"plexfs clear cache: {k}: {fn()}"
+        yield from self.status()
 
     def status(self):
         for k in dir(self.plexfs):
