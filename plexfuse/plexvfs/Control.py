@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class Control:
     def __init__(self, plex: PlexApi, plexfs: PlexFS):
-        self.plex = plex
+        self.plex = CacheControl(plex)
         self.plexfs = CacheControl(plexfs)
 
     @property
@@ -26,9 +26,11 @@ class Control:
 
     def reload(self):
         yield from self.plexfs.cache_clear()
+        yield from self.plex.cache_clear()
 
     def status(self):
         yield from self.plexfs.cache_info()
+        yield from self.plex.cache_info()
 
     def handle(self, pc: int, pe: list[str]):
         if pc == 1 and pe[0] in self.root:
