@@ -11,6 +11,12 @@ class Control:
     def commands(self):
         return ["reload", "status"]
 
+    def reload(self):
+        return ""
+
+    def status(self):
+        return ""
+
     def handle(self, pc: int, pe: list[str]):
         if pc == 1 and pe[0] in self.root:
             return DirEntry(self.commands)
@@ -19,4 +25,4 @@ class Control:
             return
 
         if pe[1] in self.commands:
-            return ControlEntry(pe[1])
+            return ControlEntry(pe[1], getattr(self, pe[1]))
