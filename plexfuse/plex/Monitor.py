@@ -12,12 +12,21 @@ class Monitor:
         self.notifier = None
 
     def start(self):
+        # Perform self-test, like PlexAPI
+        try:
+            import websocket
+        except ImportError:
+            print("Can't use Monitor without websocket")
+            return
+        finally:
+            del websocket
+
         self.notifier = self.plex.server.startAlertListener(
             callback=self.event_handler,
             callbackError=self.event_handler,
         )
-        self.notifier.start()
         print("Started notifier:", self.notifier)
+        self.event_handler("test")
 
     def stop(self):
         if not self.notifier:
