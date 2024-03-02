@@ -33,7 +33,10 @@ class Monitor:
             return
         print("Stopping notifier:", self.notifier)
         if self.notifier.is_alive():
-            self.notifier.join()
+            self.notifier.join(timeout=10)
+            if self.notifier.is_alive():
+                print("Thread for notifier is still alive:", self.notifier)
+
         self.notifier = None
 
     @property
