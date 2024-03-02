@@ -23,4 +23,4 @@ class UserDictCacheControl:
     def cache_clear(self):
         size = len(self.data)
         self.data.clear()
-        yield f"Cleared{self.name} cache: {size} entries"
+        yield f"Cleared {self.name} cache: {size} entries"
