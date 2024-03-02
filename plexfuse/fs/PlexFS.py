@@ -43,10 +43,13 @@ class PlexFS(fuse.Fuse):
         if self.options.control_path:
             control = Control(self.plex, self, self.vfs)
             self.control = ControlListener(self.options.control_path, control).start()
+        self.monitor.start()
 
     def fsdestroy(self):
         if self.control:
             self.control.stop()
+
+        self.monitor.stop()
 
     @cache
     def getattr(self, path: str):
