@@ -11,6 +11,7 @@ from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
 from plexfuse.fs.RefCountedDict import RefCountedDict
 from plexfuse.normalize import normalize
+from plexfuse.plex.Monitor import Monitor
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.vfs.Control import Control
 from plexfuse.vfs.entry.DirEntry import DirEntry
@@ -26,6 +27,7 @@ class PlexFS(fuse.Fuse):
         self.plex = plex = PlexApi()
         self.vfs = PlexVFS(plex, self)
         self.control = None
+        self.monitor = Monitor(plex)
         self.file_map = RefCountedDict()
         self.iolock = Lock()
 
