@@ -9,5 +9,6 @@ class PlexFile(Stat, Timestampable):
     def __init__(self, **kw):
         super().__init__(**kw)
         Timestampable.__init__(self)
-        self.st_mode = stat.S_IFREG | 0o644
+        if self.st_mode is None:
+            self.st_mode = stat.S_IFREG | 0o644
         self.st_nlink = 1
