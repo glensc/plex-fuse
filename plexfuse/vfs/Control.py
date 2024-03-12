@@ -20,7 +20,6 @@ if TYPE_CHECKING:
 class Control:
     def __init__(self, plex: PlexApi, plexfs: PlexFS, plexvfs: PlexVFS):
         self.plexfs = CacheControl(plexfs)
-        self.plex = CacheControl(plex)
         self.plexvfs = UserDictCacheControl(plexvfs)
         self.library = CachedPropertyCacheControl(plex.library)
         self.sections = DelayedPropertyCacheControl(plex.library, "sections", CachedPropertyCacheControl)
@@ -35,14 +34,12 @@ class Control:
 
     def reload(self):
         yield from self.plexfs.cache_clear()
-        yield from self.plex.cache_clear()
         yield from self.plexvfs.cache_clear()
         yield from self.sections.cache_clear()
         yield from self.library.cache_clear()
 
     def status(self):
         yield from self.plexfs.cache_info()
-        yield from self.plex.cache_info()
         yield from self.plexvfs.cache_info()
         yield from self.sections.cache_info()
         yield from self.library.cache_info()
