@@ -58,5 +58,5 @@ class HttpCache:
             cache_control=False,
             urls_expire_after=self.urls_expire_after,
             # Plex doesn't Send Vary: X-Plex-Container-Start
-            match_headers=['X-Plex-Container-Start'],
+            match_headers=["X-Plex-Container-Start"],
         )
