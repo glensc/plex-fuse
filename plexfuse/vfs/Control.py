@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plexfuse.cache.CacheControl import CacheControl
@@ -19,10 +20,9 @@ if TYPE_CHECKING:
 
 class Control:
     def __init__(self, plex: PlexApi, plexfs: PlexFS, plexvfs: PlexVFS):
-        self.plexfs = CacheControl(plexfs)
-        self.plexvfs = UserDictCacheControl(plexvfs)
-        self.library = CachedPropertyCacheControl(plex.library)
-        self.sections = DelayedPropertyCacheControl(plex.library, "sections", CachedPropertyCacheControl)
+        self.plex = plex
+        self.plexfs = plexfs
+        self.plexvfs = plexvfs
 
     @property
     def root(self):
@@ -32,17 +32,33 @@ class Control:
     def commands(self):
         return ["reload", "status"]
 
+    @cached_property
+    def cc_plexfs(self):
+        return CacheControl(self.plexfs)
+
+    @cached_property
+    def cc_plexvfs(self):
+        return UserDictCacheControl(self.plexvfs)
+
+    @cached_property
+    def cc_library(self):
+        return CachedPropertyCacheControl(self.plex.library)
+
+    @cached_property
+    def cc_sections(self):
+        return DelayedPropertyCacheControl(self.plex.library, "sections", CachedPropertyCacheControl)
+
     def reload(self):
-        yield from self.plexfs.cache_clear()
-        yield from self.plexvfs.cache_clear()
-        yield from self.sections.cache_clear()
-        yield from self.library.cache_clear()
+        yield from self.cc_plexfs.cache_clear()
+        yield from self.cc_plexvfs.cache_clear()
+        yield from self.cc_sections.cache_clear()
+        yield from self.cc_library.cache_clear()
 
     def status(self):
-        yield from self.plexfs.cache_info()
-        yield from self.plexvfs.cache_info()
-        yield from self.sections.cache_info()
-        yield from self.library.cache_info()
+        yield from self.cc_plexfs.cache_info()
+        yield from self.cc_plexvfs.cache_info()
+        yield from self.cc_sections.cache_info()
+        yield from self.cc_library.cache_info()
 
     def handle(self, pc: int, pe: list[str]):
         if pc == 1 and pe[0] in self.root:
