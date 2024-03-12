@@ -24,10 +24,10 @@ class HttpCache:
             "*/library/sections/*/all?includeGuids=1": CACHE_1d,
             "*/library/sections/*/all?includeGuids=1&type=3": CACHE_1h,
             "*/library/sections/*/all?includeGuids=1&type=4": CACHE_1h,
-
+            # Item details
+            "*/library/metadata/*?checkFiles=1*": CACHE_1d,
             # Some reload
             "*/library/metadata/*": CACHE_1d,
-
             # default policy is not to cache
             "*": DO_NOT_CACHE,
         }
