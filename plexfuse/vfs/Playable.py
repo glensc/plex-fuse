@@ -56,9 +56,6 @@ class Playable:
         if year:
             title += f" ({year})"
 
-        for guid in self.guids:
-            title += f" {{{guid.id.replace('://', '-')}}}"
-
         return normalize(title)
 
     @cached_property
