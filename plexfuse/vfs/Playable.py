@@ -52,6 +52,10 @@ class Playable:
     def title(self):
         title = f"{self.item.seasonEpisode} " if self.item.TYPE == "episode" else ""
         title += self.item.title
+        edition_title = self.item.__dict__.get("editionTitle", None)
+        if edition_title:
+            title += f" {{{edition_title}}}"
+
         year = self.item.__dict__.get("year", None)
         if year:
             title += f" ({year})"
