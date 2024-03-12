@@ -49,4 +49,11 @@ version = {attr = "plexfuse.__version__.__version__"}
 plex-fuse = "plexfuse.fs.main:main"
 
 [tool.setuptools]
-packages = ["plexfuse", "plexfuse.fs", "plexfuse.plex", "plexfuse.plexvfs"]
+packages = [
+	"plexfuse",
+	"plexfuse.cache",
+	"plexfuse.fs",
+	"plexfuse.plex",
+	"plexfuse.vfs",
+	"plexfuse.vfs.entry"
+]
