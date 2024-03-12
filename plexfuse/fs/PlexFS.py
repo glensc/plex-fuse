@@ -30,6 +30,8 @@ class PlexFS(fuse.Fuse):
         cache_path = self.cache_path if self.cache_path else PlexApi.CACHE_PATH
         PlexApi.CACHE_PATH = Path(cache_path).absolute()
         PlexApi.HTTP_CACHE = self.http_cache
+        print(f"fsinit: CACHE_PATH={PlexApi.CACHE_PATH}")
+        print(f"fsinit: HTTP_CACHE={PlexApi.HTTP_CACHE}")
 
     @cache
     def getattr(self, path: str):
