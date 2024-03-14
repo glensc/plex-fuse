@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 from functools import cached_property
+from typing import TYPE_CHECKING
 
 from plexfuse.vfs.entry.AttrEntry import AttrEntry
-from plexfuse.vfs.Playable import Playable
-from plexfuse.vfs.PlexMatch import PlexMatch
+
+if TYPE_CHECKING:
+    from plexapi.media import Guid
+
+    from plexfuse.vfs.Playable import Playable
 
 
 class PlexMatchEntry(AttrEntry):
@@ -20,9 +24,20 @@ class PlexMatchEntry(AttrEntry):
 
     @cached_property
     def content(self):
-        plexmatch = PlexMatch()
+        """
+        Handler for .plexmatch files
+        - https://support.plex.tv/articles/plexmatch/
+        """
+        return "\n".join(self.mapping(self.playable.guids))
 
-        return plexmatch.content(self.playable)
+    @staticmethod
+    def mapping(guids: list[Guid]):
+        for guid in guids:
+            provider, value = guid.id.split("://")
+            yield f"{provider}id: {value}"
+
+        # Add newline to end of the file
+        yield ""
 
     @cached_property
     def size(self):
