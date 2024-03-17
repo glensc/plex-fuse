@@ -7,6 +7,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING
 
+from plexapi.exceptions import BadRequest, NotFound
 from plexapi.server import PlexServer
 
 from plexfuse.cache.HttpCache import HttpCache
@@ -195,12 +196,13 @@ class PlexApi:
                 headers["Range"] = f"bytes={offset}-"
             accepted_status = (206,)
         elif size is not None:
-            raise ValueError("size not supported without offset")
+            raise BadRequest("size not supported without offset")
 
         response = self.session.get(url, headers=headers, stream=True)
         if response.status_code not in accepted_status:
-            message = f"({response.status_code}): {response.url}"
-            raise RuntimeError(message)
+            if response.status_code == 404:
+                raise NotFound(response.url)
+            raise BadRequest(f"({response.status_code}): {response.url}")
 
         yield from response.iter_content(chunk_size=self.CHUNK_SIZE)
 
