@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import os
 from functools import cached_property
 from os import makedirs
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING
 
 from plexapi.server import PlexServer
@@ -209,8 +211,9 @@ class PlexApi:
 
         content = self.request_file(key, size, offset)
         makedirs(savepath.parent, exist_ok=True)
-        with savepath.open("wb") as handle:
+        with NamedTemporaryFile(dir=savepath.parent, prefix=f"{savepath.stem}.") as handle:
             for chunk in content:
                 handle.write(chunk)
+            os.link(handle.name, savepath)
 
         return savepath
