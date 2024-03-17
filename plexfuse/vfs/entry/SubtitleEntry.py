@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from functools import cached_property
 
+from plexapi.exceptions import NotFound
+
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.vfs.entry.AttrEntry import AttrEntry
 from plexfuse.vfs.Playable import Playable
@@ -32,7 +34,10 @@ class SubtitleEntry(AttrEntry):
         cache_path = self.plex.cache_path(stream.key)
         if not cache_path.exists():
             print(f"Downloading: {cache_path}")
-            self.plex.download_part(stream.key, cache_path)
+            try:
+                self.plex.download_part(stream.key, cache_path)
+            except NotFound as e:
+                print(f"ERROR: Subtitle not found: {e}")
 
         return cache_path
 

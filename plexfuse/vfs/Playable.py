@@ -77,10 +77,11 @@ class Playable:
                     print(f"Unsupported subtitle codec: {s.codec}: {self.item}")
                     # Not sure how to serve VOBSUB .idx files alone, where are .sub files?
                     continue
+                language = s.languageCode or s.languageTag
                 if basename:
-                    title = f"{basename}.{s.languageCode}.{s.codec}"
+                    title = f"{basename}.{language}.{s.codec}"
                 else:
-                    title = f"{s.language} ({s.languageCode}).{s.codec}"
+                    title = f"{s.language} ({language}).{s.codec}"
                 yield title, s
 
         return dict(inner())
