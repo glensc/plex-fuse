@@ -25,6 +25,14 @@ class FileEntry(AttrEntry):
         except AttributeError:
             return {}
 
+    @staticmethod
+    def get_size(playable: Playable, part: MediaPart):
+        if playable.item.isPartialObject():
+            playable.item.reload()
+        part = next(partx for partx in playable.item.iterParts() if partx.key == part.key)
+        size = part.size if part.exists else None
+        return size
+
     def read(self, offset: int, size: int):
         return self.reader.read(self.key, size=size, offset=offset, max_size=self.size)
 
