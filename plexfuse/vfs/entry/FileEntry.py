@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class FileEntry(AttrEntry):
     def __init__(self, part: MediaPart, playable: Playable, reader: ChunkedFile):
-        self.size = part.size if part.exists else None
+        self.size = self.get_size(playable, part)
         self.key = part.key
         self.playable = playable
         self.reader = reader
