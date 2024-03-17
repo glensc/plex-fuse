@@ -28,6 +28,10 @@ class HttpCache:
             "*/library/metadata/*?checkFiles=1*": CACHE_1d,
             # Some reload
             "*/library/metadata/*": CACHE_1d,
+            # File download
+            "*/library/parts/*": DO_NOT_CACHE,
+            # Subtitles
+            "*/library/streams/*": DO_NOT_CACHE,
             # default policy is not to cache
             "*": DO_NOT_CACHE,
         }
