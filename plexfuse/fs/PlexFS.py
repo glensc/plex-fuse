@@ -21,6 +21,7 @@ class PlexFS(fuse.Fuse):
         self.vfs = PlexVFS(plex, self)
         self.cache_path = None
         self.http_cache = None
+        self.control_path = None
         self.file_map = RefCountedDict()
         self.iolock = Lock()
 
@@ -32,6 +33,7 @@ class PlexFS(fuse.Fuse):
         PlexApi.HTTP_CACHE = self.http_cache
         print(f"fsinit: CACHE_PATH={PlexApi.CACHE_PATH}")
         print(f"fsinit: HTTP_CACHE={PlexApi.HTTP_CACHE}")
+        print(f"fsinit: control_path={self.control_path}")
 
     @cache
     def getattr(self, path: str):
