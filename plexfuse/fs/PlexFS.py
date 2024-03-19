@@ -5,22 +5,27 @@ from threading import Lock
 
 import fuse
 
+from plexfuse.control.ControlListener import ControlListener
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
 from plexfuse.fs.RefCountedDict import RefCountedDict
 from plexfuse.normalize import normalize
 from plexfuse.plex.PlexApi import PlexApi
+from plexfuse.vfs.Control import Control
 from plexfuse.vfs.entry.DirEntry import DirEntry
 from plexfuse.vfs.PlexVFS import PlexVFS
 
 
 class PlexFS(fuse.Fuse):
+    control: ControlListener
+
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
-        plex = PlexApi()
+        self.plex = plex = PlexApi()
         self.vfs = PlexVFS(plex, self)
         self.cache_path = None
         self.http_cache = None
+        self.control = None
         self.control_path = None
         self.file_map = RefCountedDict()
         self.iolock = Lock()
@@ -34,6 +39,13 @@ class PlexFS(fuse.Fuse):
         print(f"fsinit: CACHE_PATH={PlexApi.CACHE_PATH}")
         print(f"fsinit: HTTP_CACHE={PlexApi.HTTP_CACHE}")
         print(f"fsinit: control_path={self.control_path}")
+        if self.control_path:
+            control = Control(self.plex, self, self.vfs)
+            self.control = ControlListener(self.control_path, control)
+
+    def fsdestroy(self):
+        if self.control:
+            self.control.stop()
 
     @cache
     def getattr(self, path: str):
