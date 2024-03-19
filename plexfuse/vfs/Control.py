@@ -60,6 +60,10 @@ class Control:
         yield from self.cc_sections.cache_info()
         yield from self.cc_library.cache_info()
 
+    def action(self, action: str):
+        method = getattr(self, action)
+        return "\n".join(method()).encode() + b"\n"
+
     def handle(self, pc: int, pe: list[str]):
         if pc == 1 and pe[0] in self.root:
             return DirEntry(self.commands)
