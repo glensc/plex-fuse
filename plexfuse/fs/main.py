@@ -26,6 +26,9 @@ def main():
     server.parser.add_option(mountopt="http_cache",
                              default=False, action="store_true",
                              help="cache http requests using requests-cache")
+    server.parser.add_option(mountopt="control_path", metavar="PATH",
+                             default=None,
+                             help="path to control socket [default: %default]")
     server.parse(values=server, errex=1)
     server.main()
 
