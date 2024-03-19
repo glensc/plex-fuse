@@ -1,10 +1,18 @@
 from time import sleep
 
 from plexfuse.control.ControlListener import ControlListener
+from plexfuse.fs.PlexFS import PlexFS
+from plexfuse.plex.PlexApi import PlexApi
+from plexfuse.vfs.Control import Control
+from plexfuse.vfs.PlexVFS import PlexVFS
 
 
 def test_socket_control():
-    s = ControlListener("/tmp/ControlListener.sock")
+    p = PlexApi()
+    fs = PlexFS()
+    vfs = PlexVFS(p, fs)
+    c = Control(p, fs, vfs)
+    s = ControlListener("/tmp/ControlListener.sock", c)
     s.start()
 
     try:
