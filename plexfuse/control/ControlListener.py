@@ -62,8 +62,9 @@ class ControlListener:
             datagram = conn.recv(128)
             if datagram:
                 tokens = datagram.decode().strip().split()
-                if tokens[0].lower() == "post":
-                    conn.send(f"{len(tokens)}".encode())
+                if tokens[0] in self.control.commands:
+                    response = self.control.action(tokens[0])
+                    conn.send(response)
                 else:
                     conn.send(b"Bye\n")
             conn.close()
