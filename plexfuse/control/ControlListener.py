@@ -1,12 +1,19 @@
+from __future__ import annotations
+
 import os
 import os.path
 import socket
 from threading import Thread
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from plexfuse.vfs.Control import Control
 
 
 class ControlListener:
-    def __init__(self, path: str):
+    def __init__(self, path: str, control: Control):
         self.path = path
+        self.control = control
         self.thread = None
         self.socket = None
 
