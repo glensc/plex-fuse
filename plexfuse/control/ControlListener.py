@@ -21,6 +21,8 @@ class ControlListener:
         self.socket = self.listen_socket()
         self.thread = self.create_thread(self.handle)
 
+        return self
+
     def stop(self):
         self.close_socket()
         self.stop_thread()
