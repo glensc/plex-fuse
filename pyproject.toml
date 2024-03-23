@@ -52,6 +52,7 @@ plex-fuse = "plexfuse.fs.main:main"
 packages = [
 	"plexfuse",
 	"plexfuse.cache",
+	"plexfuse.control",
 	"plexfuse.fs",
 	"plexfuse.plex",
 	"plexfuse.vfs",
