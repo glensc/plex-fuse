@@ -5,7 +5,7 @@ from functools import cached_property
 
 class CachedPropertyCacheControl:
     """
-    Cache control methods for an class using @cached_property
+    Cache control methods for a class using @cached_property
     """
 
     def __init__(self, obj):
