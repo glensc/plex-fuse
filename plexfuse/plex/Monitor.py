@@ -17,7 +17,7 @@ class Monitor:
             import websocket
         except ImportError:
             print("Can't use Monitor without websocket")
-            return
+            return None
         finally:
             del websocket
 
@@ -27,6 +27,8 @@ class Monitor:
         )
         print("Started notifier:", self.notifier)
         self.event_handler("test")
+
+        return self
 
     def stop(self):
         if not self.notifier:
