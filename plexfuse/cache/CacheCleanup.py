@@ -14,6 +14,9 @@ class CacheCleanup:
     def start(self):
         return tl.start()
 
+    def stop(self):
+        return tl.stop()
+
     @cached_property
     def loop(self):
         return Timeloop()
