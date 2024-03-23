@@ -20,6 +20,7 @@ from plexfuse.vfs.PlexVFS import PlexVFS
 
 class PlexFS(fuse.Fuse):
     control: ControlListener | None
+    monitor: Monitor | None
 
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
@@ -27,7 +28,7 @@ class PlexFS(fuse.Fuse):
         self.plex = plex = PlexApi()
         self.vfs = PlexVFS(plex, self)
         self.control = None
-        self.monitor = Monitor(plex)
+        self.monitor = None
         self.file_map = RefCountedDict()
         self.iolock = Lock()
 
@@ -43,13 +44,15 @@ class PlexFS(fuse.Fuse):
         if self.options.control_path:
             control = Control(self.plex, self, self.vfs)
             self.control = ControlListener(self.options.control_path, control).start()
-        self.monitor.start()
+        if self.options.listen_events:
+            self.monitor = Monitor(self.plex).start()
 
     def fsdestroy(self):
         if self.control:
             self.control.stop()
 
-        self.monitor.stop()
+        if self.monitor:
+            self.monitor.stop()
 
     @cache
     def getattr(self, path: str):
