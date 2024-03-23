@@ -6,6 +6,7 @@ from threading import Lock
 import fuse
 
 from plexfuse.control.ControlListener import ControlListener
+from plexfuse.fs.FsOptions import FsOptions
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
 from plexfuse.fs.RefCountedDict import RefCountedDict
@@ -21,6 +22,7 @@ class PlexFS(fuse.Fuse):
 
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
+        self.options = FsOptions()
         self.plex = plex = PlexApi()
         self.vfs = PlexVFS(plex, self)
         self.cache_path = None
