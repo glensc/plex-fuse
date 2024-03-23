@@ -18,32 +18,29 @@ from plexfuse.vfs.PlexVFS import PlexVFS
 
 
 class PlexFS(fuse.Fuse):
-    control: ControlListener
+    control: ControlListener | None
 
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
         self.options = FsOptions()
         self.plex = plex = PlexApi()
         self.vfs = PlexVFS(plex, self)
-        self.cache_path = None
-        self.http_cache = None
         self.control = None
-        self.control_path = None
         self.file_map = RefCountedDict()
         self.iolock = Lock()
 
     def fsinit(self):
         # "cache_path" property doesn't get always initialized from options:
         # https://github.com/libfuse/python-fuse/issues/61#issuecomment-1902472620
-        cache_path = self.cache_path if self.cache_path else PlexApi.CACHE_PATH
+        cache_path = self.options.cache_path if self.options.cache_path else PlexApi.CACHE_PATH
         PlexApi.CACHE_PATH = Path(cache_path).absolute()
-        PlexApi.HTTP_CACHE = self.http_cache
+        PlexApi.HTTP_CACHE = self.options.http_cache
         print(f"fsinit: CACHE_PATH={PlexApi.CACHE_PATH}")
         print(f"fsinit: HTTP_CACHE={PlexApi.HTTP_CACHE}")
-        print(f"fsinit: control_path={self.control_path}")
-        if self.control_path:
+        print(f"fsinit: control_path={self.options.control_path}")
+        if self.options.control_path:
             control = Control(self.plex, self, self.vfs)
-            self.control = ControlListener(self.control_path, control).start()
+            self.control = ControlListener(self.options.control_path, control).start()
 
     def fsdestroy(self):
         if self.control:

@@ -29,7 +29,7 @@ def main():
     server.parser.add_option(mountopt="control_path", metavar="PATH",
                              default=None,
                              help="path to control socket [default: %default]")
-    server.parse(values=server, errex=1)
+    server.parse(values=server.options, errex=1)
     server.main()
 
 
