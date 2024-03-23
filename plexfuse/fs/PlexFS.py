@@ -11,6 +11,7 @@ from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
 from plexfuse.fs.RefCountedDict import RefCountedDict
 from plexfuse.normalize import normalize
+from plexfuse.plex.Monitor import Monitor
 from plexfuse.plex.PlexApi import PlexApi
 from plexfuse.vfs.Control import Control
 from plexfuse.vfs.entry.DirEntry import DirEntry
@@ -19,6 +20,7 @@ from plexfuse.vfs.PlexVFS import PlexVFS
 
 class PlexFS(fuse.Fuse):
     control: ControlListener | None
+    monitor: Monitor | None
 
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
@@ -26,6 +28,7 @@ class PlexFS(fuse.Fuse):
         self.plex = plex = PlexApi()
         self.vfs = PlexVFS(plex, self)
         self.control = None
+        self.monitor = None
         self.file_map = RefCountedDict()
         self.iolock = Lock()
 
@@ -38,13 +41,19 @@ class PlexFS(fuse.Fuse):
         print(f"fsinit: CACHE_PATH={PlexApi.CACHE_PATH}")
         print(f"fsinit: HTTP_CACHE={PlexApi.HTTP_CACHE}")
         print(f"fsinit: control_path={self.options.control_path}")
+        print(f"fsinit: listen_events={self.options.listen_events}")
         if self.options.control_path:
             control = Control(self.plex, self, self.vfs)
             self.control = ControlListener(self.options.control_path, control).start()
+        if self.options.listen_events:
+            self.monitor = Monitor(self.plex).start()
 
     def fsdestroy(self):
         if self.control:
             self.control.stop()
+
+        if self.monitor:
+            self.monitor.stop()
 
     @cache
     def getattr(self, path: str):

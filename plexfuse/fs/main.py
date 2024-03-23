@@ -26,6 +26,9 @@ def main():
     server.parser.add_option(mountopt="http_cache",
                              default=False, action="store_true",
                              help="cache http requests using requests-cache")
+    server.parser.add_option(mountopt="listen_events",
+                             default=False, action="store_true",
+                             help="listen for events from Plex Media Server")
     server.parser.add_option(mountopt="control_path", metavar="PATH",
                              default=None,
                              help="path to control socket [default: %default]")
