@@ -33,7 +33,10 @@ class Monitor:
     def stop(self):
         if not self.notifier:
             return
+
         print("Stopping notifier:", self.notifier)
+        self.notifier.stop()
+
         if self.notifier.is_alive():
             self.notifier.join(timeout=10)
             if self.notifier.is_alive():
