@@ -41,6 +41,7 @@ class PlexFS(fuse.Fuse):
         print(f"fsinit: CACHE_PATH={PlexApi.CACHE_PATH}")
         print(f"fsinit: HTTP_CACHE={PlexApi.HTTP_CACHE}")
         print(f"fsinit: control_path={self.options.control_path}")
+        print(f"fsinit: listen_events={self.options.listen_events}")
         if self.options.control_path:
             control = Control(self.plex, self, self.vfs)
             self.control = ControlListener(self.options.control_path, control).start()
