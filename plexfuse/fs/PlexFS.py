@@ -5,6 +5,7 @@ from threading import Lock
 
 import fuse
 
+from plexfuse.cache.CacheCleanup import CacheCleanup
 from plexfuse.control.ControlListener import ControlListener
 from plexfuse.fs.FsOptions import FsOptions
 from plexfuse.fs.PlexDirectory import PlexDirectory
@@ -47,6 +48,8 @@ class PlexFS(fuse.Fuse):
             self.control = ControlListener(self.options.control_path, control).start()
         if self.options.listen_events:
             self.monitor = Monitor(self.plex).start()
+
+        self.cache_cleanup = CacheCleanup().start()
 
     def fsdestroy(self):
         if self.control:
