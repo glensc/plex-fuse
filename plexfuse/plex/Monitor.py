@@ -18,8 +18,8 @@ class Monitor:
         except ImportError:
             print("Can't use Monitor without websocket")
             return None
-        finally:
-            del websocket
+
+        del websocket
 
         self.notifier = self.plex.server.startAlertListener(
             callback=self.event_handler,
