@@ -41,7 +41,7 @@ class PlexFS(fuse.Fuse):
         print(f"fsinit: control_path={self.control_path}")
         if self.control_path:
             control = Control(self.plex, self, self.vfs)
-            self.control = ControlListener(self.control_path, control)
+            self.control = ControlListener(self.control_path, control).start()
 
     def fsdestroy(self):
         if self.control:
