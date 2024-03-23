@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5420cb0c32dc8375080d8ad0621f127381760958691bf9ce121975f76733f764"
+            "sha256": "3e4c46034d6c5c9c83063a5bca29d525c4df6759083c39d9353d3881281f8bd9"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -139,6 +139,7 @@
         "fuse-python": {
             "hashes": [
                 "sha256:32188063652408cd472aebb6f92d35df92c8bb42009371f8c8927bb37e6bdd1b",
+                "sha256:7ec2de2cb6de030aef33ea7853dde9097951d635778b0a2f320a7ec850a2f893",
                 "sha256:873d177ebf1c28c2a7609e4727fbed5713d5c2d8113fb072bd6b7ae87a722fc0"
             ],
             "index": "pypi",
@@ -193,6 +194,14 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.16.0"
+        },
+        "timeloop": {
+            "hashes": [
+                "sha256:4e716c67fe6bcadcee7ddb91e2520792426818a70f27e630cfbbbd9becc48a13",
+                "sha256:70cb69eeef39968ea0e6dd68a3a3a51257d5f4aa27b177ab1b19ca86ff525946"
+            ],
+            "index": "pypi",
+            "version": "==1.0.2"
         },
         "url-normalize": {
             "hashes": [
