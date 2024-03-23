@@ -53,14 +53,24 @@ class ControlListener:
         return server
 
     def close_socket(self):
-        self.socket.close()
+        socket = self.socket
+        self.socket = None
+        socket.close()
         if os.path.exists(self.path):
             os.unlink(self.path)
-        self.socket = None
 
     def handle(self):
         while True:
-            conn, addr = self.socket.accept()
+            try:
+                conn, addr = self.socket.accept()
+            except ConnectionAbortedError as e:
+                print(e)
+                # Server is shutting down
+                if not self.socket:
+                    print("No more socket, exiting")
+                    return
+                continue
+
             datagram = conn.recv(128)
             if datagram:
                 tokens = datagram.decode().strip().split()
