@@ -30,6 +30,7 @@ class PlexFS(fuse.Fuse):
         self.vfs = PlexVFS(plex, self)
         self.control = None
         self.monitor = None
+        self.cache_cleanup = None
         self.file_map = RefCountedDict()
         self.iolock = Lock()
 
