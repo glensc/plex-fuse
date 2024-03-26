@@ -114,5 +114,6 @@ class PlexFS(fuse.Fuse):
                 return -errno.EISDIR
 
             self.file_map[path] = entry
+            print(f"Opened: {path}: {entry}")
 
             return 0

@@ -36,5 +36,8 @@ class FileEntry(AttrEntry):
     def read(self, offset: int, size: int):
         return self.reader.read(self.key, size=size, offset=offset, max_size=self.size)
 
+    def __str__(self):
+        return f"FileEntry(key='{self.key}')"
+
     def __len__(self):
         return self.size
