@@ -21,10 +21,11 @@ if TYPE_CHECKING:
 class Control:
     CONTROL_DIR = "control"
 
-    def __init__(self, plex: PlexApi, plexfs: PlexFS, plexvfs: PlexVFS):
+    def __init__(self, plex: PlexApi, plexfs: PlexFS, plexvfs: PlexVFS, control_path: str = None):
         self.plex = plex
         self.plexfs = plexfs
         self.plexvfs = plexvfs
+        self.control_path = control_path
 
     @property
     def root(self):
