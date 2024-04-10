@@ -7,7 +7,7 @@ from threading import Thread
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from plexfuse.vfs.Control import Control
+    from plexfuse.control.Control import Control
 
 
 class ControlListener:
