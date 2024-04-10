@@ -19,6 +19,8 @@ if TYPE_CHECKING:
 
 
 class Control:
+    CONTROL_DIR = "control"
+
     def __init__(self, plex: PlexApi, plexfs: PlexFS, plexvfs: PlexVFS):
         self.plex = plex
         self.plexfs = plexfs
@@ -26,7 +28,9 @@ class Control:
 
     @property
     def root(self):
-        return ["control"]
+        return [
+            self.CONTROL_DIR,
+        ]
 
     @property
     def commands(self):
@@ -65,10 +69,10 @@ class Control:
         return "\n".join(method()).encode() + b"\n"
 
     def handle(self, pc: int, pe: list[str]):
-        if pc == 1 and pe[0] in self.root:
+        if pc == 1 and pe[0] == self.CONTROL_DIR:
             return DirEntry(self.commands)
 
-        if pc != 2 or pe[0] != self.root[0]:
+        if pc != 2 or pe[0] != self.CONTROL_DIR:
             return
 
         if pe[1] in self.commands:
