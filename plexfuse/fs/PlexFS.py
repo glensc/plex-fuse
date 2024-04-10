@@ -35,7 +35,7 @@ class PlexFS(fuse.Fuse):
 
     @cached_property
     def vfs(self):
-        return PlexVFS(self.plex, self)
+        return PlexVFS(self.plex, self, self.options.control_path)
 
     def fsinit(self):
         # "cache_path" property doesn't get always initialized from options:
