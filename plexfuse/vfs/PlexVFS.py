@@ -7,8 +7,8 @@ from plexfuse.vfs.ChunkedFile import ChunkedFile
 from plexfuse.vfs.Control import Control
 from plexfuse.vfs.entry.DirEntry import DirEntry
 from plexfuse.vfs.entry.FileEntry import FileEntry
-from plexfuse.vfs.entry.SubtitleEntry import SubtitleEntry
 from plexfuse.vfs.entry.PlexMatchEntry import PlexMatchEntry
+from plexfuse.vfs.entry.SubtitleEntry import SubtitleEntry
 
 if TYPE_CHECKING:
     from plexfuse.fs.PlexFS import PlexFS
@@ -18,11 +18,11 @@ if TYPE_CHECKING:
 class PlexVFS(UserDict):
     SUBTITLE_EXT = (".srt", ".vtt")
 
-    def __init__(self, plex: PlexApi, plexfs: PlexFS):
+    def __init__(self, plex: PlexApi, plexfs: PlexFS, control_path: str = None):
         super().__init__()
         self.plex = plex
         self.reader = ChunkedFile(plex)
-        self.control = Control(plex, plexfs, self)
+        self.control = Control(plex, plexfs, self, control_path)
 
     def __missing__(self, path: str):
         entry = self.resolve(path)

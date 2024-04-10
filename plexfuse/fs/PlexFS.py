@@ -1,5 +1,5 @@
 import errno
-from functools import cache
+from functools import cache, cached_property
 from pathlib import Path
 from threading import Lock
 
@@ -13,7 +13,6 @@ from plexfuse.fs.RefCountedDict import RefCountedDict
 from plexfuse.normalize import normalize
 from plexfuse.plex.Monitor import Monitor
 from plexfuse.plex.PlexApi import PlexApi
-from plexfuse.vfs.Control import Control
 from plexfuse.vfs.entry.DirEntry import DirEntry
 from plexfuse.vfs.PlexVFS import PlexVFS
 
@@ -25,12 +24,18 @@ class PlexFS(fuse.Fuse):
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
         self.options = FsOptions()
-        self.plex = plex = PlexApi()
-        self.vfs = PlexVFS(plex, self)
         self.control = None
         self.monitor = None
         self.file_map = RefCountedDict()
         self.iolock = Lock()
+
+    @cached_property
+    def plex(self):
+        return PlexApi()
+
+    @cached_property
+    def vfs(self):
+        return PlexVFS(self.plex, self, self.options.control_path)
 
     def fsinit(self):
         # "cache_path" property doesn't get always initialized from options:
@@ -43,8 +48,7 @@ class PlexFS(fuse.Fuse):
         print(f"fsinit: control_path={self.options.control_path}")
         print(f"fsinit: listen_events={self.options.listen_events}")
         if self.options.control_path:
-            control = Control(self.plex, self, self.vfs)
-            self.control = ControlListener(self.options.control_path, control).start()
+            self.control = ControlListener(self.options.control_path, self.vfs.control).start()
         if self.options.listen_events:
             self.monitor = Monitor(self.plex).start()
 
@@ -68,6 +72,22 @@ class PlexFS(fuse.Fuse):
             return PlexDirectory(st_nlink=2 + len(item))
 
         return PlexFile(st_size=item.size, **item.attr)
+
+    @cache
+    def readlink(self, path: str):
+        path = normalize(path, is_path=True)
+        try:
+            item = self.vfs[path]
+        except KeyError as e:
+            print(f"ERROR: readlink: Unsupported path: {e}")
+            return -errno.ENOENT
+
+        link = item.link
+        if link is None:
+            print(f"ERROR: readlink: value for {path} is None")
+            return -errno.EINVAL
+
+        return link
 
     @cache
     def readdir(self, path: str, offset: int):
