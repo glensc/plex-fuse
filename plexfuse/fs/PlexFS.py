@@ -13,7 +13,6 @@ from plexfuse.fs.RefCountedDict import RefCountedDict
 from plexfuse.normalize import normalize
 from plexfuse.plex.Monitor import Monitor
 from plexfuse.plex.PlexApi import PlexApi
-from plexfuse.vfs.Control import Control
 from plexfuse.vfs.entry.DirEntry import DirEntry
 from plexfuse.vfs.PlexVFS import PlexVFS
 
@@ -49,8 +48,7 @@ class PlexFS(fuse.Fuse):
         print(f"fsinit: control_path={self.options.control_path}")
         print(f"fsinit: listen_events={self.options.listen_events}")
         if self.options.control_path:
-            control = Control(self.plex, self, self.vfs)
-            self.control = ControlListener(self.options.control_path, control).start()
+            self.control = ControlListener(self.options.control_path, self.vfs.control).start()
         if self.options.listen_events:
             self.monitor = Monitor(self.plex).start()
 
