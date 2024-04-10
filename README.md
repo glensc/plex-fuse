@@ -1,6 +1,6 @@
 # Plex FUSE Filesystem
 
-An attempt to create fuse filesystem to access Plex Media Server.
+An attempt to create fuse filesystem to access Plex Media Server files as local files.
 
 ## Development
 
