@@ -1,5 +1,5 @@
 import errno
-from functools import cache
+from functools import cache, cached_property
 from pathlib import Path
 from threading import Lock
 
@@ -25,12 +25,18 @@ class PlexFS(fuse.Fuse):
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
         self.options = FsOptions()
-        self.plex = plex = PlexApi()
-        self.vfs = PlexVFS(plex, self)
         self.control = None
         self.monitor = None
         self.file_map = RefCountedDict()
         self.iolock = Lock()
+
+    @cached_property
+    def plex(self):
+        return PlexApi()
+
+    @cached_property
+    def vfs(self):
+        return PlexVFS(self.plex, self)
 
     def fsinit(self):
         # "cache_path" property doesn't get always initialized from options:
