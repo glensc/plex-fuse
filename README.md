@@ -42,19 +42,27 @@ Currently implemented:
 - [ ] Handling of "artist" library type
 - [x] Add "status" and "reload" control channels
 
-## Usage
+## Requirements
 
-1. Install Python >= 3.11
-1. Install fuse, macfuse, osxfuse or [fuse-t] depending on your OS
+1. Python >= 3.11
+1. fuse, macfuse, osxfuse or [fuse-t] depending on your OS
+
+[fuse-t]: https://github.com/macos-fuse-t/fuse-t
+
+## Installation
+
 1. Install [pipx]
 1. Install `plex-fuse`: `pipx install plex-fuse`
+
+[pipx]: https://pipx.pypa.io/stable/installation
+
+## Usage
+
+1. Check [requirements](#requirements) and [installation](#installation)
 1. Create [config.ini](#plex-config) for `python-plexapi`
 1. Mount the configured PMS somewhere, i.e `plex-server`: `mkdir plex-server; plex-fuse plex-server -f`
 1. Access the `plex-server` directory from another terminal
 1. `umount` or `fusermount -u` the directory to remove the `plex-server` mount
-
-[fuse-t]: https://github.com/macos-fuse-t/fuse-t
-[pipx]: https://pipx.pypa.io/stable/installation
 
 ## Plex Config
 
