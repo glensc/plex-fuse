@@ -70,6 +70,22 @@ class PlexFS(fuse.Fuse):
         return PlexFile(st_size=item.size, **item.attr)
 
     @cache
+    def readlink(self, path: str):
+        path = normalize(path, is_path=True)
+        try:
+            item = self.vfs[path]
+        except KeyError as e:
+            print(f"ERROR: readlink: Unsupported path: {e}")
+            return -errno.ENOENT
+
+        link = item.link
+        if link is None:
+            print(f"ERROR: readlink: value for {path} is None")
+            return -errno.EINVAL
+
+        return link
+
+    @cache
     def readdir(self, path: str, offset: int):
         return list(self._readdir(path))
 
