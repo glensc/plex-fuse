@@ -1,18 +1,13 @@
 from __future__ import annotations
 
-import stat
-
-from plexfuse.vfs.entry.AttrEntry import AttrEntry
+from plexfuse.vfs.entry.SymlinkEntry import SymlinkEntry
 
 
-class ControlSockEntry(AttrEntry):
+class ControlSockEntry(SymlinkEntry):
     def __init__(self, name: str, control_path: str):
         self.name = name
-        self.size = 0
-        self.link = control_path
+        self.control_path = control_path
 
     @property
-    def attr(self):
-        return {
-            "st_mode": stat.S_IFLNK | 0o644
-        }
+    def link(self):
+        return self.control_path
