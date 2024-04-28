@@ -8,7 +8,7 @@ from plexfuse.vfs.entry.AttrEntry import AttrEntry
 class SymlinkEntry(AttrEntry):
     @property
     def size(self):
-        raise 0
+        return 0
 
     @property
     def link(self):
