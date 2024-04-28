@@ -9,9 +9,6 @@ from plexfuse.cache.CachedPropertyCacheControl import \
 from plexfuse.cache.DelayedPropertyCacheControl import \
     DelayedPropertyCacheControl
 from plexfuse.cache.UserDictCacheControl import UserDictCacheControl
-from plexfuse.vfs.entry.ControlEntry import ControlEntry
-from plexfuse.vfs.entry.ControlSockEntry import ControlSockEntry
-from plexfuse.vfs.entry.DirEntry import DirEntry
 
 if TYPE_CHECKING:
     from plexfuse.fs.PlexFS import PlexFS
@@ -20,25 +17,10 @@ if TYPE_CHECKING:
 
 
 class Control:
-    CONTROL_DIR = "control"
-    CONTROL_SOCK = "control.sock"
-
-    def __init__(self, plex: PlexApi, plexfs: PlexFS, plexvfs: PlexVFS, control_path: str = None):
+    def __init__(self, plex: PlexApi, plexfs: PlexFS, plexvfs: PlexVFS):
         self.plex = plex
         self.plexfs = plexfs
         self.plexvfs = plexvfs
-        self.control_path = control_path
-
-    @property
-    def root(self):
-        entries = [
-            self.CONTROL_DIR,
-        ]
-
-        if self.control_path:
-            entries.append(self.CONTROL_SOCK)
-
-        return entries
 
     @property
     def commands(self):
@@ -75,16 +57,3 @@ class Control:
     def action(self, action: str):
         method = getattr(self, action)
         return "\n".join(method()).encode() + b"\n"
-
-    def handle(self, pc: int, pe: list[str]):
-        if pc == 1 and pe[0] == self.CONTROL_SOCK:
-            return ControlSockEntry(pe[0], self.control_path)
-
-        if pc == 1 and pe[0] == self.CONTROL_DIR:
-            return DirEntry(self.commands)
-
-        if pc != 2 or pe[0] != self.CONTROL_DIR:
-            return
-
-        if pe[1] in self.commands:
-            return ControlEntry(pe[1], getattr(self, pe[1]))

@@ -3,26 +3,25 @@ from __future__ import annotations
 from collections import UserDict
 from typing import TYPE_CHECKING
 
+from plexfuse.control.ControlVFS import ControlVFS
 from plexfuse.vfs.ChunkedFile import ChunkedFile
-from plexfuse.vfs.Control import Control
 from plexfuse.vfs.entry.DirEntry import DirEntry
 from plexfuse.vfs.entry.FileEntry import FileEntry
 from plexfuse.vfs.entry.PlexMatchEntry import PlexMatchEntry
 from plexfuse.vfs.entry.SubtitleEntry import SubtitleEntry
 
 if TYPE_CHECKING:
-    from plexfuse.fs.PlexFS import PlexFS
     from plexfuse.plex.PlexApi import PlexApi
 
 
 class PlexVFS(UserDict):
     SUBTITLE_EXT = (".srt", ".vtt")
 
-    def __init__(self, plex: PlexApi, plexfs: PlexFS, control_path: str = None):
+    def __init__(self, plex: PlexApi, control_path: str = None):
         super().__init__()
         self.plex = plex
         self.reader = ChunkedFile(plex)
-        self.control = Control(plex, plexfs, self, control_path)
+        self.control = ControlVFS(control_path)
 
     def __missing__(self, path: str):
         entry = self.resolve(path)

@@ -5,6 +5,7 @@ from threading import Lock
 
 import fuse
 
+from plexfuse.control.Control import Control
 from plexfuse.control.ControlListener import ControlListener
 from plexfuse.fs.FsOptions import FsOptions
 from plexfuse.fs.PlexDirectory import PlexDirectory
@@ -35,7 +36,7 @@ class PlexFS(fuse.Fuse):
 
     @cached_property
     def vfs(self):
-        return PlexVFS(self.plex, self, self.options.control_path)
+        return PlexVFS(self.plex, self.options.control_path)
 
     def fsinit(self):
         # "cache_path" property doesn't get always initialized from options:
@@ -48,7 +49,8 @@ class PlexFS(fuse.Fuse):
         print(f"fsinit: control_path={self.options.control_path}")
         print(f"fsinit: listen_events={self.options.listen_events}")
         if self.options.control_path:
-            self.control = ControlListener(self.options.control_path, self.vfs.control).start()
+            control = Control(self.plex, self, self.vfs)
+            self.control = ControlListener(self.options.control_path, control).start()
         if self.options.listen_events:
             self.monitor = Monitor(self.plex).start()
 

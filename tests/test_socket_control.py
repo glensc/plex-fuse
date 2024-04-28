@@ -1,9 +1,9 @@
 from time import sleep
 
+from plexfuse.control.Control import Control
 from plexfuse.control.ControlListener import ControlListener
 from plexfuse.fs.PlexFS import PlexFS
 from plexfuse.plex.PlexApi import PlexApi
-from plexfuse.vfs.Control import Control
 from plexfuse.vfs.PlexVFS import PlexVFS
 
 
