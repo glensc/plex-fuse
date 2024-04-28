@@ -1,7 +1,6 @@
 import errno
 from functools import cache, cached_property
 from pathlib import Path
-from threading import Lock
 
 import fuse
 
@@ -14,6 +13,7 @@ from plexfuse.fs.RefCountedDict import RefCountedDict
 from plexfuse.normalize import normalize
 from plexfuse.plex.Monitor import Monitor
 from plexfuse.plex.PlexApi import PlexApi
+from plexfuse.TimeoutLock import TimeoutLock
 from plexfuse.vfs.entry.DirEntry import DirEntry
 from plexfuse.vfs.PlexVFS import PlexVFS
 
@@ -28,7 +28,7 @@ class PlexFS(fuse.Fuse):
         self.control = None
         self.monitor = None
         self.file_map = RefCountedDict()
-        self.iolock = Lock()
+        self.iolock = TimeoutLock(60)
 
     @cached_property
     def plex(self):
