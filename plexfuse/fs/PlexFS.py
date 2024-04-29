@@ -74,13 +74,10 @@ class PlexFS(fuse.Fuse):
         return PlexFile(st_size=item.size, **item.attr)
 
     @cache
+    @plex_errno
     def readlink(self, path: str):
         path = normalize(path, is_path=True)
-        try:
-            item = self.vfs[path]
-        except KeyError as e:
-            print(f"ERROR: readlink: Unsupported path: {e}")
-            return -errno.ENOENT
+        item = self.vfs[path]
 
         link = item.link
         if link is None:
@@ -122,13 +119,10 @@ class PlexFS(fuse.Fuse):
 
             return 0
 
+    @plex_errno
     def open(self, path, flags):
         with self.iolock:
-            try:
-                entry = self.vfs[path]
-            except KeyError as e:
-                print(f"ERROR: open({path}): {e}")
-                return -errno.ENOENT
+            entry = self.vfs[path]
 
             if isinstance(entry, DirEntry):
                 return -errno.EISDIR
