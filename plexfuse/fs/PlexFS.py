@@ -7,6 +7,7 @@ import fuse
 from plexfuse.control.Control import Control
 from plexfuse.control.ControlListener import ControlListener
 from plexfuse.fs.FsOptions import FsOptions
+from plexfuse.fs.plex_errno import plex_errno
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
 from plexfuse.fs.RefCountedDict import RefCountedDict
@@ -62,13 +63,10 @@ class PlexFS(fuse.Fuse):
             self.monitor.stop()
 
     @cache
+    @plex_errno
     def getattr(self, path: str):
         path = normalize(path, is_path=True)
-        try:
-            item = self.vfs[path]
-        except KeyError as e:
-            print(f"ERROR: getattr: Unsupported path: {e}")
-            return -errno.ENOENT
+        item = self.vfs[path]
 
         if isinstance(item, DirEntry):
             return PlexDirectory(st_nlink=2 + len(item))
@@ -76,13 +74,10 @@ class PlexFS(fuse.Fuse):
         return PlexFile(st_size=item.size, **item.attr)
 
     @cache
+    @plex_errno
     def readlink(self, path: str):
         path = normalize(path, is_path=True)
-        try:
-            item = self.vfs[path]
-        except KeyError as e:
-            print(f"ERROR: readlink: Unsupported path: {e}")
-            return -errno.ENOENT
+        item = self.vfs[path]
 
         link = item.link
         if link is None:
@@ -124,13 +119,10 @@ class PlexFS(fuse.Fuse):
 
             return 0
 
+    @plex_errno
     def open(self, path, flags):
         with self.iolock:
-            try:
-                entry = self.vfs[path]
-            except KeyError as e:
-                print(f"ERROR: open({path}): {e}")
-                return -errno.ENOENT
+            entry = self.vfs[path]
 
             if isinstance(entry, DirEntry):
                 return -errno.EISDIR
