@@ -20,8 +20,8 @@
 
 int main(int argc, char **argv)
 {
-    if (argc < 3) {
-        printf("usage: ./a.out pid src_dir dst_dir\n");
+    if (argc < 4) {
+        printf("usage: %s PID src_dir dst_dir\n", argv[0]);
         return 0;
     }
 
