@@ -13,7 +13,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include <linux/mount.h>
+#include <sys/mount.h>
 
 #include <errno.h>
 #include <sys/syscall.h>
@@ -48,6 +48,12 @@ int main(int argc, char **argv)
     }
 
     setns(fd_mntns, 0);
+
+    // remove previous mount
+    int ret1 = umount2(dst_dir, MNT_DETACH);
+    if (ret1 < 0) {
+        perror("umount2 failed");
+    }
 
     int ret = syscall(__NR_move_mount, 
         fd_mnt, "", -EBADF, dst_dir, MOVE_MOUNT_F_EMPTY_PATH );
