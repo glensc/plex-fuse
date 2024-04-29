@@ -22,5 +22,8 @@ def plex_errno(f):
         except plexapi.exceptions.BadRequest as e:
             print(f"ERROR: Plex: {e}")
             return -errno.ENETUNREACH
+        except KeyError as e:
+            print(f"ERROR: Plex: Unsupported path: {e}")
+            return -errno.ENOENT
 
     return decorated
