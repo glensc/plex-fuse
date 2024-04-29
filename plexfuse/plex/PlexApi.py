@@ -24,6 +24,8 @@ class PlexApi:
     CACHE_VERSION = str(2)
     CHUNK_SIZE = 1024 * 1024 * 16
     HTTP_CACHE = False
+    PLEX_TIMEOUT = 3
+    PLEX_READ_TIMEOUT = 10
 
     @cached_property
     def server(self):
@@ -32,7 +34,7 @@ class PlexApi:
             http_cache = HttpCache(self.CACHE_PATH / "http_cache")
             session = http_cache.session
 
-        return PlexServer(session=session)
+        return PlexServer(session=session, timeout=self.PLEX_TIMEOUT)
 
     @property
     def session(self):
@@ -198,7 +200,7 @@ class PlexApi:
         elif size is not None:
             raise BadRequest("size not supported without offset")
 
-        response = self.session.get(url, headers=headers, stream=True)
+        response = self.session.get(url, headers=headers, stream=True, timeout=self.PLEX_READ_TIMEOUT)
         if response.status_code not in accepted_status:
             if response.status_code == 404:
                 raise NotFound(response.url)
