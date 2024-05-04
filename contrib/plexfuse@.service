@@ -1,0 +1,17 @@
+# $ systemctl --user daemon-reload
+# $ systemctl --user enable plexfuse@default
+# $ systemctl --user status plexfuse@default
+# $ systemctl --user status "plexfuse@*.service"
+
+[Unit]
+Description=Mount Plex Media Server Files
+After=network-online.target
+
+[Service]
+ExecSearchPath=%h/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=plex-fuse %i -f
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
