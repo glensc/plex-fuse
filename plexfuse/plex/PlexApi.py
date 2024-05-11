@@ -24,7 +24,7 @@ class PlexApi:
     CACHE_VERSION = str(2)
     CHUNK_SIZE = 1024 * 1024 * 16
     HTTP_CACHE = False
-    PLEX_TIMEOUT = 3
+    PLEX_TIMEOUT = 30
     PLEX_READ_TIMEOUT = 10
 
     @cached_property

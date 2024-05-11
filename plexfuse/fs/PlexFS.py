@@ -29,7 +29,7 @@ class PlexFS(fuse.Fuse):
         self.control = None
         self.monitor = None
         self.file_map = RefCountedDict()
-        self.iolock = TimeoutLock(60)
+        self.iolock = TimeoutLock(300)
 
     @cached_property
     def plex(self):
