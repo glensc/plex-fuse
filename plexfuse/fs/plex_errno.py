@@ -28,5 +28,8 @@ def plex_errno(f):
         except KeyError as e:
             print(f"ERROR: Plex: {f.__module__}.{f.__name__}: Unsupported path: {e}")
             return -errno.ENOENT
+        except Exception as e:
+            print(f"ERROR: Plex: Unknown error {type(e)}: {e}")
+            return -errno.ENOENT
 
     return decorated
