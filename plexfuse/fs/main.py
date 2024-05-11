@@ -32,6 +32,9 @@ def main():
     server.parser.add_option(mountopt="control_path", metavar="PATH",
                              default=None,
                              help="path to control socket [default: %default]")
+    server.parser.add_option(mountopt="sentry_dsn", metavar="DSN",
+                             default=None,
+                             help="sentry dsn to enable logging to Sentry.io")
     server.parse(values=server.options, errex=1)
     server.main()
 
