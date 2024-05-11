@@ -52,12 +52,15 @@ main() {
 	local mount_path="$XDG_RUNTIME_DIR/plexfuse/$host"
 	local config_path="$XDG_CONFIG_HOME/plexfuse/init.sh"
 	local control_path="$cache_path/control.sock"
-	local options="allow_other,ro,uid=1000,gid=1000,http_cache,cache_path=$cache_path,control_path=$control_path"
+	local uid="${UID:-$(id -u)}"
+	local gid="${GID:-$(id -g)}"
 
 	# Add initialization, perhaps change values based on "$host"
 	if [ -f "$config_path" ]; then
 		. "$config_path"
 	fi
+
+	local options="allow_other,ro,uid=$uid,gid=$gid,http_cache,cache_path=$cache_path,control_path=$control_path"
 
 	if mountpoint "$mount_path" -q; then
 		umount "$mount_path"
