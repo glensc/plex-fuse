@@ -21,6 +21,25 @@ die() {
 	exit 1
 }
 
+type -p mountpoint || mountpoint() {
+	local path="$1"
+	# Wrapper for systems missing "mountpoint", i.e. macOS
+	# https://stackoverflow.com/questions/22192842/how-to-check-if-filepath-is-mounted-in-os-x-using-bash/22193352#22193352
+	if mount | grep -q "on $path"; then
+		return 0
+	fi
+
+	# try resolving symlink, i.e. "/tmp" may be symlink
+	path=$(readlink -f "$path")
+	[ -z "$path" ] && return 1
+
+	if mount | grep -q "on $path"; then
+		return 0
+	fi
+
+	return 1
+}
+
 main() {
 	local host="${1:-}"; shift
 	test -n "$host" || die "Need at least host argument"
