@@ -60,7 +60,7 @@ class ControlListener:
             os.unlink(self.path)
 
     def handle(self):
-        while True:
+        while self.socket is not None:
             try:
                 conn, addr = self.socket.accept()
             except ConnectionAbortedError as e:
