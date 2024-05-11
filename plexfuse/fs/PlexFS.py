@@ -14,6 +14,7 @@ from plexfuse.fs.RefCountedDict import RefCountedDict
 from plexfuse.normalize import normalize
 from plexfuse.plex.Monitor import Monitor
 from plexfuse.plex.PlexApi import PlexApi
+from plexfuse.sentry import sentry
 from plexfuse.TimeoutLock import TimeoutLock
 from plexfuse.vfs.entry.DirEntry import DirEntry
 from plexfuse.vfs.PlexVFS import PlexVFS
@@ -49,6 +50,9 @@ class PlexFS(fuse.Fuse):
         print(f"fsinit: HTTP_CACHE={PlexApi.HTTP_CACHE}")
         print(f"fsinit: control_path={self.options.control_path}")
         print(f"fsinit: listen_events={self.options.listen_events}")
+        print(f"fsinit: sentry_dsn={self.options.sentry_dsn}")
+        if self.options.sentry_dsn:
+            sentry(self.options.sentry_dsn)
         if self.options.control_path:
             control = Control(self.plex, self, self.vfs)
             self.control = ControlListener(self.options.control_path, control).start()
