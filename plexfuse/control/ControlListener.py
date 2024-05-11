@@ -69,10 +69,6 @@ class ControlListener:
                 continue
             except ConnectionAbortedError as e:
                 print(e)
-                # Server is shutting down
-                if not self.socket:
-                    print("No more socket, exiting")
-                    return
                 continue
 
             datagram = conn.recv(128)
