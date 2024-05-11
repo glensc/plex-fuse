@@ -16,8 +16,14 @@
 #		;;
 #	esac
 
+die() {
+	echo >&2 "ERROR: plexfuse: $*"
+	exit 1
+}
+
 main() {
-	local host="$1"; shift
+	local host="${1:-}"; shift
+	test -n "$host" || die "Need at least host argument"
 
 	export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 	export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
