@@ -16,7 +16,10 @@ def plex_errno(f):
     def decorated(*args, **kwargs):
         try:
             return f(*args, **kwargs)
-        except (urllib3.exceptions.ReadTimeoutError, requests.exceptions.ReadTimeout, TimeoutError) as e:
+        except (urllib3.exceptions.ReadTimeoutError,
+                requests.exceptions.ConnectionError,
+                requests.exceptions.ReadTimeout,
+                TimeoutError) as e:
             print(f"ERROR: Plex: {f.__module__}.{f.__name__}({args[1:]}, {kwargs}): {type(e)}: {e}")
             return -errno.ETIMEDOUT
         except plexapi.exceptions.BadRequest as e:
