@@ -54,13 +54,12 @@ main() {
 	local control_path="$cache_path/control.sock"
 	local uid="${UID:-$(id -u)}"
 	local gid="${GID:-$(id -g)}"
+	local options="allow_other,ro,uid=$uid,gid=$gid,http_cache,cache_path=$cache_path,control_path=$control_path"
 
 	# Add initialization, perhaps change values based on "$host"
 	if [ -f "$config_path" ]; then
 		. "$config_path"
 	fi
-
-	local options="allow_other,ro,uid=$uid,gid=$gid,http_cache,cache_path=$cache_path,control_path=$control_path"
 
 	if mountpoint "$mount_path" -q; then
 		umount "$mount_path"
