@@ -63,6 +63,9 @@ class ControlListener:
         while self.socket is not None:
             try:
                 conn, addr = self.socket.accept()
+            except OSError as e:
+                print(e)
+                continue
             except ConnectionAbortedError as e:
                 print(e)
                 # Server is shutting down
