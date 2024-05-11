@@ -21,7 +21,7 @@ die() {
 	exit 1
 }
 
-type -p mountpoint || mountpoint() {
+type mountpoint >/dev/null || mountpoint() {
 	local path="$1"
 	# Wrapper for systems missing "mountpoint", i.e. macOS
 	# https://stackoverflow.com/questions/22192842/how-to-check-if-filepath-is-mounted-in-os-x-using-bash/22193352#22193352
