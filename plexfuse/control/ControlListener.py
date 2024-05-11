@@ -53,9 +53,10 @@ class ControlListener:
         return server
 
     def close_socket(self):
-        socket = self.socket
+        s = self.socket
         self.socket = None
-        socket.close()
+        s.shutdown(socket.SHUT_RDWR)
+        s.close()
         if os.path.exists(self.path):
             os.unlink(self.path)
 
