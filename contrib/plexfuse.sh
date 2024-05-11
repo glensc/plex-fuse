@@ -21,7 +21,13 @@ die() {
 	exit 1
 }
 
-type mountpoint >/dev/null || mountpoint() {
+has_prog() {
+  local prog="$1" out
+  out=$(type mountpoint 2>/dev/null)
+  test -n "$out"
+}
+
+has_prog "mountpoint" || mountpoint() {
 	local path="$1"
 	# Wrapper for systems missing "mountpoint", i.e. macOS
 	# https://stackoverflow.com/questions/22192842/how-to-check-if-filepath-is-mounted-in-os-x-using-bash/22193352#22193352
