@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from plexfuse.cache.FileCache import FileCache
+from plexfuse.measure_speed import measure_speed
 
 if TYPE_CHECKING:
     from plexfuse.plex.PlexApi import PlexApi
@@ -46,8 +47,10 @@ class ChunkedFile:
         if not cache_path.exists():
             print(f"Downloading: {cache_path}")
             base_offset = self.base_offset(chunk_number)
-            self.plex.download_part(path, cache_path,
-                                    offset=base_offset, size=self.chunk_size)
+
+            with measure_speed(cache_path):
+                self.plex.download_part(path, cache_path,
+                                        offset=base_offset, size=self.chunk_size)
 
         return cache_path
 
