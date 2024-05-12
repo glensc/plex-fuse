@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 @contextmanager
 def measure_speed(part: Path):
     start = monotonic()
+    print(f"Downloading: {part}")
     yield
     now = monotonic()
     file_size = part.stat().st_size

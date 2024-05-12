@@ -45,7 +45,6 @@ class ChunkedFile:
         cache_path = file.parent / filename
 
         if not cache_path.exists():
-            print(f"Downloading: {cache_path}")
             base_offset = self.base_offset(chunk_number)
 
             with measure_speed(cache_path):
