@@ -5,7 +5,11 @@ def sentry(dsn: str = None):
     if not dsn:
         return
 
-    import sentry_sdk
+    try:
+        import sentry_sdk
+    except ImportError:
+        print("Unable to init sentry: sentry_sdk package not installed")
+        return
 
     sentry_sdk.init(
         dsn=dsn,
