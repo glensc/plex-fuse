@@ -4,7 +4,7 @@ from time import sleep
 from plexapi.exceptions import BadRequest
 
 
-def retry(retries: int, delay: int):
+def retry(retries: int, delay: int, fail: int):
     def decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
@@ -17,7 +17,7 @@ def retry(retries: int, delay: int):
                 ) as e:
                     if count == retries:
                         print(f"Error: {e}")
-                        raise
+                        return fail
 
                     count += 1
                     name = f"{fn.__module__}.{fn.__name__}()"
