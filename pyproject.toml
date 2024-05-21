@@ -51,6 +51,7 @@ version = {attr = "plexfuse.__version__.__version__"}
 plex-fuse = "plexfuse.fs.main:main"
 
 [tool.setuptools]
+package-dir = {"" = "src"}
 packages = [
 	"plexfuse",
 	"plexfuse.cache",
