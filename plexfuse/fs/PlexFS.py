@@ -11,6 +11,7 @@ from plexfuse.fs.plex_errno import plex_errno
 from plexfuse.fs.PlexDirectory import PlexDirectory
 from plexfuse.fs.PlexFile import PlexFile
 from plexfuse.fs.RefCountedDict import RefCountedDict
+from plexfuse.fs.retry import retry
 from plexfuse.normalize import normalize
 from plexfuse.plex.Monitor import Monitor
 from plexfuse.plex.PlexApi import PlexApi
@@ -107,6 +108,7 @@ class PlexFS(fuse.Fuse):
         for r in it:
             yield fuse.Direntry(r)
 
+    @retry(retries=5, delay=1, fail=errno.EBADF)
     def read(self, path, size, offset):
         with self.iolock:
             entry = self.file_map[path]
