@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     char *dst_dir = argv[3];
 
     int fd_mnt;
-    fd_mnt = syscall(__NR_open_tree, 
+    fd_mnt = syscall(__NR_open_tree,
         -EBADF, src_dir, OPEN_TREE_CLONE);
 
     if (fd_mnt < 0) {
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
         perror("umount2 failed");
     }
 
-    int ret = syscall(__NR_move_mount, 
+    int ret = syscall(__NR_move_mount,
         fd_mnt, "", -EBADF, dst_dir, MOVE_MOUNT_F_EMPTY_PATH );
 
     if (ret < 0) {
