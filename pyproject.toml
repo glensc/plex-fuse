@@ -57,6 +57,7 @@ packages = [
 	"plexfuse.control",
 	"plexfuse.fs",
 	"plexfuse.plex",
+	"plexfuse.sentry",
 	"plexfuse.vfs",
 	"plexfuse.vfs.entry"
 ]
