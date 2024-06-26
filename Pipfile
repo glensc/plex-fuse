@@ -9,7 +9,7 @@ humanize = "==4.9.0"
 plexapi = "==4.15.14"
 requests-cache = "==1.2.1"
 sentry-sdk = "==2.7.0"
-websocket-client = "==1.7.0"
+websocket-client = "==1.8.0"
 
 [dev-packages]
 
