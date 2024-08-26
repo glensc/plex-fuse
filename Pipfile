@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 fuse-python = "==1.0.8"
 humanize = "==4.10.0"
-plexapi = "==4.15.15"
+plexapi = "==4.15.16"
 requests-cache = "==1.2.1"
 sentry-sdk = "==2.13.0"
 websocket-client = "==1.8.0"
