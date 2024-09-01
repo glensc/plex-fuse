@@ -27,8 +27,7 @@ class FileEntry(AttrEntry):
 
     @staticmethod
     def get_size(playable: Playable, part: MediaPart):
-        if playable.item.isPartialObject():
-            playable.item.reload()
+        playable.item.reload(checkFiles=True)
         part = next(partx for partx in playable.item.iterParts() if partx.key == part.key)
         size = part.size if part.exists else None
         return size
