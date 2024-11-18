@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fuse-python = "==1.0.8"
+fuse-python = "==1.0.9"
 humanize = "==4.11.0"
 plexapi = "==4.16.0"
 requests-cache = "==1.2.1"
