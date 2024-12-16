@@ -1,12 +1,7 @@
 name: Test
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - "*.*.*"
-  pull_request:
+  workflow_call:
 
 env:
   DEFAULT_PYTHON: "3.11"
