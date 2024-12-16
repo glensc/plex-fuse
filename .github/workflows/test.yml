@@ -1,0 +1,35 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "*.*.*"
+  pull_request:
+
+env:
+  DEFAULT_PYTHON: "3.11"
+  # https://github.com/dependabot/dependabot-core/blob/main/python/helpers/requirements.txt
+  PIPENV_VERSION: "2024.0.2"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache: pip
+
+      - name: Install pipenv
+        run: python -m pip install pipenv==$PIPENV_VERSION
+
+      - name: Install dependencies (pipenv)
+        run: pipenv install --deploy
+
+# vim:ts=2:sw=2:et
