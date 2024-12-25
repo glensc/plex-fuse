@@ -13,6 +13,7 @@ on:
   push:
     tags:
       - '*.*.*'
+  pull_request:
 
 permissions:
   contents: read
@@ -34,7 +35,7 @@ jobs:
     - name: Set version variable
       id: vars
       run: |
-        if [[ "${GITHUB_REF#refs/heads/}" = "${GITHUB_REF}" ]]; then
+        if [[ "${GITHUB_REF#refs/tags/}" != "${GITHUB_REF}" ]]; then
           APP_VERSION=${GITHUB_REF#refs/tags/}
         else
           git fetch --tags --unshallow
@@ -49,20 +50,22 @@ jobs:
       with:
         python-version: ${{ env.DEFAULT_PYTHON }}
 
-    - name: Install dependencies and build
+    - name: Setup version
       env:
         APP_VERSION: ${{ steps.vars.outputs.version }}
+      working-directory: src
       run: |
-        set -x
-        echo "__version__ = '$APP_VERSION'" > plexfuse/__version__.py
-        cat plexfuse/__version__.py
+        echo "__version__ = '$APP_VERSION'" | tee plexfuse/__version__.py
         python -c 'from plexfuse import __version__ as v; print(v.__version__)'
 
+    - name: Install dependencies and build
+      run: |
         python -m pip install --upgrade build
         python -m build
 
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
