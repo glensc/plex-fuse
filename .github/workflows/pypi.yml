@@ -49,15 +49,15 @@ jobs:
       with:
         python-version: ${{ env.DEFAULT_PYTHON }}
 
-    - name: Install dependencies and build
+    - name: Setup version
       env:
         APP_VERSION: ${{ steps.vars.outputs.version }}
       run: |
-        set -x
-        echo "__version__ = '$APP_VERSION'" > plexfuse/__version__.py
-        cat plexfuse/__version__.py
+        echo "__version__ = '$APP_VERSION'" | tee plexfuse/__version__.py
         python -c 'from plexfuse import __version__ as v; print(v.__version__)'
 
+    - name: Install dependencies and build
+      run: |
         python -m pip install --upgrade build
         python -m build
 
