@@ -52,6 +52,7 @@ jobs:
     - name: Setup version
       env:
         APP_VERSION: ${{ steps.vars.outputs.version }}
+      working-directory: src
       run: |
         echo "__version__ = '$APP_VERSION'" | tee plexfuse/__version__.py
         python -c 'from plexfuse import __version__ as v; print(v.__version__)'
