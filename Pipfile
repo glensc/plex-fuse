@@ -8,7 +8,7 @@ fuse-python = "==1.0.9"
 humanize = "==4.11.0"
 plexapi = "==4.16.1"
 requests-cache = "==1.2.1"
-sentry-sdk = "==2.20.0"
+sentry-sdk = "==2.21.0"
 websocket-client = "==1.8.0"
 
 [dev-packages]
