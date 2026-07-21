@@ -171,11 +171,12 @@
         },
         "platformdirs": {
             "hashes": [
-                "sha256:31e761a6a0ca04faf7353ea759bdba55652be214725111e5aac52dfa29d4bef7",
-                "sha256:fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a"
+                "sha256:0555d18370482847566ffabcaa53ad7c6c1c29f195989ae1ed634a05f76ea1e0",
+                "sha256:360ccded2b7fce0af0ff80cc8f5942a1c5d99b0e856033acb030bfc634709e74"
             ],
+            "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==4.10.0"
+            "version": "==4.11.0"
         },
         "plexapi": {
             "hashes": [
