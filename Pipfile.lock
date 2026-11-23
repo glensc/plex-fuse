@@ -313,12 +313,12 @@
         },
         "url-normalize": {
             "hashes": [
-                "sha256:1655cd214159d9d47dc37aa6ce993c2149da44fa35cac6bafd90036a4eda3ac3",
-                "sha256:97ea68fc543b1fc9f270f34c90cf164453e7d490da2ec653dcd8ebd4e3ac1faf"
+                "sha256:52ad9004d6278ea4b581f1cf2f4d016c4873bf3d81fd749b7472ac0206355d05",
+                "sha256:dea616fc9c3d4c8bcd46fcaa783bb4e402b4f272789650919e473c5a86a7b3eb"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.10'",
-            "version": "==3.0.1"
+            "markers": "python_version >= '3.11'",
+            "version": "==4.0.0"
         },
         "urllib3": {
             "hashes": [
